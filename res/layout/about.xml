@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:flattr_sdk="http://schemas.flattr4android.com/sdk"
     android:orientation="vertical"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     >
 <TextView  
     android:layout_height="wrap_content" 
-    android:text="[Unofficial] Android LastFM Player"
+    android:text="Another [Unofficial] Android LastFM Player"
     android:layout_width="wrap_content"
     android:textSize="30dip"/>
 <TextView android:id="@+id/version"
@@ -16,20 +17,23 @@
     android:textSize="20dip"/>
 <TextView  
     android:layout_height="wrap_content" 
-    android:text="© 2008 Oleg Avdeev"
+    android:text="Produced by CoboltForge"
     android:layout_width="wrap_content"/>
+   
+<com.flattr4android.sdk.FlattrButton
+    android:layout_width="wrap_content" 
+    android:layout_height="wrap_content" 
+    flattr_sdk:token="TODO"
+    flattr_sdk:token_secret="TODO"
+    flattr_sdk:thing_id="TODO"
+    flattr_sdk:button_style="vertical" android:layout_gravity="center"/>
+        
 <TextView  
     android:layout_height="wrap_content" 
-    android:paddingTop="30dip"
-    android:autoLink="all"
-    android:text="Please send bug reports to bugs@lastfm.ajaxie.com"
-    android:layout_width="wrap_content"/>
-<TextView  
-    android:layout_height="wrap_content" 
-    android:paddingTop="5dip"
+    android:paddingTop="45dip"
     android:paddingBottom="45dip"
     android:autoLink="all"
-    android:text="Or visit home page at http://lastfm.ajaxie.com"
+    android:text="Based on alastfm © 2008 Oleg Avdeev - http://lastfm.ajaxie.com"
     android:layout_width="wrap_content"/>
-    
+ 
 </LinearLayout>

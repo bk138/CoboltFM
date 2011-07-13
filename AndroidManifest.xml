@@ -1,9 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
       package="com.ajaxie.lastfm"
-      android:versionCode="8"
-      android:versionName="0.8.6">
+      android:versionCode="0"
+      android:versionName="0.9.0">
+    
+    <uses-sdk android:minSdkVersion="4"></uses-sdk>
+    
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="com.flattr4android.permission.READ_THING"/>
+    
     <application android:icon="@drawable/lastfm_icon" android:label="@string/app_name">
         <activity android:name=".LastFMPlayer"
                   android:label="@string/app_name">
