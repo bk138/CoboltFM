@@ -430,7 +430,7 @@ public class LastFMPlayer extends Activity {
 							UserInfo.class), SET_USER_INFO_AND_TUNE);
 				else
 					startActivityForResult(new Intent(LastFMPlayer.this,
-							Tune.class), TUNE);
+							TuneActivity.class), TUNE);
 			}
 		});
 
@@ -652,7 +652,7 @@ public class LastFMPlayer extends Activity {
 			if (username != null && password != null && username.length() != 0
 					&& password.length() != 0)
 				startActivityForResult(
-						new Intent(LastFMPlayer.this, Tune.class), TUNE);
+						new Intent(LastFMPlayer.this, TuneActivity.class), TUNE);
 		}
 		if (requestCode == TUNE && resultCode == RESULT_OK) {
 			SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);

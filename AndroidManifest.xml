@@ -47,7 +47,7 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
-        <activity android:name=".Tune"
+        <activity android:name=".TuneActivity"
                   android:label="@string/tune">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

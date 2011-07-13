@@ -1,48 +1,24 @@
 package com.ajaxie.lastfm;
 
-import java.util.ArrayList;
 import java.util.List;
 
-import android.app.Activity;
-import android.app.ExpandableListActivity;
 import android.app.ListActivity;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.pm.PackageManager.NameNotFoundException;
-import android.content.res.Resources;
-import android.graphics.drawable.ColorDrawable;
-import android.graphics.drawable.Drawable;
-import android.graphics.drawable.StateListDrawable;
 import android.net.Uri;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Gravity;
-import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.View.OnFocusChangeListener;
-import android.view.View.OnKeyListener;
-import android.view.ViewGroup.LayoutParams;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
-import android.widget.BaseExpandableListAdapter;
-import android.widget.EditText;
-import android.widget.ExpandableListAdapter;
-import android.widget.ExpandableListView;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.RadioButton;
-import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.AbsListView.OnScrollListener;
 import android.widget.AdapterView.OnItemClickListener;
-import android.widget.AdapterView.OnItemSelectedListener;
-import android.widget.ExpandableListView.OnGroupExpandListener;
 
-public class Tune extends ListActivity {
+public class TuneActivity extends ListActivity {
 	MyListAdapter mAdapter;
 	protected static final int ENTER_ARTIST = 0;
 	protected static final int ENTER_TAG = 1;
@@ -58,7 +34,7 @@ public class Tune extends ListActivity {
 	        mUsername = settings.getString("username", "empty");
 
 	        setListAdapter(new ArrayAdapter<String>(this,
-	                android.R.layout.simple_list_item_single_choice, STATION_TYPES));
+	                android.R.layout.simple_list_item_1, STATION_TYPES));
 
 		    getListView().setItemsCanFocus(false);
 		    getListView().setChoiceMode(ListView.CHOICE_MODE_SINGLE);
@@ -107,7 +83,7 @@ public class Tune extends ListActivity {
 					builder.appendPath(mUsername);
 					builder.appendPath("neighbours");					
 					setResult(RESULT_OK, new Intent("play", builder.build(),
-							Tune.this, LastFMPlayer.class));
+							TuneActivity.this, LastFMPlayer.class));
 					finish();										
 					break;				
 				case STATION_TYPE_PLAYLIST:
@@ -115,7 +91,7 @@ public class Tune extends ListActivity {
 					builder.appendPath(mUsername);
 					builder.appendPath("playlist");					
 					setResult(RESULT_OK, new Intent("play", builder.build(),
-							Tune.this, LastFMPlayer.class));
+							TuneActivity.this, LastFMPlayer.class));
 					finish();										
 					break;				
 				case STATION_TYPE_RECOMMENDED:
@@ -124,7 +100,7 @@ public class Tune extends ListActivity {
 					builder.appendPath("recommended");					
 					builder.appendPath("100");					
 					setResult(RESULT_OK, new Intent("play", builder.build(),
-							Tune.this, LastFMPlayer.class));
+							TuneActivity.this, LastFMPlayer.class));
 					finish();										
 					break;				
 				case STATION_TYPE_PERSONAL:
@@ -132,19 +108,19 @@ public class Tune extends ListActivity {
 					builder.appendPath(mUsername);
 					builder.appendPath("personal");					
 					setResult(RESULT_OK, new Intent("play", builder.build(),
-							Tune.this, LastFMPlayer.class));
+							TuneActivity.this, LastFMPlayer.class));
 					finish();										
 					break;									
 				case STATION_TYPE_ARTIST:
-					startActivityForResult(new Intent(Tune.this,
+					startActivityForResult(new Intent(TuneActivity.this,
 							EnterArtistName.class), ENTER_ARTIST);
 					break;
 				case STATION_TYPE_TAG:
-					startActivityForResult(new Intent(Tune.this,
+					startActivityForResult(new Intent(TuneActivity.this,
 							EnterTag.class), ENTER_TAG);
 					break;
 				case STATION_TYPE_FRIENDS:
-					startActivityForResult(new Intent(Tune.this,
+					startActivityForResult(new Intent(TuneActivity.this,
 							ChooseFriendActivity.class), CHOOSE_FRIEND);
 					break;
 				}
@@ -232,7 +208,7 @@ public class Tune extends ListActivity {
 	            AbsListView.LayoutParams lp = new AbsListView.LayoutParams(
 	                    ViewGroup.LayoutParams.FILL_PARENT, 64);
 
-	            TextView textView = new TextView(Tune.this);
+	            TextView textView = new TextView(TuneActivity.this);
 	            textView.setText(text);
 	            textView.setLayoutParams(lp);
 	            // Center the text vertically
