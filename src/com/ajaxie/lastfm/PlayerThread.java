@@ -1,7 +1,10 @@
 package com.ajaxie.lastfm;
 
 import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -32,6 +35,7 @@ import org.xmlpull.v1.XmlPullParserException;
 import org.xmlpull.v1.XmlPullParserFactory;
 import org.xmlpull.v1.XmlSerializer;
 
+import android.content.Context;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.media.MediaPlayer;
 import android.media.MediaPlayer.OnBufferingUpdateListener;
@@ -77,6 +81,8 @@ public class PlayerThread extends Thread {
 	}
 
 	MediaPlayer mp = null;
+	
+	boolean FullDownloadMode; //FIXME
 
 	private ArrayList<XSPFTrackInfo> mPlaylist;
 	private int mNextPlaylistItem;
@@ -166,11 +172,13 @@ public class PlayerThread extends Thread {
 	String mUsername;
 	String mPassword;
 	protected ArrayList<FriendInfo> mFriendsList;
+	private Context mContext;
 
-	public PlayerThread(String username, String password) {
+	public PlayerThread(Context c, String username, String password) {
 		super();
 		mUsername = username;
 		mPassword = password;
+		mContext = c;
 	}
 
 	public void run() {
@@ -404,8 +412,21 @@ public class PlayerThread extends Thread {
 				mp = null;
 			}
 			
+			Log.d(TAG, "about to play from " + streamUrl);
+			
+			FullDownloadMode = true; //FIXME
+			
+			if(FullDownloadMode)
+				downloadData(streamUrl); 
+			
 			MediaPlayer mediaPlayer = new MediaPlayer();
-			mediaPlayer.setDataSource(streamUrl);
+			if(FullDownloadMode)
+			{
+				FileInputStream fis = new FileInputStream(downloadingMediaFile);
+				mediaPlayer.setDataSource(fis.getFD());
+			}
+			else
+				mediaPlayer.setDataSource(streamUrl);
 			mediaPlayer.setOnCompletionListener(mOnTrackCompletionListener);
 			mediaPlayer.setOnBufferingUpdateListener(mOnBufferingUpdateListener);
 			mediaPlayer.prepare();
@@ -706,6 +727,10 @@ public class PlayerThread extends Thread {
 	}
 
 	Boolean mMuted = false;
+	private boolean isInterrupted; // FIXME set
+	private File downloadingMediaFile;
+	private int totalKbDownloaded;
+	
 	public void unmute() {
 		synchronized (mMuted) {
 			if (mp != null)
@@ -730,4 +755,73 @@ public class PlayerThread extends Thread {
 				mp.setVolume(1, 1);
 		}
 	}
+	
+	
+    /**  
+     * Download the url stream to a temporary location and then call the setDataSource  
+     * for that local file
+     */  
+    public void downloadData(String mediaUrl) throws IOException {
+    	
+    	URLConnection cn = new URL(mediaUrl).openConnection();   
+        cn.connect();   
+        InputStream stream = cn.getInputStream();
+        if (stream == null) {
+        	Log.e(TAG, "Unable to create InputStream for mediaUrl:" + mediaUrl);
+        }
+        
+		downloadingMediaFile = new File(mContext.getCacheDir(),"downloadingMedia.dat");
+		
+		// Just in case a prior deletion failed because our code crashed or something, we also delete any previously 
+		// downloaded file to ensure we start fresh.  If you use this code, always delete 
+		// no longer used downloads else you'll quickly fill up your hard disk memory.  Of course, you can also 
+		// store any previously downloaded file in a separate data cache for instant replay if you wanted as well.
+		if (downloadingMediaFile.exists()) {
+			downloadingMediaFile.delete();
+		}
+
+		Log.d(TAG, "download of " + mediaUrl + " starting");
+		
+        FileOutputStream out = new FileOutputStream(downloadingMediaFile);   
+        byte buf[] = new byte[16384];
+        int totalBytesRead = 0, incrementalBytesRead = 0;
+        do {
+        	int numread = stream.read(buf);   
+            if (numread <= 0)   
+                break;   
+            out.write(buf, 0, numread);
+            totalBytesRead += numread;
+            incrementalBytesRead += numread;
+            totalKbDownloaded = totalBytesRead/1000;
+            
+            Log.d(TAG, "downloaded " + totalKbDownloaded + " KB");
+            
+        } while (validateNotInterrupted());   
+       		stream.close();
+        if (validateNotInterrupted()) {
+        	Log.d(getClass().getName(), "download of " + mediaUrl + " done");
+	       //	fireDataFullyLoaded();
+        }
+    }  
+
+    private boolean validateNotInterrupted() {
+		if (isInterrupted) {
+			if (mp != null) {
+				mp.pause();
+				//mediaPlayer.release();
+			}
+			return false;
+		} else {
+			return true;
+		}
+    }
+
+
+    private void fireDataFullyLoaded() {
+   // 	transferBufferToMediaPlayer();
+
+    	// Delete the downloaded File as it's now been transferred to the currently playing buffer file.
+    	downloadingMediaFile.delete();
+    }
+	
 }
