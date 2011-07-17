@@ -406,16 +406,17 @@ public class PlayerThread extends Thread {
 			
 			FullDownloadMode = true; //FIXME
 			
-			if(FullDownloadMode)
-				downloadData(streamUrl); 
+//			if(FullDownloadMode)
+	//			downloadingMediaFile = new File(mContext.getCacheDir(),"downloadingMedia.dat");
+		//		downloadData(streamUrl); 
 			
 			MediaPlayer mediaPlayer = new MediaPlayer();
-			if(FullDownloadMode)
+		//	if(FullDownloadMode)
 			{
-				FileInputStream fis = new FileInputStream(downloadingMediaFile);
-				mediaPlayer.setDataSource(fis.getFD());
+			//	FileInputStream fis = new FileInputStream(downloadingMediaFile);
+				//mediaPlayer.setDataSource(fis.getFD());
 			}
-			else
+			//else
 				mediaPlayer.setDataSource(streamUrl);
 			mediaPlayer.setOnCompletionListener(mOnTrackCompletionListener);
 			mediaPlayer.setOnBufferingUpdateListener(mOnBufferingUpdateListener);
@@ -717,9 +718,7 @@ public class PlayerThread extends Thread {
 	}
 
 	Boolean mMuted = false;
-	private boolean isInterrupted; // FIXME set
 	private File downloadingMediaFile;
-	private int totalKbDownloaded;
 	
 	public void unmute() {
 		synchronized (mMuted) {
@@ -747,71 +746,6 @@ public class PlayerThread extends Thread {
 	}
 	
 	
-    /**  
-     * Download the url stream to a temporary location and then call the setDataSource  
-     * for that local file
-     */  
-    public void downloadData(String mediaUrl) throws IOException {
-    	
-    	URLConnection cn = new URL(mediaUrl).openConnection();   
-        cn.connect();   
-        InputStream stream = cn.getInputStream();
-        if (stream == null) {
-        	Log.e(TAG, "Unable to create InputStream for mediaUrl:" + mediaUrl);
-        }
-        
-		downloadingMediaFile = new File(mContext.getCacheDir(),"downloadingMedia.dat");
-		
-		// Just in case a prior deletion failed because our code crashed or something, we also delete any previously 
-		// downloaded file to ensure we start fresh.  If you use this code, always delete 
-		// no longer used downloads else you'll quickly fill up your hard disk memory.  Of course, you can also 
-		// store any previously downloaded file in a separate data cache for instant replay if you wanted as well.
-		if (downloadingMediaFile.exists()) {
-			downloadingMediaFile.delete();
-		}
-
-		Log.d(TAG, "download of " + mediaUrl + " starting");
-		
-        FileOutputStream out = new FileOutputStream(downloadingMediaFile);   
-        byte buf[] = new byte[16384];
-        int totalBytesRead = 0, incrementalBytesRead = 0;
-        do {
-        	int numread = stream.read(buf);   
-            if (numread <= 0)   
-                break;   
-            out.write(buf, 0, numread);
-            totalBytesRead += numread;
-            incrementalBytesRead += numread;
-            totalKbDownloaded = totalBytesRead/1000;
-            
-            Log.d(TAG, "downloaded " + totalKbDownloaded + " KB");
-            
-        } while (validateNotInterrupted());   
-       		stream.close();
-        if (validateNotInterrupted()) {
-        	Log.d(getClass().getName(), "download of " + mediaUrl + " done");
-	       //	fireDataFullyLoaded();
-        }
-    }  
-
-    private boolean validateNotInterrupted() {
-		if (isInterrupted) {
-			if (mp != null) {
-				mp.pause();
-				//mediaPlayer.release();
-			}
-			return false;
-		} else {
-			return true;
-		}
-    }
-
-
-    private void fireDataFullyLoaded() {
-   // 	transferBufferToMediaPlayer();
-
-    	// Delete the downloaded File as it's now been transferred to the currently playing buffer file.
-    	downloadingMediaFile.delete();
-    }
+ 
 	
 }
