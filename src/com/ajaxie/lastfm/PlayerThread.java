@@ -72,7 +72,9 @@ public class PlayerThread extends Thread {
 
 	MediaPlayer mp = null;
 	
-	boolean FullDownloadMode; //FIXME
+	boolean FullDownloadMode;
+	private File downloadingFile;
+	private File playingFile;
 
 	private ArrayList<XSPFTrackInfo> mPlaylist;
 	private int mNextPlaylistItem;
@@ -718,7 +720,6 @@ public class PlayerThread extends Thread {
 	}
 
 	Boolean mMuted = false;
-	private File downloadingMediaFile;
 	
 	public void unmute() {
 		synchronized (mMuted) {

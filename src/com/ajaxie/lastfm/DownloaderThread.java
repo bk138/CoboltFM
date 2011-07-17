@@ -15,8 +15,6 @@ public class DownloaderThread extends Thread {
 	String url;
 	File dst;
 	int totalKbDownloaded;
-	private boolean isInterrupted = false;
-
 
 
 	public DownloaderThread(String url, File dst) {
@@ -34,11 +32,6 @@ public class DownloaderThread extends Thread {
 			e.printStackTrace();
 		}
 		
-	}
-	
-	public void cancel()
-	{
-		isInterrupted = true;
 	}
 	
 	
@@ -75,11 +68,11 @@ public class DownloaderThread extends Thread {
             
             Log.d(getClass().getName(), "downloaded " + totalKbDownloaded + " KB");
             
-        } while (! isInterrupted);   
+        } while (! isInterrupted());   
         
         stream.close();
         
-        if(! isInterrupted)
+        if(! isInterrupted())
         	Log.d(getClass().getName(), "download of " + mediaUrl + " done");
         else 
         	Log.d(getClass().getName(), "download of " + mediaUrl + " canceled");
