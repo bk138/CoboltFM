@@ -14,7 +14,7 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
 
-public class Settings extends Activity {
+public class SettingsActivity extends Activity {
 	protected static final int SET_USER_INFO = 0;
 
 	@Override
@@ -28,7 +28,7 @@ public class Settings extends Activity {
 
 			@Override
 			public void onClick(View v) {
-				new AlertDialog.Builder(Settings.this)
+				new AlertDialog.Builder(SettingsActivity.this)
 						.setIcon(R.drawable.alert_dialog_icon)
 						.setTitle(
 								"Are you really want to reset all settings, including your saved last.fm username and password?")
@@ -62,7 +62,7 @@ public class Settings extends Activity {
 			@Override
 			public void onClick(View v) {
 				startActivityForResult(
-						new Intent(Settings.this, UserInfo.class),
+						new Intent(SettingsActivity.this, UserInfo.class),
 						SET_USER_INFO);
 			}
 

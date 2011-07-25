@@ -66,7 +66,7 @@ public class PlayerActivity extends Activity {
 		switch (item.getItemId()) {
 		case MENU_SETTINGS_ID:
 			startActivityForResult(
-					new Intent(PlayerActivity.this, Settings.class),
+					new Intent(PlayerActivity.this, SettingsActivity.class),
 					SETTINGS);
 			return true;
 		case MENU_ABOUT_ID:
