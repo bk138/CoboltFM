@@ -215,7 +215,7 @@ public class Utils {
 	/**
 	 *  Move the file in oldLocation to newLocation.
 	 */
-	public static void moveFile(File	oldLocation, File	newLocation) throws IOException {
+	public static void copyFile(File	oldLocation, File	newLocation) throws IOException {
 
 		if ( oldLocation.exists( )) {
 			BufferedInputStream  reader = new BufferedInputStream( new FileInputStream(oldLocation) );
