@@ -68,13 +68,13 @@ public class SettingsActivity extends Activity {
 
 		});
 		
-		CheckBox muteSoundCheckBox = (CheckBox) findViewById(R.id.mute_on_call_check);
+		CheckBox altBufferCheckBox = (CheckBox) findViewById(R.id.alt_buffer);
 		SharedPreferences settings = getSharedPreferences(
 				PlayerActivity.PREFS_NAME, 0);
 		
-		muteSoundCheckBox.setChecked(settings.getBoolean("muteOnCall", false));
+		altBufferCheckBox.setChecked(settings.getBoolean("muteOnCall", false));
 		
-		muteSoundCheckBox.setOnCheckedChangeListener(new OnCheckedChangeListener() {
+		altBufferCheckBox.setOnCheckedChangeListener(new OnCheckedChangeListener() {
 
 			@Override
 			public void onCheckedChanged(CompoundButton buttonView,
@@ -82,7 +82,7 @@ public class SettingsActivity extends Activity {
 				SharedPreferences settings = getSharedPreferences(
 						PlayerActivity.PREFS_NAME, 0);
 				Editor ed = settings.edit();
-				ed.putBoolean("muteOnCall", isChecked);
+				ed.putBoolean("altBuffer", isChecked);
 				ed.commit();
 			}			
 		});
