@@ -12,15 +12,18 @@ import android.util.Log;
 
 public class DownloaderThread extends Thread {
 
-	String url;
-	File dst;
-	int totalKbDownloaded;
+	private String url;
+	private String what;
+	private File dst;
+	private int totalKbDownloaded;
+	private boolean done = false;
 
 
-	public DownloaderThread(String url, File dst) {
+	public DownloaderThread(String url, File dst, String what) {
 		super();
 		this.url = url;
 		this.dst = dst;
+		this.what = what;
 	}
 
 	
@@ -32,6 +35,16 @@ public class DownloaderThread extends Thread {
 			e.printStackTrace();
 		}
 		
+	}
+	
+	public boolean isDone()
+	{
+		return done;
+	}
+	
+	public String getWhat()
+	{
+		return what;
 	}
 	
 	
@@ -52,7 +65,7 @@ public class DownloaderThread extends Thread {
 			dst.delete();
 		}
 
-		Log.d(getClass().getName(), "download of " + mediaUrl + " starting");
+		Log.d(getClass().getName(), "download of " + what + " (" + mediaUrl + ") starting");
 		
         FileOutputStream out = new FileOutputStream(dst);   
         byte buf[] = new byte[16384];
@@ -66,17 +79,19 @@ public class DownloaderThread extends Thread {
             incrementalBytesRead += numread;
             totalKbDownloaded = totalBytesRead/1000;
             
-            Log.d(getClass().getName(), "downloaded " + totalKbDownloaded + " KB");
+            Log.d(getClass().getName(), "downloaded " + totalKbDownloaded + " KB of " + what);
             
         } while (! isInterrupted());   
         
         stream.close();
-        
-        if(! isInterrupted())
-        	Log.d(getClass().getName(), "download of " + mediaUrl + " done");
-        else 
-        	Log.d(getClass().getName(), "download of " + mediaUrl + " canceled");
 
+        if(! isInterrupted())
+        {
+        	Log.d(getClass().getName(), "download of " + what + " (" + mediaUrl + ") done");
+        	done = true;
+        }
+        else 
+        	Log.d(getClass().getName(), "download of "+ what + " (" + mediaUrl + ") canceled");
     }  
 
   

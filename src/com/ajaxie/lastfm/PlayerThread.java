@@ -29,6 +29,7 @@ import org.xmlpull.v1.XmlPullParserFactory;
 import org.xmlpull.v1.XmlSerializer;
 
 import android.content.Context;
+import android.content.pm.PackageManager.NameNotFoundException;
 import android.media.MediaPlayer;
 import android.media.MediaPlayer.OnBufferingUpdateListener;
 import android.os.ConditionVariable;
@@ -38,6 +39,7 @@ import android.os.Message;
 import android.util.Log;
 
 import com.ajaxie.lastfm.PlayerService.LastFMNotificationListener;
+import com.ajaxie.lastfm.PlayerService.ServiceNotificationListener;
 import com.ajaxie.lastfm.Utils.ParseException;
 
 public class PlayerThread extends Thread {
@@ -72,13 +74,17 @@ public class PlayerThread extends Thread {
 
 	MediaPlayer mp = null;
 	
-	boolean FullDownloadMode;
-	private File downloadingFile;
-	private File playingFile;
+	boolean mFullDownloadMode;
+	private File mDownloadingFile;
+	private File mReadyFile;
+	private String mDownloadingFileName = "downloadBuf.dat";
+	private String mReadyFileName = "readyBuf.dat";
+	private DownloaderThread mDownloader;
 
 	private ArrayList<XSPFTrackInfo> mPlaylist;
 	private int mNextPlaylistItem;
 	private XSPFTrackInfo mCurrentTrack;
+	private XSPFTrackInfo mDownloadingTrack;
 
 	private long mStartPlaybackTime;
 	private String mCurrentTrackRating;
@@ -165,12 +171,25 @@ public class PlayerThread extends Thread {
 	String mPassword;
 	protected ArrayList<FriendInfo> mFriendsList;
 	private Context mContext;
+	
+	
 
 	public PlayerThread(Context c, String username, String password) {
 		super();
 		mUsername = username;
 		mPassword = password;
 		mContext = c;
+		
+		mFullDownloadMode = true; //FIXME
+
+		if(mFullDownloadMode)
+		{
+			mDownloader =  new DownloaderThread(null, null, null); // just to have it non-null
+			mReadyFile = new File(mContext.getCacheDir(), mReadyFileName);
+			mDownloadingFile = new File(mContext.getCacheDir(), mDownloadingFileName);
+			mReadyFile.deleteOnExit();
+			mDownloadingFile.deleteOnExit();
+		}
 	}
 
 	public void run() {
@@ -302,6 +321,15 @@ public class PlayerThread extends Thread {
 			submitCurrentTrackDelayed();
 		if (mp != null)
 			mp.stop();
+		
+		if(mFullDownloadMode)
+		{
+			// stop downloading
+			mDownloader.interrupt();
+			mDownloadingFile.delete();
+			mDownloadingTrack = null;
+		}
+		
 		return true;
 	}
 
@@ -392,7 +420,12 @@ public class PlayerThread extends Thread {
 	private void playNextTrack() throws LastFMError {
 		if (mCurrentTrack != null)
 			submitCurrentTrackDelayed();
-		mCurrentTrack = getNextTrack();
+		
+		if(mFullDownloadMode && mDownloadingTrack != null)
+			mCurrentTrack = mDownloadingTrack;
+		else
+			mCurrentTrack = getNextTrack();
+		
 		if (mCurrentTrack == null)
 			throw new NotEnoughContentError();
 
@@ -403,23 +436,58 @@ public class PlayerThread extends Thread {
 				mp.stop();
 				mp = null;
 			}
+
+			if(mFullDownloadMode)
+			{
+				mReadyFile.delete(); // is consumed by now
+				
+				if(!mDownloader.isAlive() && !mDownloader.isDone())// no download started, start one 
+				{
+					Log.d(TAG, "No download running, starting new one (" + mCurrentTrack.getTitle() + ")");
+
+					mDownloader = new DownloaderThread(streamUrl, mDownloadingFile, mCurrentTrack.getTitle());
+					mDownloader.start();
+				}
+
+				Log.d(TAG, "Waiting for download to finish");
+				
+				// downloading now , but not ready
+				try {
+					mDownloader.join();
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+				
+				Log.d(TAG, "Download finished, swapping buffers");
+
+				mDownloadingFile.renameTo(new File(mContext.getCacheDir(), mReadyFileName));
+				mDownloadingFile.createNewFile();
+				
+				Log.d(TAG, "Starting new download to " + mDownloadingFile.getAbsolutePath());
+				
+				mDownloadingTrack = getNextTrack();
+
+				mDownloader = new DownloaderThread(mDownloadingTrack.getLocation(),
+						mDownloadingFile, 
+						mDownloadingTrack.getTitle());
+				mDownloader.start();
+			}
 			
-			Log.d(TAG, "about to play from " + streamUrl);
-			
-			FullDownloadMode = true; //FIXME
-			
-//			if(FullDownloadMode)
-	//			downloadingMediaFile = new File(mContext.getCacheDir(),"downloadingMedia.dat");
-		//		downloadData(streamUrl); 
 			
 			MediaPlayer mediaPlayer = new MediaPlayer();
-		//	if(FullDownloadMode)
+			
+			if(mFullDownloadMode) // readyFile is ready at this point
 			{
-			//	FileInputStream fis = new FileInputStream(downloadingMediaFile);
-				//mediaPlayer.setDataSource(fis.getFD());
+				FileInputStream fis = new FileInputStream(mReadyFile);
+				mediaPlayer.setDataSource(fis.getFD());
+				Log.d(TAG, "playing from file " + mReadyFile.getAbsolutePath());
 			}
-			//else
+			else
+			{
+				Log.d(TAG, "playing from stream " + streamUrl);
 				mediaPlayer.setDataSource(streamUrl);
+			}
+				
 			mediaPlayer.setOnCompletionListener(mOnTrackCompletionListener);
 			mediaPlayer.setOnBufferingUpdateListener(mOnBufferingUpdateListener);
 			mediaPlayer.prepare();
@@ -438,6 +506,7 @@ public class PlayerThread extends Thread {
 					.sendToTarget();
 			if (mLastFMNotificationListener != null)
 				mLastFMNotificationListener.onStartTrack(mCurrentTrack);
+			
 		} catch (IllegalArgumentException e) {
 			Log.e(TAG, "in playNextTrack", e);
 			throw new LastFMError(e.toString());
