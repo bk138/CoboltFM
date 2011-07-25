@@ -14,8 +14,8 @@ public class EnterArtistName extends EnterNameActivity {
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
-    	SharedPreferences settings = getSharedPreferences(LastFMPlayer.PREFS_NAME, 0);		
-        Uri stationUri = LastFMPlayer.getStationUri(settings);
+    	SharedPreferences settings = getSharedPreferences(PlayerActivity.PREFS_NAME, 0);		
+        Uri stationUri = PlayerActivity.getStationUri(settings);
         
         if (stationUri != null)
         {

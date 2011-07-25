@@ -95,7 +95,7 @@ public class PlayerService extends Service {
 		Notification notification = new Notification(R.drawable.play, null,
 				System.currentTimeMillis());
 		PendingIntent contentIntent = PendingIntent.getActivity(this, 0,
-				new Intent(this, LastFMPlayer.class), 0);
+				new Intent(this, PlayerActivity.class), 0);
 
 		notification.setLatestEventInfo(this, "aLastFM Player", text,
 				contentIntent);
@@ -301,7 +301,7 @@ public class PlayerService extends Service {
 				stopPlaying();
 
 			SharedPreferences settings = getSharedPreferences(
-					LastFMPlayer.PREFS_NAME, 0);
+					PlayerActivity.PREFS_NAME, 0);
 			
 			TelephonyManager tm = (TelephonyManager)getSystemService(Context.TELEPHONY_SERVICE);
 			

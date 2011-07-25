@@ -35,7 +35,7 @@ public class ChooseFriendActivity extends ListActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-    	SharedPreferences settings = getSharedPreferences(LastFMPlayer.PREFS_NAME, 0);		
+    	SharedPreferences settings = getSharedPreferences(PlayerActivity.PREFS_NAME, 0);		
 
     	String username = settings.getString("username", "<none>");
         loader = new FriendLoader(username);
@@ -63,8 +63,8 @@ public class ChooseFriendActivity extends ListActivity {
     	if (dialog != null)
     		dialog.dismiss();
 
-    	SharedPreferences settings = getSharedPreferences(LastFMPlayer.PREFS_NAME, 0);		
-    	Uri stationUri = LastFMPlayer.getStationUri(settings);
+    	SharedPreferences settings = getSharedPreferences(PlayerActivity.PREFS_NAME, 0);		
+    	Uri stationUri = PlayerActivity.getStationUri(settings);
         
     	int lastFriendId = -1;
         if (stationUri != null)

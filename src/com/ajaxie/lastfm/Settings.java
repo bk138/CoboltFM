@@ -37,7 +37,7 @@ public class Settings extends Activity {
 									public void onClick(DialogInterface dialog,
 											int whichButton) {
 										SharedPreferences settings = getSharedPreferences(
-												LastFMPlayer.PREFS_NAME, 0);
+												PlayerActivity.PREFS_NAME, 0);
 										SharedPreferences.Editor ed = settings
 												.edit();
 										ed.clear();
@@ -70,7 +70,7 @@ public class Settings extends Activity {
 		
 		CheckBox muteSoundCheckBox = (CheckBox) findViewById(R.id.mute_on_call_check);
 		SharedPreferences settings = getSharedPreferences(
-				LastFMPlayer.PREFS_NAME, 0);
+				PlayerActivity.PREFS_NAME, 0);
 		
 		muteSoundCheckBox.setChecked(settings.getBoolean("muteOnCall", false));
 		
@@ -80,7 +80,7 @@ public class Settings extends Activity {
 			public void onCheckedChanged(CompoundButton buttonView,
 					boolean isChecked) {
 				SharedPreferences settings = getSharedPreferences(
-						LastFMPlayer.PREFS_NAME, 0);
+						PlayerActivity.PREFS_NAME, 0);
 				Editor ed = settings.edit();
 				ed.putBoolean("muteOnCall", isChecked);
 				ed.commit();

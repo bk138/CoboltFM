@@ -30,7 +30,7 @@ public class TuneActivity extends ListActivity {
 	        super.onCreate(savedInstanceState);	        	       
 	        mAdapter = new MyListAdapter();
 
-        	SharedPreferences settings = getSharedPreferences(LastFMPlayer.PREFS_NAME, 0);
+        	SharedPreferences settings = getSharedPreferences(PlayerActivity.PREFS_NAME, 0);
 	        mUsername = settings.getString("username", "empty");
 
 	        setListAdapter(new ArrayAdapter<String>(this,
@@ -39,7 +39,7 @@ public class TuneActivity extends ListActivity {
 		    getListView().setItemsCanFocus(false);
 		    getListView().setChoiceMode(ListView.CHOICE_MODE_SINGLE);
 		    
-	        Uri stationUri = LastFMPlayer.getStationUri(settings);
+	        Uri stationUri = PlayerActivity.getStationUri(settings);
 	        if (stationUri != null)
 	        {
 	        	List<String> path = stationUri.getPathSegments();
@@ -83,7 +83,7 @@ public class TuneActivity extends ListActivity {
 					builder.appendPath(mUsername);
 					builder.appendPath("neighbours");					
 					setResult(RESULT_OK, new Intent("play", builder.build(),
-							TuneActivity.this, LastFMPlayer.class));
+							TuneActivity.this, PlayerActivity.class));
 					finish();										
 					break;				
 				case STATION_TYPE_PLAYLIST:
@@ -91,7 +91,7 @@ public class TuneActivity extends ListActivity {
 					builder.appendPath(mUsername);
 					builder.appendPath("playlist");					
 					setResult(RESULT_OK, new Intent("play", builder.build(),
-							TuneActivity.this, LastFMPlayer.class));
+							TuneActivity.this, PlayerActivity.class));
 					finish();										
 					break;				
 				case STATION_TYPE_RECOMMENDED:
@@ -100,7 +100,7 @@ public class TuneActivity extends ListActivity {
 					builder.appendPath("recommended");					
 					builder.appendPath("100");					
 					setResult(RESULT_OK, new Intent("play", builder.build(),
-							TuneActivity.this, LastFMPlayer.class));
+							TuneActivity.this, PlayerActivity.class));
 					finish();										
 					break;				
 				case STATION_TYPE_PERSONAL:
@@ -108,7 +108,7 @@ public class TuneActivity extends ListActivity {
 					builder.appendPath(mUsername);
 					builder.appendPath("personal");					
 					setResult(RESULT_OK, new Intent("play", builder.build(),
-							TuneActivity.this, LastFMPlayer.class));
+							TuneActivity.this, PlayerActivity.class));
 					finish();										
 					break;									
 				case STATION_TYPE_ARTIST:
@@ -144,7 +144,7 @@ public class TuneActivity extends ListActivity {
 						builder.appendPath("similarartists");		
 						Uri stationUri = builder.build();
 						setResult(RESULT_OK, new Intent("play", stationUri,
-								this, LastFMPlayer.class));
+								this, PlayerActivity.class));
 						finish();
 					}
 				}
@@ -158,7 +158,7 @@ public class TuneActivity extends ListActivity {
 					builder.appendPath(data.getStringExtra("result"));
 					Uri stationUri = builder.build();
 					setResult(RESULT_OK, new Intent("play", stationUri,
-							this, LastFMPlayer.class));
+							this, PlayerActivity.class));
 					finish();					
 				}
 				else 
@@ -172,7 +172,7 @@ public class TuneActivity extends ListActivity {
 						builder.appendPath("personal");
 						Uri stationUri = builder.build();
 						setResult(RESULT_OK, new Intent("play", stationUri,
-								this, LastFMPlayer.class));
+								this, PlayerActivity.class));
 						finish();											
 					}
 					
