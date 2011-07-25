@@ -304,9 +304,7 @@ public class PlayerService extends Service {
 					PlayerActivity.PREFS_NAME, 0);
 			
 			TelephonyManager tm = (TelephonyManager)getSystemService(Context.TELEPHONY_SERVICE);
-			
-			if (settings.getBoolean("muteOnCall", false))
-				tm.listen(mPhoneStateListener, PhoneStateListener.LISTEN_CALL_STATE);
+			tm.listen(mPhoneStateListener, PhoneStateListener.LISTEN_CALL_STATE);
 			
 			String username = settings.getString("username", null);
 			String password = settings.getString("password", null);
