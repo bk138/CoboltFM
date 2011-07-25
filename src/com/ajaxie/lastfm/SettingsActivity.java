@@ -72,7 +72,7 @@ public class SettingsActivity extends Activity {
 		SharedPreferences settings = getSharedPreferences(
 				PlayerActivity.PREFS_NAME, 0);
 		
-		altBufferCheckBox.setChecked(settings.getBoolean("muteOnCall", false));
+		altBufferCheckBox.setChecked(settings.getBoolean("altBuffer", false));
 		
 		altBufferCheckBox.setOnCheckedChangeListener(new OnCheckedChangeListener() {
 

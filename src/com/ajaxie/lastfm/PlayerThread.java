@@ -176,14 +176,13 @@ public class PlayerThread extends Thread {
 	
 	
 
-	public PlayerThread(Context c, String username, String password) {
+	public PlayerThread(Context c, String username, String password, boolean fullDownloadMode) {
 		super();
 		mUsername = username;
 		mPassword = password;
 		mContext = c;
+		mFullDownloadMode = fullDownloadMode;
 		
-		mFullDownloadMode = true; //FIXME
-
 		if(mFullDownloadMode)
 		{
 			mDownloader =  new DownloaderThread(null, null, null, null); // just to have it non-null
