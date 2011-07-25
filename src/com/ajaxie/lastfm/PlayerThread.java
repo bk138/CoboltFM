@@ -56,6 +56,8 @@ public class PlayerThread extends Thread {
 	public static final int MESSAGE_SHARE = 9;
 	public static final int MESSAGE_CACHE_FRIENDS_LIST = 10;
 	public static final int MESSAGE_LOGIN = 11;
+	public static final int MESSAGE_DOWNLOAD_FINISHED = 12;
+
 
 	private static final String TAG = "PlayerThread";
 	private static final String XMLRPC_URL = "http://ws.audioscrobbler.com/1.0/rw/xmlrpc.php";
@@ -184,7 +186,7 @@ public class PlayerThread extends Thread {
 
 		if(mFullDownloadMode)
 		{
-			mDownloader =  new DownloaderThread(null, null, null); // just to have it non-null
+			mDownloader =  new DownloaderThread(null, null, null, null); // just to have it non-null
 			mReadyFile = new File(mContext.getCacheDir(), mReadyFileName);
 			mDownloadingFile = new File(mContext.getCacheDir(), mDownloadingFileName);
 			mReadyFile.deleteOnExit();
@@ -296,6 +298,10 @@ public class PlayerThread extends Thread {
 						} else
 							throw new LastFMError("Failed to tune to a station. Please try again or choose a different station.");
 						break;
+					case PlayerThread.MESSAGE_DOWNLOAD_FINISHED:
+						Log.d(TAG, "got download finished message");
+						playNextTrack();
+						break;
 					}
 				} catch (LastFMError e) {
 					setErrorState(e);
@@ -401,7 +407,7 @@ public class PlayerThread extends Thread {
 
 	private void submitCurrentTrackDelayed() {
 		XSPFTrackInfo curTrack = getCurrentTrack();
-		if (curTrack.getDuration() > 30)
+		if (curTrack.getDuration() > 30 && mp != null)
 			if (mp != null && mp.getCurrentPosition() > 240
 					|| mp.getCurrentPosition() > curTrack.getDuration()					
 					|| (mCurrentTrackRating != null && mCurrentTrackRating.equals("L"))
@@ -417,8 +423,9 @@ public class PlayerThread extends Thread {
 		playNextTrack();
 	}
 
+	
 	private void playNextTrack() throws LastFMError {
-		if (mCurrentTrack != null)
+		if (mCurrentTrack != null) //FIXME for resume after dl finished
 			submitCurrentTrackDelayed();
 		
 		if(mFullDownloadMode && mDownloadingTrack != null)
@@ -441,11 +448,12 @@ public class PlayerThread extends Thread {
 			{
 				mReadyFile.delete(); // is consumed by now
 				
-				if(!mDownloader.isAlive() && !mDownloader.isDone())// no download started, start one 
+				if(!mDownloader.isAlive() && !mDownloader.isDone())// no download ever started yet, start one 
 				{
 					Log.d(TAG, "No download running, starting new one (" + mCurrentTrack.getTitle() + ")");
 
-					mDownloader = new DownloaderThread(streamUrl, mDownloadingFile, mCurrentTrack.getTitle());
+					mDownloadingTrack = mCurrentTrack;
+					mDownloader = new DownloaderThread(streamUrl, mDownloadingFile, mCurrentTrack.getTitle(), mHandler);
 					mDownloader.start();
 				}
 
@@ -453,7 +461,9 @@ public class PlayerThread extends Thread {
 				
 				// downloading now , but not ready
 				try {
-					mDownloader.join();
+					mDownloader.join(100);
+					if(mDownloader.isAlive()) // still running
+						return; // get back to main loop to get messages!!
 				} catch (InterruptedException e) {
 					e.printStackTrace();
 				}
@@ -466,10 +476,10 @@ public class PlayerThread extends Thread {
 				Log.d(TAG, "Starting new download to " + mDownloadingFile.getAbsolutePath());
 				
 				mDownloadingTrack = getNextTrack();
-
 				mDownloader = new DownloaderThread(mDownloadingTrack.getLocation(),
 						mDownloadingFile, 
-						mDownloadingTrack.getTitle());
+						mDownloadingTrack.getTitle(),
+						mHandler);
 				mDownloader.start();
 			}
 			

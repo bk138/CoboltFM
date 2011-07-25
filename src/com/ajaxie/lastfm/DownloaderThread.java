@@ -7,6 +7,8 @@ import java.io.InputStream;
 import java.net.URL;
 import java.net.URLConnection;
 
+import android.os.Handler;
+import android.os.Message;
 import android.util.Log;
 
 
@@ -17,13 +19,15 @@ public class DownloaderThread extends Thread {
 	private File dst;
 	private int totalKbDownloaded;
 	private boolean done = false;
+	private Handler callbackHandler = null;
 
 
-	public DownloaderThread(String url, File dst, String what) {
+	public DownloaderThread(String url, File dst, String what, Handler cb) {
 		super();
 		this.url = url;
 		this.dst = dst;
 		this.what = what;
+		this.callbackHandler = cb;
 	}
 
 	
@@ -89,6 +93,8 @@ public class DownloaderThread extends Thread {
         {
         	Log.d(getClass().getName(), "download of " + what + " (" + mediaUrl + ") done");
         	done = true;
+        	if(callbackHandler != null) // notify the callback handler
+        		Message.obtain(callbackHandler, PlayerThread.MESSAGE_DOWNLOAD_FINISHED).sendToTarget();
         }
         else 
         	Log.d(getClass().getName(), "download of "+ what + " (" + mediaUrl + ") canceled");
