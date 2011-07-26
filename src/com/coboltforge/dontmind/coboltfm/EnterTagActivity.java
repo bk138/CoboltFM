@@ -9,9 +9,9 @@ import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 
-public class EnterTag extends EnterNameActivity {
+public class EnterTagActivity extends EnterNameActivity {
 
-	public EnterTag() {
+	public EnterTagActivity() {
 		super(R.layout.enter_tag, "tag", "Please enter some tag name");
 		
 	}

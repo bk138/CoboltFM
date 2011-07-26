@@ -64,7 +64,7 @@ public class SettingsActivity extends Activity {
 			@Override
 			public void onClick(View v) {
 				startActivityForResult(
-						new Intent(SettingsActivity.this, UserInfo.class),
+						new Intent(SettingsActivity.this, UserInfoActivity.class),
 						SET_USER_INFO);
 			}
 

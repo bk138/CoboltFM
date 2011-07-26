@@ -9,9 +9,9 @@ import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 
-public class EnterArtistName extends EnterNameActivity {
+public class EnterArtistNameActivity extends EnterNameActivity {
 	
-	public EnterArtistName() {
+	public EnterArtistNameActivity() {
 		super(R.layout.enter_station, "station", "Please enter some artist name");				
 	}
 	

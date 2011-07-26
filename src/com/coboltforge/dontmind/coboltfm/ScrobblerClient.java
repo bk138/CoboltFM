@@ -14,7 +14,6 @@ import java.net.URLEncoder;
 
 import android.util.Log;
 
-import com.coboltforge.dontmind.coboltfm.Utils.OptionsParser;
 
 public class ScrobblerClient {
 

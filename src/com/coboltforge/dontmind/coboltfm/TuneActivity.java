@@ -113,11 +113,11 @@ public class TuneActivity extends ListActivity {
 					break;									
 				case STATION_TYPE_ARTIST:
 					startActivityForResult(new Intent(TuneActivity.this,
-							EnterArtistName.class), ENTER_ARTIST);
+							EnterArtistNameActivity.class), ENTER_ARTIST);
 					break;
 				case STATION_TYPE_TAG:
 					startActivityForResult(new Intent(TuneActivity.this,
-							EnterTag.class), ENTER_TAG);
+							EnterTagActivity.class), ENTER_TAG);
 					break;
 				case STATION_TYPE_FRIENDS:
 					startActivityForResult(new Intent(TuneActivity.this,

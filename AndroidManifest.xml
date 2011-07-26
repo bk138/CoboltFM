@@ -18,7 +18,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".UserInfo"
+        <activity android:name=".UserInfoActivity"
                   android:label="@string/user_info_title">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -32,14 +32,14 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
-        <activity android:name=".EnterArtistName"
+        <activity android:name=".EnterArtistNameActivity"
                   android:label="@string/enter_artist_name_title">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
-        <activity android:name=".EnterTag"
+        <activity android:name=".EnterTagActivity"
                   android:label="@string/enter_tag_title">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

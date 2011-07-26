@@ -419,7 +419,7 @@ public class PlayerActivity extends Activity {
 				if ((username == null || password == null)
 						|| (username.length() == 0 || password.length() == 0))
 					startActivityForResult(new Intent(PlayerActivity.this,
-							UserInfo.class), SET_USER_INFO_AND_TUNE);
+							UserInfoActivity.class), SET_USER_INFO_AND_TUNE);
 				else
 					startActivityForResult(new Intent(PlayerActivity.this,
 							TuneActivity.class), TUNE);
@@ -446,7 +446,7 @@ public class PlayerActivity extends Activity {
 				if ((usernameInvalid || passwordInvalid || username == null || password == null)
 						|| (username.length() == 0 || password.length() == 0))
 					startActivityForResult(new Intent(PlayerActivity.this,
-							UserInfo.class), SET_USER_INFO_AND_PLAY);
+							UserInfoActivity.class), SET_USER_INFO_AND_PLAY);
 				else {
 					Uri stationUri = getStationUri(settings);
 					if (stationUri == null)
