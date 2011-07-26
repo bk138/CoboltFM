@@ -4,7 +4,6 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -29,7 +28,6 @@ import org.xmlpull.v1.XmlPullParserFactory;
 import org.xmlpull.v1.XmlSerializer;
 
 import android.content.Context;
-import android.content.pm.PackageManager.NameNotFoundException;
 import android.media.MediaPlayer;
 import android.media.MediaPlayer.OnBufferingUpdateListener;
 import android.os.ConditionVariable;
@@ -39,7 +37,6 @@ import android.os.Message;
 import android.util.Log;
 
 import com.coboltforge.dontmind.coboltfm.PlayerService.LastFMNotificationListener;
-import com.coboltforge.dontmind.coboltfm.PlayerService.ServiceNotificationListener;
 import com.coboltforge.dontmind.coboltfm.Utils.ParseException;
 
 public class PlayerThread extends Thread {
@@ -123,6 +120,8 @@ public class PlayerThread extends Thread {
 	}
 
 	public static class BadCredentialsError extends LastFMError {
+		
+		private static final long serialVersionUID = -2749238650889906413L;
 		String faultString = "";
 		public static int BAD_USERNAME = 0;
 		public static int BAD_PASSWORD = 1;

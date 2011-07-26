@@ -47,7 +47,7 @@ public class EnterNameActivity extends Activity {
 			for (int i = 0; i < items.size(); i++)
 				ed.putString("lru_" + mName + "_" + Integer.toString(i), items
 						.get(i));
-			boolean res = ed.commit();
+			ed.commit();
 		}
 
 		public void load(SharedPreferences prefs) {

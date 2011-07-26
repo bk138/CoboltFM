@@ -656,7 +656,7 @@ public class PlayerActivity extends Activity {
 
 				SharedPreferences.Editor ed = settings.edit();
 				ed.putString("station_uri", data.getDataString());
-				boolean res = ed.commit();
+				ed.commit();
 
 				TextView radioName = (TextView) PlayerActivity.this
 						.findViewById(R.id.radio_name);

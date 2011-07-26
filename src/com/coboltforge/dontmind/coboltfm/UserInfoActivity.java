@@ -62,7 +62,7 @@ public class UserInfoActivity extends Activity {
 	            	ed.putString("password", passwordText.getText().toString());
 	            	ed.putBoolean("username_invalid", false);
 	            	ed.putBoolean("password_invalid", false);
-					boolean res = ed.commit();	            	
+					ed.commit();	            	
 	                setResult(RESULT_OK);
 	                finish();
 	            }

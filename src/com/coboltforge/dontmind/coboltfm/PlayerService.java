@@ -59,8 +59,6 @@ public class PlayerService extends Service {
 
 	private LastFMNotificationListener mLastFMNotificationListener = null;
 	
-	private String mUrl;
-
 	public void setLastFMNotificationListener(
 			LastFMNotificationListener listener) {
 		this.mLastFMNotificationListener = listener;

@@ -5,7 +5,6 @@ import org.w3c.dom.Element;
 import com.coboltforge.dontmind.coboltfm.Utils.ParseException;
 
 public class FriendInfo {
-	private static final String TAG = "FriendInfo";
 	
 	private String mName;
 	private String mProfileUrl;
@@ -20,7 +19,7 @@ public class FriendInfo {
 	}
 
 	public String getProfileUrl() {
-		return mAvatarUrl;
+		return mProfileUrl;
 	}
 	
 	// important for AutoCompleteTextViews
