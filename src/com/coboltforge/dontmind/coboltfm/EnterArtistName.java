@@ -1,16 +1,18 @@
-package com.ajaxie.lastfm;
+package com.coboltforge.dontmind.coboltfm;
 
 import java.util.List;
+
+import com.coboltforge.dontmind.coboltfm.R;
+
 
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 
-public class EnterTag extends EnterNameActivity {
-
-	public EnterTag() {
-		super(R.layout.enter_tag, "tag", "Please enter some tag name");
-		
+public class EnterArtistName extends EnterNameActivity {
+	
+	public EnterArtistName() {
+		super(R.layout.enter_station, "station", "Please enter some artist name");				
 	}
 	
 	@Override
@@ -22,7 +24,7 @@ public class EnterTag extends EnterNameActivity {
         {
         	List<String> path = stationUri.getPathSegments();
         	if (stationUri.getScheme().equals("lastfm")) {
-    			if (stationUri.getAuthority().equals("globaltags") && path.size() > 0)
+    			if (stationUri.getAuthority().equals("artist") && path.size() > 0)
         			super.setDefaultName(path.get(0));
         	}
         }

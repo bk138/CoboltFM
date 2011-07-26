@@ -1,4 +1,4 @@
-package com.ajaxie.lastfm;
+package com.coboltforge.dontmind.coboltfm;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;

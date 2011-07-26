@@ -1,4 +1,4 @@
-package com.ajaxie.lastfm;
+package com.coboltforge.dontmind.coboltfm;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -14,7 +14,7 @@ import java.net.URLEncoder;
 
 import android.util.Log;
 
-import com.ajaxie.lastfm.Utils.OptionsParser;
+import com.coboltforge.dontmind.coboltfm.Utils.OptionsParser;
 
 public class ScrobblerClient {
 

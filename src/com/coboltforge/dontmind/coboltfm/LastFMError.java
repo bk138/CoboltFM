@@ -1,4 +1,4 @@
-package com.ajaxie.lastfm;
+package com.coboltforge.dontmind.coboltfm;
 
 public class LastFMError extends Exception {
 	String mMessage;

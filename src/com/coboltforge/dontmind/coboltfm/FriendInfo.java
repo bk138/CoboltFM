@@ -1,8 +1,8 @@
-package com.ajaxie.lastfm;
+package com.coboltforge.dontmind.coboltfm;
 
 import org.w3c.dom.Element;
 
-import com.ajaxie.lastfm.Utils.ParseException;
+import com.coboltforge.dontmind.coboltfm.Utils.ParseException;
 
 public class FriendInfo {
 	private static final String TAG = "FriendInfo";

@@ -1,7 +1,9 @@
-package com.ajaxie.lastfm;
+package com.coboltforge.dontmind.coboltfm;
 
 import java.util.Timer;
 import java.util.TimerTask;
+
+import com.coboltforge.dontmind.coboltfm.R;
 
 import android.app.Activity;
 import android.app.AlertDialog;

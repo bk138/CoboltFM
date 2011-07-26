@@ -1,4 +1,4 @@
-package com.ajaxie.lastfm;
+package com.coboltforge.dontmind.coboltfm;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -38,9 +38,9 @@ import android.os.Looper;
 import android.os.Message;
 import android.util.Log;
 
-import com.ajaxie.lastfm.PlayerService.LastFMNotificationListener;
-import com.ajaxie.lastfm.PlayerService.ServiceNotificationListener;
-import com.ajaxie.lastfm.Utils.ParseException;
+import com.coboltforge.dontmind.coboltfm.PlayerService.LastFMNotificationListener;
+import com.coboltforge.dontmind.coboltfm.PlayerService.ServiceNotificationListener;
+import com.coboltforge.dontmind.coboltfm.Utils.ParseException;
 
 public class PlayerThread extends Thread {
 

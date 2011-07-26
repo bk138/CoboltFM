@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="hello">Hello World, LastFMPlayer</string>
-    <string name="app_name">aLastFM Player</string>
+    <string name="app_name">CoboltFM</string>
 <string name="local_service_connected">Service connected</string>
 <string name="local_service_disconnected">Local service disconnected</string>
 <string name="alert_dialog_single_choice">Error</string>

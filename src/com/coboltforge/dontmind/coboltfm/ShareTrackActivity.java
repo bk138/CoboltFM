@@ -1,4 +1,4 @@
-package com.ajaxie.lastfm;
+package com.coboltforge.dontmind.coboltfm;
 
 import java.util.ArrayList;
 
@@ -14,11 +14,11 @@ import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.MultiAutoCompleteTextView;
 import android.widget.TextView;
 
-import com.ajaxie.lastfm.PlayerService.PlayingStatus;
-import com.ajaxie.lastfm.PlayerService.Status;
+import com.coboltforge.dontmind.coboltfm.R;
+import com.coboltforge.dontmind.coboltfm.PlayerService.PlayingStatus;
+import com.coboltforge.dontmind.coboltfm.PlayerService.Status;
 
 public class ShareTrackActivity extends Activity {
 	

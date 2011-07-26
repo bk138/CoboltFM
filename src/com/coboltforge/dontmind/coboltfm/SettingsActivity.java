@@ -1,4 +1,6 @@
-package com.ajaxie.lastfm;
+package com.coboltforge.dontmind.coboltfm;
+
+import com.coboltforge.dontmind.coboltfm.R;
 
 import android.app.Activity;
 import android.app.AlertDialog;
