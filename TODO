@@ -1,7 +1,12 @@
+* use mp instead of dl thread
+
+* add % preference
+
 * rework main view
   * better space usage
+  * error into dialog
 
 * rework about screen
-  * add flattr button
-  
-* Translations
+  * update flattr sdk
+  * add paypal button
+ 
