@@ -2,10 +2,9 @@
 
 * add % preference
 
-* rework main view
-  * better space usage
-
 * rework about screen
   * update flattr sdk
   * add paypal button
+  
+* translate all strings
  

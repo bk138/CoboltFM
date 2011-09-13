@@ -7,45 +7,50 @@
 		android:layout_width="fill_parent" android:layout_height="wrap_content"
 		android:layout_gravity="center_vertical">
 
-	<LinearLayout android:orientation="vertical"
-		android:layout_width="fill_parent" android:layout_height="wrap_content" android:layout_weight="1"
-		android:layout_gravity="right" >
-	<TextView android:id="@+id/status_text" android:layout_height="wrap_content"
-		android:text="playing" android:layout_width="fill_parent"  />		
-	<TextView android:id="@+id/radio_name" android:layout_height="fill_parent"
-		android:text="" android:layout_width="fill_parent" 
-		android:textSize="18sp"/>
-	</LinearLayout>
-
-	<LinearLayout android:orientation="vertical"
-		android:layout_width="wrap_content" android:layout_height="wrap_content"
-		android:layout_gravity="right" >
-
-	<TextView android:layout_height="5px"
-		android:text="" android:layout_width="fill_parent"  />		
+		<LinearLayout android:orientation="vertical"
+			android:layout_width="fill_parent" android:layout_height="wrap_content" android:layout_weight="1"
+			android:layout_gravity="right" >
+		<TextView android:id="@+id/status_text" android:layout_height="wrap_content"
+			android:text="playing" android:layout_width="fill_parent"  />		
+		<TextView android:id="@+id/radio_name" android:layout_height="fill_parent"
+			android:text="" android:layout_width="fill_parent" 
+			android:textSize="18sp"/>
+		</LinearLayout>
 	
-	 <Button android:id="@+id/tune_button" android:layout_width="100dip" android:textSize="18sp"
-	 android:drawableLeft="@drawable/tune_icon" 
-	 android:text="Tune" android:layout_height="65dip" android:textStyle="bold"/>
-	</LinearLayout>
+		<LinearLayout android:orientation="vertical"
+			android:layout_width="wrap_content" android:layout_height="wrap_content"
+			android:layout_gravity="right" >
+	
+		<TextView android:layout_height="5px"
+			android:text="" android:layout_width="fill_parent"  />		
+		
+		 <Button android:id="@+id/tune_button" android:layout_width="100dip" android:textSize="18sp"
+		 android:drawableLeft="@drawable/tune_icon" 
+		 android:text="Tune" android:layout_height="65dip" android:textStyle="bold"/>
+		</LinearLayout>
 		 
 	</LinearLayout>
 	
 	<ViewFlipper android:id="@+id/switcher" android:layout_width="fill_parent" 
-	android:layout_height="wrap_content" android:baselineAligned="false" android:layout_gravity="center_horizontal" >
+	android:baselineAligned="false" android:layout_gravity="center_horizontal"
+	 android:layout_height="fill_parent"  android:layout_weight="1">
 	
 		<LinearLayout android:orientation="horizontal" android:id="@+id/display_container"
-			android:layout_width="wrap_content" android:layout_height="wrap_content"
-			android:layout_gravity="left" >
+			android:layout_width="fill_parent" android:layout_height="fill_parent"
+			android:padding="5dip" >
 		
-			<TextView android:layout_height="5px"
-				android:text="" android:layout_width="5px"  />		
-		
-			<ImageSwitcher android:id="@+id/album_view" android:layout_width="100dip"
-				android:layout_height="100dip" android:paddingRight="8dip"/>
+			<ImageSwitcher android:id="@+id/album_view" 
+			    android:layout_width="0dip"
+				android:layout_height="fill_parent" 
+				android:layout_weight="1"
+				android:paddingRight="5dip"
+				/>
 							
 			<LinearLayout android:orientation="vertical"
-				android:layout_width="wrap_content" android:layout_height="wrap_content"			>
+				android:layout_width="0dip" 
+				android:layout_height="fill_parent"	
+				android:layout_weight="1">
+				
 				<TextView android:id="@+id/creator_name_text" android:layout_height="wrap_content"
 					android:layout_weight="1"
 					android:text="" android:layout_width="fill_parent" android:textSize="18sp" />
@@ -55,20 +60,24 @@
 					android:text="" android:layout_width="wrap_content" />
 				<TextView android:id="@+id/time_counter" android:layout_height="wrap_content"
 					android:textSize="40dip" android:text="0:00" android:layout_width="wrap_content" />							
+			
 			</LinearLayout>
 	
 		</LinearLayout>
 	
 		<LinearLayout android:orientation="horizontal" android:id="@+id/loading_container"
-			android:layout_width="fill_parent" android:layout_height="wrap_content"
+			android:layout_width="wrap_content" android:layout_height="fill_parent"
 			android:layout_gravity="center">
 	
 			<ImageView android:id="@+id/loading_image"
 				android:layout_width="wrap_content" android:layout_height="48dip"
-				android:paddingRight="8dip" />
+				android:paddingRight="8dip" 
+				android:layout_gravity="center_vertical"/>
 			<TextView android:id="@+id/loading_text"
 				android:layout_height="wrap_content" android:textSize="32dip"
-				android:text="Connecting" android:layout_width="wrap_content" />
+				android:text="Connecting" android:layout_width="wrap_content"
+				android:layout_gravity="center_vertical" />
+				
 		</LinearLayout>
 		
 		<LinearLayout android:orientation="horizontal" android:id="@+id/errormsg_container"
@@ -76,7 +85,7 @@
 			android:layout_gravity="center"
 			android:padding="10dip" >
 		
-			<TextView android:id="@+id/error_text" android:layout_height="fill_parent"
+			<TextView android:id="@+id/error_text" android:layout_height="wrap_content"
 			android:text="" android:layout_width="wrap_content" android:textColor="#000000"
 			android:background="#f88017" 
 			android:layout_gravity="center"/>

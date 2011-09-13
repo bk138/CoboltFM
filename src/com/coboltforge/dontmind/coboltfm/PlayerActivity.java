@@ -199,7 +199,7 @@ public class PlayerActivity extends Activity {
 		TextView trackText = (TextView) PlayerActivity.this
 				.findViewById(R.id.track_name_text);
 
-		timeText.setText("--:--");
+		timeText.setText("");
 		creatorText.setText("");
 		albumText.setText("");
 		trackText.setText("");
