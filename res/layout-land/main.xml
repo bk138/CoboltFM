@@ -32,11 +32,11 @@
 
 	</LinearLayout>
 
-	<ViewSwitcher android:id="@+id/switcher"
+	<ViewFlipper android:id="@+id/switcher"
 		android:layout_width="fill_parent" android:layout_height="wrap_content"
 		android:baselineAligned="false" android:layout_gravity="center_horizontal">
 
-		<LinearLayout android:orientation="horizontal"
+		<LinearLayout android:orientation="horizontal" android:id="@+id/display_container"
 			android:layout_width="wrap_content" android:layout_height="wrap_content"
 			android:layout_gravity="left">
 
@@ -76,8 +76,21 @@
 				android:layout_height="wrap_content" android:textSize="32dip"
 				android:text="Connecting" android:layout_width="wrap_content" />
 		</LinearLayout>
+		
+		
+		<LinearLayout android:orientation="horizontal" android:id="@+id/errormsg_container"
+			android:layout_width="wrap_content" android:layout_height="fill_parent"
+			android:layout_gravity="center"
+			android:padding="10dip" >
+		
+			<TextView android:id="@+id/error_text" android:layout_height="fill_parent"
+			android:text="" android:layout_width="wrap_content" android:textColor="#000000"
+			android:background="#f88017" 
+			android:layout_gravity="center"/>
+		
+		</LinearLayout>
 
-	</ViewSwitcher>
+	</ViewFlipper>
 
 	<LinearLayout android:orientation="horizontal"
 		android:layout_width="wrap_content" android:layout_height="wrap_content"
