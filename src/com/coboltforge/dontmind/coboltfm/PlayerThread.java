@@ -1,8 +1,6 @@
 package com.coboltforge.dontmind.coboltfm;
 
 import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
@@ -71,15 +69,11 @@ public class PlayerThread extends Thread {
 		mVersionString = ver;
 	}
 
-	MediaPlayer mp = null;
-	
-	boolean mFullDownloadMode;
-	private File mDownloadingFile;
-	private File mReadyFile;
-	private String mDownloadingFileName = "downloadBuf.dat";
-	private String mReadyFileName = "readyBuf.dat";
-	private DownloaderThread mDownloader;
+	MediaPlayer mFrontMP = null;
+	MediaPlayer mBackMP = null;
 
+	private int mPreBuffer;
+	
 	private ArrayList<XSPFTrackInfo> mPlaylist;
 	private int mNextPlaylistItem;
 	private XSPFTrackInfo mCurrentTrack;
@@ -151,8 +145,8 @@ public class PlayerThread extends Thread {
 	}
 
 	public int getCurrentPosition() {
-		if (mp != null)
-			return mp.getCurrentPosition();
+		if (mFrontMP != null)
+			return mFrontMP.getCurrentPosition();
 		else
 			return 0;
 	}
@@ -175,21 +169,12 @@ public class PlayerThread extends Thread {
 	
 	
 
-	public PlayerThread(Context c, String username, String password, boolean fullDownloadMode) {
+	public PlayerThread(Context c, String username, String password, int preBuffer) {
 		super();
 		mUsername = username;
 		mPassword = password;
 		mContext = c;
-		mFullDownloadMode = fullDownloadMode;
-		
-		if(mFullDownloadMode)
-		{
-			mDownloader =  new DownloaderThread(null, null, null, null); // just to have it non-null
-			mReadyFile = new File(mContext.getCacheDir(), mReadyFileName);
-			mDownloadingFile = new File(mContext.getCacheDir(), mDownloadingFileName);
-			mReadyFile.deleteOnExit();
-			mDownloadingFile.deleteOnExit();
-		}
+		mPreBuffer = preBuffer;
 	}
 
 	public void run() {
@@ -323,16 +308,20 @@ public class PlayerThread extends Thread {
 	public boolean stopPlaying() {
 		if (mCurrentTrack != null)
 			submitCurrentTrackDelayed();
-		if (mp != null)
-			mp.stop();
-		
-		if(mFullDownloadMode)
+		if (mFrontMP != null)
 		{
-			// stop downloading
-			mDownloader.interrupt();
-			mDownloadingFile.delete();
-			mDownloadingTrack = null;
+			mFrontMP.stop();
+			mFrontMP.release();
+			mFrontMP = null;
 		}
+		
+		if (mBackMP != null)
+		{
+			mBackMP.stop();
+			mBackMP.release();
+			mBackMP = null;
+		}
+		
 		
 		return true;
 	}
@@ -370,6 +359,16 @@ public class PlayerThread extends Thread {
 	OnBufferingUpdateListener mOnBufferingUpdateListener = new MediaPlayer.OnBufferingUpdateListener() {
 
 		public void onBufferingUpdate(MediaPlayer mp, int percent) {
+			
+			Log.d(TAG, "front player buffered " + percent + " %, " + mPreBuffer + " needed" );
+			
+			if(percent >= mPreBuffer && 
+					mFrontMP != null &&
+					!mFrontMP.isPlaying())
+			{
+				mFrontMP.start();
+			}
+
 			if (mLastFMNotificationListener != null)
 				mLastFMNotificationListener.onBuffer(percent);
 		}
@@ -405,9 +404,9 @@ public class PlayerThread extends Thread {
 
 	private void submitCurrentTrackDelayed() {
 		XSPFTrackInfo curTrack = getCurrentTrack();
-		if (curTrack.getDuration() > 30 && mp != null)
-			if (mp != null && mp.getCurrentPosition() > 240
-					|| mp.getCurrentPosition() > curTrack.getDuration()					
+		if (curTrack.getDuration() > 30 && mFrontMP != null)
+			if (mFrontMP != null && mFrontMP.getCurrentPosition() > 240
+					|| mFrontMP.getCurrentPosition() > curTrack.getDuration()					
 					|| (mCurrentTrackRating != null && mCurrentTrackRating.equals("L"))
 					|| (mCurrentTrackRating != null && mCurrentTrackRating.equals("B"))) {
 				TrackSubmissionParams params = new TrackSubmissionParams(
@@ -426,9 +425,9 @@ public class PlayerThread extends Thread {
 		if (mCurrentTrack != null) //FIXME for resume after dl finished
 			submitCurrentTrackDelayed();
 		
-		if(mFullDownloadMode && mDownloadingTrack != null)
-			mCurrentTrack = mDownloadingTrack;
-		else
+//		if(mFullDownloadMode && mDownloadingTrack != null)
+//			mCurrentTrack = mDownloadingTrack;
+//		else
 			mCurrentTrack = getNextTrack();
 		
 		if (mCurrentTrack == null)
@@ -436,73 +435,73 @@ public class PlayerThread extends Thread {
 
 		String streamUrl = mCurrentTrack.getLocation();
 		try {
-			if (mp != null)
+			if (mFrontMP != null)
 			{
-				mp.stop();
-				mp = null;
+				mFrontMP.stop();
+				mFrontMP.release();
+				mFrontMP = null;
 			}
 
-			if(mFullDownloadMode)
-			{
-				mReadyFile.delete(); // is consumed by now
-				
-				if(!mDownloader.isAlive() && !mDownloader.isDone())// no download ever started yet, start one 
-				{
-					Log.d(TAG, "No download running, starting new one (" + mCurrentTrack.getTitle() + ")");
-
-					mDownloadingTrack = mCurrentTrack;
-					mDownloader = new DownloaderThread(streamUrl, mDownloadingFile, mCurrentTrack.getTitle(), mHandler);
-					mDownloader.start();
-				}
-
-				Log.d(TAG, "Waiting for download to finish");
-				
-				// downloading now , but not ready
-				try {
-					mDownloader.join(100);
-					if(mDownloader.isAlive()) // still running
-						return; // get back to main loop to get messages!!
-				} catch (InterruptedException e) {
-					e.printStackTrace();
-				}
-				
-				Log.d(TAG, "Download finished, swapping buffers");
-
-				mDownloadingFile.renameTo(new File(mContext.getCacheDir(), mReadyFileName));
-				mDownloadingFile.createNewFile();
-				
-				Log.d(TAG, "Starting new download to " + mDownloadingFile.getAbsolutePath());
-				
-				mDownloadingTrack = getNextTrack();
-				mDownloader = new DownloaderThread(mDownloadingTrack.getLocation(),
-						mDownloadingFile, 
-						mDownloadingTrack.getTitle(),
-						mHandler);
-				mDownloader.start();
-			}
+//			if(mFullDownloadMode)
+//			{
+//				mReadyFile.delete(); // is consumed by now
+//				
+//				if(!mDownloader.isAlive() && !mDownloader.isDone())// no download ever started yet, start one 
+//				{
+//					Log.d(TAG, "No download running, starting new one (" + mCurrentTrack.getTitle() + ")");
+//
+//					mDownloadingTrack = mCurrentTrack;
+//					mDownloader = new DownloaderThread(streamUrl, mDownloadingFile, mCurrentTrack.getTitle(), mHandler);
+//					mDownloader.start();
+//				}
+//
+//				Log.d(TAG, "Waiting for download to finish");
+//				
+//				// downloading now , but not ready
+//				try {
+//					mDownloader.join(100);
+//					if(mDownloader.isAlive()) // still running
+//						return; // get back to main loop to get messages!!
+//				} catch (InterruptedException e) {
+//					e.printStackTrace();
+//				}
+//				
+//				Log.d(TAG, "Download finished, swapping buffers");
+//
+//				mDownloadingFile.renameTo(new File(mContext.getCacheDir(), mReadyFileName));
+//				mDownloadingFile.createNewFile();
+//				
+//				Log.d(TAG, "Starting new download to " + mDownloadingFile.getAbsolutePath());
+//				
+//				mDownloadingTrack = getNextTrack();
+//				mDownloader = new DownloaderThread(mDownloadingTrack.getLocation(),
+//						mDownloadingFile, 
+//						mDownloadingTrack.getTitle(),
+//						mHandler);
+//				mDownloader.start();
+//			}
 			
 			
 			MediaPlayer mediaPlayer = new MediaPlayer();
-			
-			if(mFullDownloadMode) // readyFile is ready at this point
-			{
-				FileInputStream fis = new FileInputStream(mReadyFile);
-				mediaPlayer.setDataSource(fis.getFD());
-				Log.d(TAG, "playing from file " + mReadyFile.getAbsolutePath());
-			}
-			else
+//			
+//			if(mFullDownloadMode) // readyFile is ready at this point
+//			{
+//				FileInputStream fis = new FileInputStream(mReadyFile);
+//				mediaPlayer.setDataSource(fis.getFD());
+//				Log.d(TAG, "playing from file " + mReadyFile.getAbsolutePath());
+//			}
+//			else
 			{
 				Log.d(TAG, "playing from stream " + streamUrl);
 				mediaPlayer.setDataSource(streamUrl);
 			}
 				
 			mediaPlayer.setOnCompletionListener(mOnTrackCompletionListener);
-			mediaPlayer.setOnBufferingUpdateListener(mOnBufferingUpdateListener);
+			mediaPlayer.setOnBufferingUpdateListener(mOnBufferingUpdateListener); // this starts the player once prebuffering is done
 			mediaPlayer.prepare();
 			if (mMuted)
 				mediaPlayer.setVolume(0, 0);
-			mediaPlayer.start();
-			mp = mediaPlayer;
+			mFrontMP = mediaPlayer;
 			
 			syncMuteState(); // in case if mute flag changed concurrently after previous if
 			
@@ -800,8 +799,8 @@ public class PlayerThread extends Thread {
 	
 	public void unmute() {
 		synchronized (mMuted) {
-			if (mp != null)
-				mp.setVolume(1.0f, 1.0f);
+			if (mFrontMP != null)
+				mFrontMP.setVolume(1.0f, 1.0f);
 			mMuted = false;
 		}
 	}
@@ -809,17 +808,17 @@ public class PlayerThread extends Thread {
 	public void mute() {
 		synchronized (mMuted) {
 			mMuted = true;
-			if (mp != null)
-				mp.setVolume(0, 0);
+			if (mFrontMP != null)
+				mFrontMP.setVolume(0, 0);
 		}
 	}
 	
 	public void syncMuteState() {
 		synchronized (mMuted) {
 			if (mMuted) 
-				mp.setVolume(0, 0);
+				mFrontMP.setVolume(0, 0);
 			else
-				mp.setVolume(1, 1);
+				mFrontMP.setVolume(1, 1);
 		}
 	}
 	

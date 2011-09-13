@@ -12,9 +12,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
-import android.widget.CheckBox;
-import android.widget.CompoundButton;
-import android.widget.CompoundButton.OnCheckedChangeListener;
+import android.widget.SeekBar;
 
 public class SettingsActivity extends Activity {
 	protected static final int SET_USER_INFO = 0;
@@ -70,25 +68,24 @@ public class SettingsActivity extends Activity {
 
 		});
 		
-		CheckBox altBufferCheckBox = (CheckBox) findViewById(R.id.alt_buffer);
+		SeekBar preBufferSlider = (SeekBar) findViewById(R.id.prebuffer_slider);
 		SharedPreferences settings = getSharedPreferences(
 				PlayerActivity.PREFS_NAME, 0);
 		
-		altBufferCheckBox.setChecked(settings.getBoolean("altBuffer", false));
+		preBufferSlider.setProgress(settings.getInt("preBuffer", 5));
+	}
+	
+	
+	protected void onPause()
+	{
+		super.onPause();
 		
-		altBufferCheckBox.setOnCheckedChangeListener(new OnCheckedChangeListener() {
-
-			@Override
-			public void onCheckedChanged(CompoundButton buttonView,
-					boolean isChecked) {
-				SharedPreferences settings = getSharedPreferences(
-						PlayerActivity.PREFS_NAME, 0);
-				Editor ed = settings.edit();
-				ed.putBoolean("altBuffer", isChecked);
-				ed.commit();
-			}			
-		});
-
+		SeekBar preBufferSlider = (SeekBar) findViewById(R.id.prebuffer_slider);
+		SharedPreferences settings = getSharedPreferences(
+				PlayerActivity.PREFS_NAME, 0);
+		Editor ed = settings.edit();
+		ed.putInt("preBuffer", preBufferSlider.getProgress());
+		ed.commit();
 	}
 
 }

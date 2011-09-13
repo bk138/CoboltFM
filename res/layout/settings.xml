@@ -19,15 +19,24 @@
             android:layout_height="wrap_content"
 	        android:text="@string/userinfo_button"
 	       	android:layout_marginBottom="20dip"/>
-        <CheckBox android:id="@+id/alt_buffer"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/alt_buffer"
-            android:layout_marginBottom="5dip" />
+     
+       
+        <TextView android:text="@string/prebuffer"
+         android:layout_height="wrap_content"
+         android:layout_width="wrap_content"
+         android:textAppearance="?android:attr/textAppearanceMedium"
+         android:layout_marginBottom="5dip"
+         />
+            
+        <SeekBar android:id="@+id/prebuffer_slider"
+         android:layout_height="wrap_content" 
+         android:layout_width="match_parent"
+         android:max="100"
+         android:layout_marginBottom="5dip"/>
     
          <TextView
             android:layout_width="fill_parent" android:layout_height="fill_parent"        
             android:layout_weight="1"
-            android:text="@string/alt_buffer_expl"/>
+            android:text="@string/prebuffer_expl"/>
                                     
 </LinearLayout>

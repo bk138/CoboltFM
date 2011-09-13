@@ -300,9 +300,9 @@ public class PlayerService extends Service {
 			
 			String username = settings.getString("username", null);
 			String password = settings.getString("password", null);
-			boolean altBuffer = settings.getBoolean("altBuffer", false);
+			int preBuffer = settings.getInt("preBuffer", 5);
 			
-			mPlayerThread = new PlayerThread(getApplicationContext(), username, password, altBuffer);
+			mPlayerThread = new PlayerThread(getApplicationContext(), username, password, preBuffer);
 			try {
 				mPlayerThread.setVersionString(getPackageManager().getPackageInfo(this.getPackageName(), 0).versionName);
 			} catch (NameNotFoundException e) {

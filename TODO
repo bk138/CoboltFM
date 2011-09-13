@@ -1,7 +1,5 @@
 * use mp instead of dl thread
 
-* add % preference
-
 * rework about screen
   * update flattr sdk
   * add paypal button
