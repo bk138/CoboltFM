@@ -32,6 +32,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ImageButton;
+import android.widget.ViewFlipper;
 import android.widget.ViewSwitcher;
 import android.widget.Gallery.LayoutParams;
 
@@ -230,8 +231,7 @@ public class PlayerActivity extends Activity {
 						public void run() {
 							if (mBoundService == null)
 								return;
-							TextView errorText = (TextView) PlayerActivity.this
-									.findViewById(R.id.error_text);
+						
 							TextView statusText = (TextView) PlayerActivity.this
 									.findViewById(R.id.status_text);
 							TextView timeText = (TextView) PlayerActivity.this
@@ -263,19 +263,19 @@ public class PlayerActivity extends Activity {
 								showLoadingBanner("Connecting..");
 							}
 							else
-								hideLoadingBanner();
+								showTimeDisplay();
 
 							if (status instanceof PlayerService.ErrorStatus) {
 								PlayerService.ErrorStatus err = (PlayerService.ErrorStatus) status;
 								statusText.setText("Error");
-								errorText.setVisibility(View.VISIBLE);
+								
 								if (err.getError() instanceof PlayerThread.BadCredentialsError) {
 									int badItem = ((PlayerThread.BadCredentialsError)err.getError()).getBadItem();
 									
 									if (badItem == PlayerThread.BadCredentialsError.BAD_USERNAME)
-										errorText.setText("Login failed: invalid username");
+										showErrorMsg("Login failed: invalid username");
 									else
-										errorText.setText("Login failed: invalid password");
+										showErrorMsg("Login failed: invalid password");
 
 									SharedPreferences settings = getSharedPreferences(
 											PREFS_NAME, 0);
@@ -293,8 +293,10 @@ public class PlayerActivity extends Activity {
 										Log.w(TAG, Boolean.toString(res));
 									}
 								} else 
-									errorText.setText(statusString);
-							} else {
+									showErrorMsg(statusString);
+							}
+							
+							else {
 								final ImageButton loveButton = (ImageButton) findViewById(R.id.love_button);
 								final ImageButton banButton = (ImageButton) findViewById(R.id.ban_button);
 								final ImageButton shareButton = (ImageButton) findViewById(R.id.share_button);
@@ -306,7 +308,6 @@ public class PlayerActivity extends Activity {
 								shareButton.setEnabled(true);
 
 								statusText.setText(statusString);
-								errorText.setVisibility(View.INVISIBLE);
 							}
 
 							if (status instanceof PlayerService.PlayingStatus) {
@@ -355,7 +356,7 @@ public class PlayerActivity extends Activity {
 
 	void showLoadingBanner(String text) {
 		final TextView textView = (TextView) findViewById(R.id.loading_text);
-		ViewSwitcher switcher = (ViewSwitcher) findViewById(R.id.switcher);
+		ViewFlipper switcher = (ViewFlipper) findViewById(R.id.switcher);
 		
 		if (!text.equals(textView.getText().toString()))
 		{
@@ -364,23 +365,43 @@ public class PlayerActivity extends Activity {
 		}
 		final ImageView img = (ImageView) findViewById(R.id.loading_image);
 		if (switcher.getCurrentView().getId() != R.id.loading_container) {
-			switcher.showNext();
+			switcher.setDisplayedChild(1); // is the second child in layout!
 			AnimationDrawable frameAnimation = (AnimationDrawable) img
 					.getBackground();
 			frameAnimation.start();
 		}
 	}
 
-	void hideLoadingBanner() {
+	void showTimeDisplay() {
 		final ImageView img = (ImageView) findViewById(R.id.loading_image);
-		ViewSwitcher switcher = (ViewSwitcher) findViewById(R.id.switcher);
-		if (switcher.getCurrentView().getId() == R.id.loading_container) {
-			switcher.showNext();
+		ViewFlipper switcher = (ViewFlipper) findViewById(R.id.switcher);
+		if (switcher.getCurrentView().getId() != R.id.display_container) {
+			switcher.setDisplayedChild(0); // is the first child in layout!
 			AnimationDrawable frameAnimation = (AnimationDrawable) img
 					.getBackground();
 			frameAnimation.stop();
 		}
 	}
+	
+	void showErrorMsg(String text) {
+		final TextView textView = (TextView) findViewById(R.id.error_text);
+		ViewFlipper switcher = (ViewFlipper) findViewById(R.id.switcher);
+		
+		if (!text.equals(textView.getText().toString()))
+		{
+			textView.setText(text);
+			textView.invalidate();
+		}
+		final ImageView img = (ImageView) findViewById(R.id.loading_image);
+		if (switcher.getCurrentView().getId() != R.id.errormsg_container) {
+			switcher.setDisplayedChild(2); // is the third child in layout!
+			AnimationDrawable frameAnimation = (AnimationDrawable) img
+					.getBackground();
+			frameAnimation.start();
+		}
+	}
+	
+	
 
 	/** Called when the activity is first created. */
 	@Override
@@ -500,7 +521,7 @@ public class PlayerActivity extends Activity {
 					PlayerActivity.this.stopService(serviceIntent);
 					resetSongInfoDisplay();
 					resetAlbumImage();
-					hideLoadingBanner();
+					showTimeDisplay();
 					TextView statusText = (TextView) PlayerActivity.this
 							.findViewById(R.id.status_text);
 					statusText.setText("Disconnected");

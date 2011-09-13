@@ -4,7 +4,6 @@
 
 * rework main view
   * better space usage
-  * error into dialog
 
 * rework about screen
   * update flattr sdk
