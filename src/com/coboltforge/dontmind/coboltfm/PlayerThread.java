@@ -84,7 +84,6 @@ public class PlayerThread extends Thread {
 	private ArrayList<XSPFTrackInfo> mPlaylist;
 	private int mNextPlaylistItem;
 	private XSPFTrackInfo mCurrentTrack;
-	private XSPFTrackInfo mDownloadingTrack;
 
 	private long mStartPlaybackTime;
 	private String mCurrentTrackRating;
@@ -542,7 +541,7 @@ public class PlayerThread extends Thread {
 			throw new LastFMError(e.toString());
 		} catch (IOException e) {
 			Log.e(TAG, "in playNextTrack", e);
-			playNextTrack();
+			throw new LastFMError(e.toString());
 		}
 	}
 
