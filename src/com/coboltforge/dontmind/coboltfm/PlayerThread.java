@@ -70,8 +70,10 @@ public class PlayerThread extends Thread {
 	}
 
 	MediaPlayer mFrontMP = null;
+	int mBufferedFront;
 	MediaPlayer mBackMP = null;
-
+	int mBufferedBack;
+	
 	private int mPreBuffer;
 	
 	private ArrayList<XSPFTrackInfo> mPlaylist;
@@ -150,6 +152,14 @@ public class PlayerThread extends Thread {
 		else
 			return 0;
 	}
+
+	public int getCurrentBuffered() {
+		if (mFrontMP != null)
+			return mBufferedFront;
+		else
+			return 0;
+	}
+	
 
 	public XSPFTrackInfo getCurrentTrack() {
 		return mCurrentTrack;
@@ -361,6 +371,8 @@ public class PlayerThread extends Thread {
 		public void onBufferingUpdate(MediaPlayer mp, int percent) {
 			
 			Log.d(TAG, "front player buffered " + percent + " %, " + mPreBuffer + " needed" );
+			
+			mBufferedFront = percent;
 			
 			if(percent >= mPreBuffer && 
 					mFrontMP != null &&

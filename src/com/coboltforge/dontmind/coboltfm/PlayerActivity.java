@@ -192,6 +192,8 @@ public class PlayerActivity extends Activity {
 	void resetSongInfoDisplay() {
 		TextView timeText = (TextView) PlayerActivity.this
 				.findViewById(R.id.time_counter);
+		TextView bufferText = (TextView) PlayerActivity.this
+                 .findViewById(R.id.buffer_display);
 		TextView creatorText = (TextView) PlayerActivity.this
 				.findViewById(R.id.creator_name_text);
 		TextView albumText = (TextView) PlayerActivity.this
@@ -200,6 +202,7 @@ public class PlayerActivity extends Activity {
 				.findViewById(R.id.track_name_text);
 
 		timeText.setText("");
+		bufferText.setText("");
 		creatorText.setText("");
 		albumText.setText("");
 		trackText.setText("");
@@ -236,6 +239,8 @@ public class PlayerActivity extends Activity {
 									.findViewById(R.id.status_text);
 							TextView timeText = (TextView) PlayerActivity.this
 									.findViewById(R.id.time_counter);
+							TextView bufferText = (TextView) PlayerActivity.this
+							         .findViewById(R.id.buffer_display);
 							TextView creatorText = (TextView) PlayerActivity.this
 									.findViewById(R.id.creator_name_text);
 							TextView albumText = (TextView) PlayerActivity.this
@@ -313,6 +318,8 @@ public class PlayerActivity extends Activity {
 							if (status instanceof PlayerService.PlayingStatus) {
 								int pos = ((PlayerService.PlayingStatus) status)
 										.getCurrentPosition();
+								int buffered = ((PlayerService.PlayingStatus) status)
+										.getCurrentBuffered();
 								final XSPFTrackInfo track = ((PlayerService.PlayingStatus) status)
 										.getCurrentTrack();
 								if (track != null) {
@@ -322,6 +329,7 @@ public class PlayerActivity extends Activity {
 
 									timeText.setText(String.format(
 											"%1$02d:%2$02d", minutes, seconds));
+									bufferText.setText("(buffered "+ buffered + " %)");
 									creatorText.setText(track.getCreator());
 									albumText.setText(track.getAlbum());
 									if (prevBitmap != track.getBitmap()) {

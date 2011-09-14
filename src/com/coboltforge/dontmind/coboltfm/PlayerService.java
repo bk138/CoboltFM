@@ -157,6 +157,7 @@ public class PlayerService extends Service {
 	}
 
 	public class PlayingStatus implements Status {
+		int buffered;
 		int position;
 		XSPFTrackInfo trackInfo;
 
@@ -172,6 +173,10 @@ public class PlayerService extends Service {
 		public int getCurrentPosition() {
 			return position;
 		}
+		
+		public int getCurrentBuffered() {
+			return buffered;
+		}
 
 		public XSPFTrackInfo getCurrentTrack() {
 			return trackInfo;
@@ -181,6 +186,9 @@ public class PlayerService extends Service {
 			position = currentPosition;
 		}
 		
+		public void setCurrentBuffered(int currentBuffered) {
+			buffered = currentBuffered;
+		}
 	}
 
 	public class StoppedStatus implements Status {
@@ -235,9 +243,14 @@ public class PlayerService extends Service {
 			else {
 				Status curStatus = mCurrentStatus;
 				if (curStatus instanceof PlayingStatus)
+				{
 					((PlayingStatus) curStatus)
 							.setCurrentPosition(mPlayerThread
 									.getCurrentPosition());
+					((PlayingStatus) curStatus)
+							.setCurrentBuffered(mPlayerThread
+									.getCurrentBuffered());
+				}
 			}
 		return mCurrentStatus;
 	}
