@@ -382,24 +382,14 @@ public class PlayerActivity extends Activity {
 			textView.setText(text);
 			textView.invalidate();
 		}
-		final ImageView img = (ImageView) findViewById(R.id.loading_image);
-		if (switcher.getCurrentView().getId() != R.id.loading_container) {
+		if (switcher.getCurrentView().getId() != R.id.loading_container) 
 			switcher.setDisplayedChild(1); // is the second child in layout!
-			AnimationDrawable frameAnimation = (AnimationDrawable) img
-					.getBackground();
-			frameAnimation.start();
-		}
 	}
 
 	void showTimeDisplay() {
-		final ImageView img = (ImageView) findViewById(R.id.loading_image);
 		ViewFlipper switcher = (ViewFlipper) findViewById(R.id.switcher);
-		if (switcher.getCurrentView().getId() != R.id.display_container) {
+		if (switcher.getCurrentView().getId() != R.id.display_container)
 			switcher.setDisplayedChild(0); // is the first child in layout!
-			AnimationDrawable frameAnimation = (AnimationDrawable) img
-					.getBackground();
-			frameAnimation.stop();
-		}
 	}
 	
 	void showErrorMsg(String text) {
@@ -411,13 +401,8 @@ public class PlayerActivity extends Activity {
 			textView.setText(text);
 			textView.invalidate();
 		}
-		final ImageView img = (ImageView) findViewById(R.id.loading_image);
-		if (switcher.getCurrentView().getId() != R.id.errormsg_container) {
+		if (switcher.getCurrentView().getId() != R.id.errormsg_container) 
 			switcher.setDisplayedChild(2); // is the third child in layout!
-			AnimationDrawable frameAnimation = (AnimationDrawable) img
-					.getBackground();
-			frameAnimation.start();
-		}
 	}
 	
 	
@@ -440,11 +425,6 @@ public class PlayerActivity extends Activity {
 		} catch (NameNotFoundException e) {
 			statusText.setText("Invalid version -- please check for update");
 		}
-
-		// Load the ImageView that will host the animation and
-		// set its background to our AnimationDrawable XML resource.
-		final ImageView img = (ImageView) findViewById(R.id.loading_image);
-		img.setBackgroundResource(R.drawable.loading_animation);
 
 		bindToPlayerService();
 

@@ -1,5 +1,7 @@
 * use mp instead of dl thread
 
+* rework landscape time artist etc display
+
 * rework about screen
   * update flattr sdk
   * add paypal button
