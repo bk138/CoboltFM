@@ -89,7 +89,7 @@ public class PlayerService extends Service {
 		PendingIntent contentIntent = PendingIntent.getActivity(this, 0,
 				new Intent(this, PlayerActivity.class), 0);
 
-		notification.setLatestEventInfo(this, "aLastFM Player", text,
+		notification.setLatestEventInfo(this, "CoboltFM Player", text,
 				contentIntent);
 
 		mNM.notify(PLAYER_NOTIFICATIONS, notification);
