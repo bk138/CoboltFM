@@ -272,6 +272,17 @@ public class PlayerService extends Service {
 		mCurrentStatus = new StoppedStatus();
 		return true;
 	}
+	
+	public boolean setPreBuffer(int percent)
+	{
+		if (mPlayerThread != null)
+		{
+			mPlayerThread.setPreBuffer(percent);
+			return true;
+		}
+		else
+			return false;
+	}
 
 	@Override
 	public void onStart(Intent intent, int startId) {

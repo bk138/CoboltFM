@@ -69,6 +69,11 @@ public class PlayerThread extends Thread {
 		mVersionString = ver;
 	}
 
+	public void setPreBuffer(int percent) {
+		mPreBuffer = percent;
+		Log.d(TAG, "prebuffer set to " + mPreBuffer);
+	}
+	
 	MediaPlayer mFrontMP = null;
 	int mBufferedFront;
 	MediaPlayer mBackMP = null;

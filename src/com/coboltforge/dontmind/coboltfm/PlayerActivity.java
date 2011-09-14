@@ -74,8 +74,7 @@ public class PlayerActivity extends Activity {
 		switch (item.getItemId()) {
 		case MENU_SETTINGS_ID:
 			startActivityForResult(
-					new Intent(PlayerActivity.this, SettingsActivity.class),
-					SETTINGS);
+					new Intent(PlayerActivity.this, SettingsActivity.class), SETTINGS);
 			return true;
 		case MENU_ABOUT_ID:
 			startActivity(new Intent(PlayerActivity.this, AboutActivity.class));
@@ -720,6 +719,16 @@ public class PlayerActivity extends Activity {
 
 			}
 		}
+		
+		// back from settings screen
+		if (requestCode == SETTINGS) {
+			if (mBoundService != null)  
+			{
+				SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
+				mBoundService.setPreBuffer(settings.getInt("preBuffer", 5));
+			}
+		}
+		
 	}
 
 	@Override
