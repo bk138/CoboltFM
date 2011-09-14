@@ -181,15 +181,12 @@ public class PlayerThread extends Thread {
 	String mUsername;
 	String mPassword;
 	protected ArrayList<FriendInfo> mFriendsList;
-	private Context mContext;
-	
 	
 
 	public PlayerThread(Context c, String username, String password, int preBuffer) {
 		super();
 		mUsername = username;
 		mPassword = password;
-		mContext = c;
 		mPreBuffer = preBuffer;
 	}
 

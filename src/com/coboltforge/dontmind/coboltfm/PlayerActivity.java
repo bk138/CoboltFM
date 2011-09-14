@@ -340,6 +340,10 @@ public class PlayerActivity extends Activity {
 									}
 									trackText.setText(track.getTitle());
 									radioName.setText(track.getStationName());
+									
+									// gets stuck sometimes when rotating
+									final ImageButton skipButton = (ImageButton) findViewById(R.id.skip_button);
+									skipButton.setEnabled(true);
 								}
 							} else {
 								resetSongInfoDisplay();
