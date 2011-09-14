@@ -16,6 +16,7 @@ import android.content.ServiceConnection;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.graphics.drawable.AnimationDrawable;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
@@ -329,7 +330,13 @@ public class PlayerActivity extends Activity {
 
 									timeText.setText(String.format(
 											"%1$02d:%2$02d", minutes, seconds));
+									
 									bufferText.setText("(buffered "+ buffered + " %)");
+									if(pos == 0) // pre-buffering
+										bufferText.setTextColor(Color.RED);
+									else 
+										bufferText.setTextColor(Color.GREEN);
+
 									creatorText.setText(track.getCreator());
 									albumText.setText(track.getAlbum());
 									if (prevBitmap != track.getBitmap()) {
