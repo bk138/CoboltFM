@@ -148,7 +148,13 @@ public class PlayerThread extends Thread {
 
 	public int getCurrentPosition() {
 		if (mFrontMP != null)
-			return mFrontMP.getCurrentPosition();
+			try {
+				return mFrontMP.getCurrentPosition();
+			}
+			catch (IllegalStateException e)
+			{
+				return 0;
+			}
 		else
 			return 0;
 	}
