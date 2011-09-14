@@ -109,11 +109,7 @@ public class PlayerActivity extends Activity {
 			// service that we know is running in our own process, we can
 			// cast its IBinder to a concrete class and directly access it.
 			mBoundService = ((PlayerService.LocalBinder) service).getService();
-
 			onServiceStarted();
-			// Tell the user about this for our demo.
-			Toast.makeText(PlayerActivity.this, R.string.local_service_connected,
-					Toast.LENGTH_SHORT).show();
 		}
 
 		public void onServiceDisconnected(ComponentName className) {
@@ -122,9 +118,6 @@ public class PlayerActivity extends Activity {
 			// Because it is running in our same process, we should never
 			// see this happen.
 			mBoundService = null;
-			Toast.makeText(PlayerActivity.this,
-					R.string.local_service_disconnected, Toast.LENGTH_LONG)
-					.show();
 		}
 	};
 

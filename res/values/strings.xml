@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">CoboltFM</string>
-<string name="local_service_connected">Service connected</string>
-<string name="local_service_disconnected">Local service disconnected</string>
 <string name="alert_dialog_single_choice">Error</string>
 <string name="alert_dialog_ok">OK</string>
 <string name="alert_dialog_cancel">Cancel</string>
@@ -15,7 +13,6 @@
 <string name="menu_about">About</string>
 <string name="about_title">About</string>
 <string name="station_spinner_prompt">Select station type</string>
-
 <string name="username">Username</string>
 <string name="password">Password</string>
 <string name="signup">Don\'t have a last.fm username? Register at http://last.fm/join</string>
