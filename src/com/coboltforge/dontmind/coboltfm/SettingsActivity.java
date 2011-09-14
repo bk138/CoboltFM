@@ -13,6 +13,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.SeekBar;
+import android.widget.TextView;
 
 public class SettingsActivity extends Activity {
 	protected static final int SET_USER_INFO = 0;
@@ -68,10 +69,33 @@ public class SettingsActivity extends Activity {
 
 		});
 		
+		
 		SeekBar preBufferSlider = (SeekBar) findViewById(R.id.prebuffer_slider);
+
+		// connect textview
+		preBufferSlider.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener()
+		{
+			@Override
+			public void onProgressChanged(SeekBar seekBar, int progress,
+					boolean fromUser) {
+				TextView preBufferText = (TextView) findViewById(R.id.prebuffer_textview);
+				preBufferText.setText(progress + " %");
+			}
+			
+
+			@Override
+			public void onStopTrackingTouch(SeekBar seekBar) {
+			}
+
+			@Override
+			public void onStartTrackingTouch(SeekBar seekBar) {
+			}
+		});
+		
+		
+		// set do saved or default value
 		SharedPreferences settings = getSharedPreferences(
 				PlayerActivity.PREFS_NAME, 0);
-		
 		preBufferSlider.setProgress(settings.getInt("preBuffer", 5));
 	}
 	
