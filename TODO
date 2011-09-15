@@ -1,10 +1,6 @@
 * use mp instead of dl thread
 
-* rework landscape time artist etc display
-
 * pause button
-
-* cover zoom screen
 
 * rework about screen
   * update flattr sdk

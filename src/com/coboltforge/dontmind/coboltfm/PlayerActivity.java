@@ -587,6 +587,23 @@ public class PlayerActivity extends Activity {
 				return i;
 			}
 		});
+		
+		albumView.setOnClickListener(new View.OnClickListener() {
+			public void onClick(View v) {
+				Log.d(TAG, "Album cover clicked");
+				if (mBoundService != null) 	
+				{
+					final PlayerService.Status status = mBoundService.getCurrentStatus();
+					if (status instanceof PlayerService.PlayingStatus) {
+						final XSPFTrackInfo track = ((PlayerService.PlayingStatus) status).getCurrentTrack();
+						Intent coverViewIntent = new Intent(PlayerActivity.this, AlbumCoverActivity.class);
+						coverViewIntent.putExtra("AlbumCover", track.getBitmap());
+						startActivity(coverViewIntent);
+					}
+				}
+			}
+		});
+		
 		albumView.setInAnimation(AnimationUtils.loadAnimation(this,
 				android.R.anim.fade_in));
 		albumView.setOutAnimation(AnimationUtils.loadAnimation(this,

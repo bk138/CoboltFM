@@ -68,8 +68,15 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
-           <activity android:name=".AboutActivity"
+        <activity android:name=".AboutActivity"
                   android:label="@string/about_title">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>  
+        <activity android:name=".AlbumCoverActivity"
+                  android:label="@string/albumcover_title">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.DEFAULT" />
