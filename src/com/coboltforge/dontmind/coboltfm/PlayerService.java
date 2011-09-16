@@ -86,14 +86,14 @@ public class PlayerService extends Service {
 	private void updateNotification(String text) {
 		Notification notification = new Notification(R.drawable.play, null,
 				System.currentTimeMillis());
-		PendingIntent contentIntent = PendingIntent.getActivity(this, 0,
-				new Intent(this, PlayerActivity.class), 0);
+		Intent startIntent = new Intent(this, PlayerActivity.class);
+		startIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP|Intent.FLAG_ACTIVITY_SINGLE_TOP);
+		PendingIntent contentIntent = PendingIntent.getActivity(this, 0, startIntent, 0);
 
 		notification.setLatestEventInfo(this, "CoboltFM Player", text,
 				contentIntent);
 
 		mNM.notify(PLAYER_NOTIFICATIONS, notification);
-
 	}
 
 	boolean mCurrentTrackLoved = false;
@@ -270,6 +270,7 @@ public class PlayerService extends Service {
 		}
 		mPlayerThread = null;
 		mCurrentStatus = new StoppedStatus();
+		updateNotification("Stopped");
 		return true;
 	}
 	
