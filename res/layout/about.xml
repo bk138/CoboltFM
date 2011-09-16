@@ -7,19 +7,25 @@
     >
 <TextView  
     android:layout_height="wrap_content" 
-    android:text="Another [Unofficial] Android LastFM Player"
+    android:text="@string/app_name"
     android:layout_width="wrap_content"
+    android:layout_gravity="center"
     android:textSize="30dip"/>
 <TextView android:id="@+id/version"
     android:layout_height="wrap_content" 
-    android:text=""
+    android:layout_gravity="center"
+    android:text="Version"
     android:layout_width="wrap_content"
-    android:textSize="20dip"/>
+    android:textSize="20dip"
+    android:paddingTop="10dip"/>
 <TextView  
     android:layout_height="wrap_content" 
-    android:text="Produced by CoboltForge"
+    android:layout_gravity="center"
+    android:autoLink="web"
+    android:text="Produced by CoboltForge, based on alastfm © 2008 Oleg Avdeev (http://lastfm.ajaxie.com)"
     android:layout_width="wrap_content"
-    android:paddingBottom="40dip"/>
+    android:padding="10dip"
+    android:layout_marginBottom="30dip"/>
    
 <com.flattr4android.sdk.FlattrButton
     android:layout_width="wrap_content" 
@@ -28,13 +34,5 @@
     flattr_sdk:token_secret="9cbb740e9f11c42948cbbc3f0549f2fe"
     flattr_sdk:thing_id="343159"
     flattr_sdk:button_style="vertical" android:layout_gravity="center"/>
-        
-<TextView  
-    android:layout_height="wrap_content" 
-    android:paddingTop="40dip"
-    android:paddingBottom="40dip"
-    android:autoLink="all"
-    android:text="Based on alastfm © 2008 Oleg Avdeev - http://lastfm.ajaxie.com"
-    android:layout_width="wrap_content"/>
  
 </LinearLayout>
