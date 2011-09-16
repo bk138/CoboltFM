@@ -3,9 +3,19 @@
     android:orientation="vertical"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:padding="10dip"
     >
-                    
+    
+    <ScrollView 
+		android:layout_gravity="center_vertical" android:layout_width="fill_parent"
+		android:layout_height="fill_parent">  
+		
+		<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+		    android:orientation="vertical"
+		    android:layout_width="fill_parent"
+		    android:layout_height="fill_parent"
+		    android:padding="10dip"
+		    >
+		              
 		<Button android:id="@+id/reset_button"
 		    android:layout_height="wrap_content" 
 		    android:autoLink="all"
@@ -48,8 +58,20 @@
          </LinearLayout>
     
          <TextView
-            android:layout_width="fill_parent" android:layout_height="fill_parent"        
-            android:layout_weight="1"
-            android:text="@string/prebuffer_expl"/>
+            android:layout_width="fill_parent"
+            android:text="@string/prebuffer_expl" android:layout_height="wrap_content"
+            android:layout_marginBottom="20dip"/>
+            
+            
+         <CheckBox
+            android:id="@+id/support_dialog_checkbox" 
+            android:text="@string/support_dialog_settings_show" 
+            android:layout_width="wrap_content" 
+            android:layout_height="wrap_content"></CheckBox>
+     
+     
+       </LinearLayout>
+     
+     </ScrollView>
                                     
 </LinearLayout>

@@ -14,6 +14,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.content.SharedPreferences;
+import android.content.DialogInterface.OnClickListener;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.graphics.Bitmap;
 import android.graphics.Color;
@@ -616,6 +617,51 @@ public class PlayerActivity extends Activity {
 					"banButton_enabled", true));
 			shareButton.setEnabled(savedInstanceState.getBoolean(
 					"shareButton_enabled", true));
+		}
+		
+		SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
+		if(settings.getBoolean("firstRun", true)) // is the first run
+		{
+			SharedPreferences.Editor ed = settings.edit();
+			ed.putBoolean("firstRun", false);
+			ed.commit();
+		}
+		else // is some later run
+		{
+			if(settings.getBoolean("showSupportDialog", true))
+			{
+				AlertDialog.Builder dialog = new AlertDialog.Builder(this);
+				dialog.setTitle(getString(R.string.support_dialog_title));
+				dialog.setIcon(getResources().getDrawable(R.drawable.lastfm_icon));
+				dialog.setMessage(R.string.support_dialog_text);
+
+				dialog.setPositiveButton(getString(R.string.support_dialog_yes), new OnClickListener() {
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+						startActivity(new Intent(PlayerActivity.this, AboutActivity.class));
+						dialog.dismiss();
+					}
+				});
+				dialog.setNeutralButton(getString(R.string.support_dialog_no), new OnClickListener() {
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+						dialog.dismiss();
+					}
+				});
+				dialog.setNegativeButton(getString(R.string.support_dialog_neveragain), new OnClickListener() {
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+						SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
+						SharedPreferences.Editor ed = settings.edit();
+						ed.putBoolean("showSupportDialog", false);
+						ed.commit();
+						
+						dialog.dismiss();
+					}
+				});
+				
+				dialog.show();
+			}
 		}
 
 	}

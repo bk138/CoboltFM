@@ -12,6 +12,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
@@ -92,11 +93,14 @@ public class SettingsActivity extends Activity {
 			}
 		});
 		
-		
 		// set do saved or default value
 		SharedPreferences settings = getSharedPreferences(
 				PlayerActivity.PREFS_NAME, 0);
+		
 		preBufferSlider.setProgress(settings.getInt("preBuffer", 5));
+		
+		CheckBox showSupportCheckBox = (CheckBox) findViewById(R.id.support_dialog_checkbox);
+		showSupportCheckBox.setChecked(settings.getBoolean("showSupportDialog", true));
 	}
 	
 	
@@ -105,10 +109,13 @@ public class SettingsActivity extends Activity {
 		super.onPause();
 		
 		SeekBar preBufferSlider = (SeekBar) findViewById(R.id.prebuffer_slider);
+		CheckBox showSupportCheckBox = (CheckBox) findViewById(R.id.support_dialog_checkbox);
+
 		SharedPreferences settings = getSharedPreferences(
 				PlayerActivity.PREFS_NAME, 0);
 		Editor ed = settings.edit();
 		ed.putInt("preBuffer", preBufferSlider.getProgress());
+		ed.putBoolean("showSupportDialog", showSupportCheckBox.isChecked());
 		ed.commit();
 	}
 
