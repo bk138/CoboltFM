@@ -5,34 +5,48 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     >
-<TextView  
-    android:layout_height="wrap_content" 
-    android:text="@string/app_name"
-    android:layout_width="wrap_content"
-    android:layout_gravity="center"
-    android:textSize="30dip"/>
-<TextView android:id="@+id/version"
-    android:layout_height="wrap_content" 
-    android:layout_gravity="center"
-    android:text="Version"
-    android:layout_width="wrap_content"
-    android:textSize="20dip"
-    android:paddingTop="10dip"/>
-<TextView  
-    android:layout_height="wrap_content" 
-    android:layout_gravity="center"
-    android:autoLink="web"
-    android:text="Produced by CoboltForge, based on alastfm © 2008 Oleg Avdeev (http://lastfm.ajaxie.com)"
-    android:layout_width="wrap_content"
-    android:padding="10dip"
-    android:layout_marginBottom="30dip"/>
-   
-<com.flattr4android.sdk.FlattrButton
-    android:layout_width="wrap_content" 
-    android:layout_height="wrap_content" 
-    flattr_sdk:token="41e28ea212496725687036408604b16b"
-    flattr_sdk:token_secret="9cbb740e9f11c42948cbbc3f0549f2fe"
-    flattr_sdk:thing_id="343159"
-    flattr_sdk:button_style="vertical" android:layout_gravity="center"/>
+    
+      <ScrollView 
+		android:layout_gravity="center_vertical" android:layout_width="fill_parent"
+		android:layout_height="fill_parent">  
+		
+			<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+		    android:orientation="vertical"
+		    android:layout_width="fill_parent"
+		    android:layout_height="fill_parent"
+		    android:padding="10dip"
+		    >		    
+					<TextView  
+					    android:layout_height="wrap_content" 
+					    android:text="@string/app_name"
+					    android:layout_width="wrap_content"
+					    android:layout_gravity="center"
+					    android:textSize="30dip"/>
+					<TextView android:id="@+id/version"
+					    android:layout_height="wrap_content" 
+					    android:layout_gravity="center"
+					    android:text="Version"
+					    android:layout_width="wrap_content"
+					    android:textSize="20dip"
+					    android:paddingTop="10dip"/>
+					<TextView  
+					    android:layout_height="wrap_content" 
+					    android:layout_gravity="center"
+					    android:autoLink="web"
+					    android:text="Produced by CoboltForge, based on alastfm © 2008 Oleg Avdeev (http://lastfm.ajaxie.com)"
+					    android:layout_width="wrap_content"
+					    android:padding="10dip"
+					    android:layout_marginBottom="30dip"/>
+					   
+					<com.flattr4android.sdk.FlattrButton
+					    android:layout_width="wrap_content" 
+					    android:layout_height="wrap_content" 
+					    flattr_sdk:token="41e28ea212496725687036408604b16b"
+					    flattr_sdk:token_secret="9cbb740e9f11c42948cbbc3f0549f2fe"
+					    flattr_sdk:thing_id="343159"
+					    flattr_sdk:button_style="vertical" android:layout_gravity="center"/>
+          </LinearLayout>
+ 
+       </ScrollView>
  
 </LinearLayout>
