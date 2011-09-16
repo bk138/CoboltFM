@@ -742,6 +742,7 @@ public class PlayerThread extends Thread {
 				HOST
 						+ "/radio/handshake.php?version=1.0.0.0&platform=windows&username="
 						+ URLEncoder.encode(Username, "UTF_8") + "&passwordmd5=" + passMD5);
+		Log.d(TAG, "Shakin' hands: " + url.toString());
 		HttpURLConnection conn = (HttpURLConnection) url.openConnection();
 		conn.connect();
 		InputStream is = conn.getInputStream();
