@@ -84,7 +84,7 @@ public class PlayerService extends Service {
 	}
 
 	private void updateNotification(String text) {
-		Notification notification = new Notification(R.drawable.play, null,
+		Notification notification = new Notification(R.drawable.play_small, null,
 				System.currentTimeMillis());
 		Intent startIntent = new Intent(this, PlayerActivity.class);
 		startIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP|Intent.FLAG_ACTIVITY_SINGLE_TOP);
