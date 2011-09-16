@@ -33,7 +33,7 @@
 <string name="enter_station_title">Enter station name</string>
 <string name="enter_artist_name_title">Enter station name</string>
 <string name="enter_tag_title">Enter tag</string>
-<string name="choose_friend_title">Enter tag</string>
+<string name="choose_friend_title">Choose friend</string>
 <string name="prebuffer">Set percent of song to prebuffer:</string>
 <string name="prebuffer_expl">Prebuffering ensures that there are less skips within songs, but there can be longer pauses between songs. Try setting this to higher values when you have bad Internet connectivity.</string>
 <string name="userinfo_button">Change user name &amp; password</string>
