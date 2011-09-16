@@ -60,10 +60,10 @@ public class PlayerActivity extends Activity {
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		boolean result = super.onCreateOptionsMenu(menu);
-		menu.add(0, MENU_SETTINGS_ID, 0, R.string.menu_settings).setIcon(
-				android.R.drawable.ic_menu_preferences);
 		menu.add(0, MENU_STATUS_ID, 0, R.string.menu_status).setIcon(
 				android.R.drawable.ic_menu_info_details);
+		menu.add(0, MENU_SETTINGS_ID, 0, R.string.menu_settings).setIcon(
+				android.R.drawable.ic_menu_preferences);
 		menu.add(0, MENU_ABOUT_ID, 0, R.string.menu_about).setIcon(
 				android.R.drawable.ic_menu_help);
 		return result;
