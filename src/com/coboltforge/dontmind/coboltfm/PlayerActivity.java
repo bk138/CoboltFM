@@ -4,6 +4,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 import com.coboltforge.dontmind.coboltfm.R;
+import com.paypal.android.MEP.PayPal;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -19,6 +20,8 @@ import android.content.pm.PackageManager.NameNotFoundException;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.IBinder;
@@ -664,6 +667,16 @@ public class PlayerActivity extends Activity {
 			}
 		}
 
+
+		// Initialize the paypal library. We'll do it in a separate thread because it requires
+		// communication with the server which may take some time depending on the connection strength/speed.
+		Thread libraryInitializationThread = new Thread() {
+			public void run() {
+				initPaypal(getApplicationContext());
+			}
+		};
+		libraryInitializationThread.start();
+
 	}
 
 	protected void shareTrack(XSPFTrackInfo track) {
@@ -784,6 +797,41 @@ public class PlayerActivity extends Activity {
 		outState.putBoolean("loveButton_enabled", loveButton.isEnabled());
 		outState.putBoolean("banButton_enabled", banButton.isEnabled());
 		outState.putBoolean("shareButton_enabled", shareButton.isEnabled());
+	}
+
+	public static void initPaypal(Context c) {
+		PayPal pp = PayPal.getInstance();
+		// If the library is already initialized, then we don't need to initialize it again.
+		if(pp == null) {
+			// The PayPal server to be used - can also be ENV_NONE and ENV_LIVE
+			int server = PayPal.ENV_SANDBOX;
+			// The ID of your application that you received from PayPal
+			final String appID = "APP-80W284485P519543T";
+
+			// library init crashes when no connection available!
+			ConnectivityManager cm = (ConnectivityManager) c.getSystemService(Context.CONNECTIVITY_SERVICE);
+			NetworkInfo netInfo = cm.getActiveNetworkInfo();
+			if (netInfo == null || !netInfo.isConnected()) {
+				return;
+			}
+
+			// This is the main initialization call that takes in your Context, the Application ID, and the server you would like to connect to.
+			pp = PayPal.initWithAppID(c, appID, server);
+
+			// -- These are required settings.
+			pp.setLanguage("en_US"); // Sets the language for the library.
+			// --
+
+			// -- These are a few of the optional settings.
+			// Sets the fees payer. If there are fees for the transaction, this person will pay for them. Possible values are FEEPAYER_SENDER,
+			// FEEPAYER_PRIMARYRECEIVER, FEEPAYER_EACHRECEIVER, and FEEPAYER_SECONDARYONLY.
+			pp.setFeesPayer(PayPal.FEEPAYER_EACHRECEIVER); 
+			// Set to true if the transaction will require shipping.
+			pp.setShippingEnabled(false);
+			// Dynamic Amount Calculation allows you to set tax and shipping amounts based on the user's shipping address. Shipping must be
+			// enabled for Dynamic Amount Calculation. This also requires you to create a class that implements PaymentAdjuster and Serializable.
+			pp.setDynamicAmountCalculationEnabled(false);
+		}
 	}
 
 }
