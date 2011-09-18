@@ -3,8 +3,12 @@ package com.coboltforge.dontmind.coboltfm;
 import com.coboltforge.dontmind.coboltfm.R;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.content.pm.PackageManager.NameNotFoundException;
+import android.net.Uri;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 public class AboutActivity extends Activity {
@@ -20,5 +24,14 @@ public class AboutActivity extends Activity {
 			} catch (NameNotFoundException e) {
 				versionText.setText("Invalid version -- please check for update");
 			}
+			
+			ImageButton donateButton = (ImageButton) findViewById(R.id.paypal_button);
+			donateButton.setOnClickListener(new View.OnClickListener() {
+				public void onClick(View v) {
+					
+					Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=HKRTWKNKBKPKN"));
+			    	startActivity(browserIntent);
+				}
+			});
 	   }
 }
