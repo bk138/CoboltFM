@@ -1,17 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-<string name="app_name">CoboltFM</string>
+    <string name="app_name">CoboltFM</string>
 <string name="alert_dialog_single_choice">Error</string>
 <string name="alert_dialog_ok">OK</string>
 <string name="alert_dialog_cancel">Cancel</string>
 <string name="support_dialog_title">Please Support CoboltFM</string>
-<string name="support_dialog_text">If you like CoboltFM, why not consider supporting its development? For the time being, you can do so by using PayPal or flattr. Thanks!</string>
+<string name="support_dialog_text">If you like CoboltFM, why not consider supporting its development? For the time being, you can do so by using flattr. Thanks!</string>
 <string name="support_dialog_yes">Yes, good idea!</string>
 <string name="support_dialog_no">No, not now.</string>
 <string name="support_dialog_neveragain">Never ask again!</string>
 <string name="support_dialog_settings_show">Show Support Dialog on Startup</string>
-<string name="donation_successful">Donation accepted. Thank you!</string>
-<string name="donation_cancelled">The transaction has been cancelled.</string>
 <string name="user_info_title">User Info</string>
 <string name="ok_button">OK</string>
 <string name="cancel_button">Cancel</string>
