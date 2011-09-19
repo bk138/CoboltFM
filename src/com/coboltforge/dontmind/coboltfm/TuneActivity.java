@@ -7,15 +7,10 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
-import android.view.Gravity;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.BaseAdapter;
 import android.widget.ListView;
-import android.widget.TextView;
 import android.widget.AdapterView.OnItemClickListener;
 
 public class TuneActivity extends ListActivity {
@@ -84,14 +79,14 @@ public class TuneActivity extends ListActivity {
 							TuneActivity.this, PlayerActivity.class));
 					finish();										
 					break;				
-				case STATION_TYPE_PLAYLIST:
-					builder.authority("user");
-					builder.appendPath(mUsername);
-					builder.appendPath("playlist");					
-					setResult(RESULT_OK, new Intent("play", builder.build(),
-							TuneActivity.this, PlayerActivity.class));
-					finish();										
-					break;				
+//				case STATION_TYPE_PLAYLIST:
+//					builder.authority("user");
+//					builder.appendPath(mUsername);
+//					builder.appendPath("playlist");					
+//					setResult(RESULT_OK, new Intent("play", builder.build(),
+//							TuneActivity.this, PlayerActivity.class));
+//					finish();										
+//					break;				
 				case STATION_TYPE_RECOMMENDED:
 					builder.authority("user");
 					builder.appendPath(mUsername);
@@ -177,7 +172,7 @@ public class TuneActivity extends ListActivity {
 	   private final static String[] STATION_TYPES = new String[] {
 		   		"Artist", "Tag", "My Recommendations",
 		        "My Radio Station",		        
-		        "My Neighbour Radio", "Friends Radio", "My Playlist"} ;
+		        "My Neighbour Radio", "Friends Radio"} ;
 	   
 	   private final int STATION_TYPE_ARTIST = 0;
 	   private final int STATION_TYPE_TAG = 1;
