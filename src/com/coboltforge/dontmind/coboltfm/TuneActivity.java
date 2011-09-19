@@ -19,7 +19,6 @@ import android.widget.TextView;
 import android.widget.AdapterView.OnItemClickListener;
 
 public class TuneActivity extends ListActivity {
-	MyListAdapter mAdapter;
 	protected static final int ENTER_ARTIST = 0;
 	protected static final int ENTER_TAG = 1;
 	protected static final int CHOOSE_FRIEND = 2;
@@ -28,7 +27,6 @@ public class TuneActivity extends ListActivity {
 	   @Override
 	    public void onCreate(Bundle savedInstanceState) {
 	        super.onCreate(savedInstanceState);	        	       
-	        mAdapter = new MyListAdapter();
 
         	SharedPreferences settings = getSharedPreferences(PlayerActivity.PREFS_NAME, 0);
 	        mUsername = settings.getString("username", "empty");
@@ -128,8 +126,6 @@ public class TuneActivity extends ListActivity {
 	    	   
 	       });
 
-//		   setListAdapter(mAdapter);	        
-	        
 	   }
 	   
 		protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -194,58 +190,5 @@ public class TuneActivity extends ListActivity {
 //	   private final int STATION_TYPE_LOVED = 7;
 	   
 	   
-	    /**
-	     * A simple adapter which maintains an ArrayList of photo resource Ids. 
-	     * Each photo is displayed as an image. This adapter supports clearing the
-	     * list of photos and adding a new photo.
-	     *
-	     */
-	    public class MyListAdapter extends BaseAdapter {
-	        // Sample data set.  children[i] contains the children (String[]) for groups[i].
-	    		        
-	        public TextView getTextView(String text) {
-	            // Layout parameters for the ExpandableListView
-	            AbsListView.LayoutParams lp = new AbsListView.LayoutParams(
-	                    ViewGroup.LayoutParams.FILL_PARENT, 64);
-
-	            TextView textView = new TextView(TuneActivity.this);
-	            textView.setText(text);
-	            textView.setLayoutParams(lp);
-	            // Center the text vertically
-	            textView.setGravity(Gravity.CENTER_VERTICAL | Gravity.LEFT);
-	            // Set the text starting position
-	            textView.setPadding(36, 0, 0, 0);
-	            return textView;
-	        }	   
-
-	        public String getItemText(int position) {
-	            return STATION_TYPES[position];
-	        }
-
-	        public int getCount() {
-	            return STATION_TYPES.length;
-	        }
-	        
-	        
-	        public View getView(int position, View convertView, ViewGroup parent)
-	        {	        	
-        			return getTextView(getItemText(position));
-	        }
-	        
-	        public boolean hasStableIds() {
-	            return true;
-	        }
-
-			@Override
-			public Object getItem(int position) {
-				return getItemText(position);
-			}
-
-			@Override
-			public long getItemId(int position) {
-				return position;
-			}
-
-	    }
 	   
 }
