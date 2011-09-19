@@ -584,7 +584,7 @@ public class PlayerThread extends Thread {
 		try {
 			URL url;
 			url = new URL("http://" + mBaseURL + "/xspf.php?sk=" + mSession
-					+ "&discovery=0&desktop=1.4.1.57486");
+					+ "&discovery=0&desktop=1.4.1.57486&api_key=9d1bbaef3b443eb97973d44181d04e4b");
 			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
 			conn.connect();
 			InputStream is = conn.getInputStream();
