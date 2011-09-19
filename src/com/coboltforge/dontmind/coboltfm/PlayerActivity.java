@@ -641,7 +641,7 @@ public class PlayerActivity extends Activity {
 		}
 		else // is some later run
 		{
-			if(settings.getBoolean("showSupportDialog", true))
+			if(settings.getBoolean("showSupportDialog", true) && savedInstanceState == null)
 			{
 				AlertDialog.Builder dialog = new AlertDialog.Builder(this);
 				dialog.setTitle(getString(R.string.support_dialog_title));
