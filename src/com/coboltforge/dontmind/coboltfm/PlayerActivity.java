@@ -53,13 +53,16 @@ public class PlayerActivity extends Activity {
 	public static final int MENU_SETTINGS_ID = Menu.FIRST;
 	public static final int MENU_STATUS_ID = Menu.FIRST + 1;
 	public static final int MENU_ABOUT_ID = Menu.FIRST + 2;
-	
+	public static final int MENU_PROFILE_ID = Menu.FIRST + 3;
+
 
 	protected static final String TAG = "PlayerActivity";
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		boolean result = super.onCreateOptionsMenu(menu);
+		menu.add(0, MENU_PROFILE_ID, 0, R.string.menu_profile).setIcon(
+				android.R.drawable.ic_menu_myplaces);
 		menu.add(0, MENU_STATUS_ID, 0, R.string.menu_status).setIcon(
 				android.R.drawable.ic_menu_info_details);
 		menu.add(0, MENU_SETTINGS_ID, 0, R.string.menu_settings).setIcon(
@@ -72,6 +75,16 @@ public class PlayerActivity extends Activity {
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
+	    case MENU_PROFILE_ID:
+			SharedPreferences settings = getSharedPreferences(
+					PREFS_NAME, 0);
+			String username = settings.getString("username", null);
+			if(username != null)
+			{
+				Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://www.last.fm/user/" + username));
+				startActivity(browserIntent);
+			}
+	    	return true;
 		case MENU_SETTINGS_ID:
 			startActivityForResult(
 					new Intent(PlayerActivity.this, SettingsActivity.class), SETTINGS);

@@ -18,6 +18,7 @@
 <string name="share_track_title">Share Track</string>
 <string name="menu_about">About</string>
 <string name="menu_status">Check Server Status</string>
+<string name="menu_profile">Show Profile Page</string>
 <string name="about_title">About</string>
 <string name="albumcover_title">Album Cover</string>
 <string name="station_spinner_prompt">Select station type</string>
