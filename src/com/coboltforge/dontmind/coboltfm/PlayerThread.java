@@ -493,16 +493,19 @@ public class PlayerThread extends Thread {
 			
 		} catch (IllegalArgumentException e) {
 			Log.e(TAG, "in bufferNextTrack", e);
-			mBackMP.release();
+			if(mBackMP != null) 
+				mBackMP.release();
 			mBackMP = null;
 			throw new LastFMError(e.toString());
 		} catch (IllegalStateException e) {
-			mBackMP.release();
+			if(mBackMP != null) 
+				mBackMP.release();
 			mBackMP = null;
 			Log.e(TAG, "in bufferNextTrack", e);
 			throw new LastFMError(e.toString());
 		} catch (IOException e) {
-			mBackMP.release();
+			if(mBackMP != null) 
+				mBackMP.release();
 			mBackMP = null;
 			Log.e(TAG, "in bufferNextTrack", e);
 			throw new LastFMError(e.toString());
