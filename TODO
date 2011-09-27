@@ -2,4 +2,5 @@
 * pause on headphone unplug  
 * translate all strings
 * unbind service
+* fix thread stop
  
