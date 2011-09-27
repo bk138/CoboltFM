@@ -326,6 +326,8 @@ public class PlayerThread extends Thread {
 
 		mInitLock.open();
 		Looper.loop();
+		
+		Log.d(TAG, "Saying Goodbye");
 	}
 
 	ScrobblerClient mScrobbler;
