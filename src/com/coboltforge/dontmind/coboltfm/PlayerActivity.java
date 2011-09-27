@@ -334,6 +334,8 @@ public class PlayerActivity extends Activity {
 										.getCurrentPosition();
 								int buffered = ((PlayerService.PlayingStatus) status)
 										.getCurrentBuffered();
+								int next_buffered = ((PlayerService.PlayingStatus) status)
+								        .getNextBuffered();
 								final XSPFTrackInfo track = ((PlayerService.PlayingStatus) status)
 										.getCurrentTrack();
 								if (track != null) {
@@ -344,11 +346,19 @@ public class PlayerActivity extends Activity {
 									timeText.setText(String.format(
 											"%1$02d:%2$02d", minutes, seconds));
 									
-									bufferText.setText("(buffered "+ buffered + " %)");
-									if(pos == 0) // pre-buffering
-										bufferText.setTextColor(Color.RED);
-									else 
-										bufferText.setTextColor(Color.GREEN);
+									if(buffered == 100) // complete, pre-buffering should run
+									{	
+										bufferText.setTextColor(Color.YELLOW);
+										bufferText.setText("(pre-buffered "+ next_buffered + " %)");
+									}
+									else // current track still downloading
+									{
+										bufferText.setText("(buffered "+ buffered + " %)");
+										if(pos == 0) // pre-buffering
+											bufferText.setTextColor(Color.RED);
+										else 
+											bufferText.setTextColor(Color.GREEN);
+									}
 
 									creatorText.setText(track.getCreator());
 									albumText.setText(track.getAlbum());

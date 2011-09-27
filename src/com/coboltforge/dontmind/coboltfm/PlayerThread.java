@@ -84,6 +84,7 @@ public class PlayerThread extends Thread {
 	private ArrayList<XSPFTrackInfo> mPlaylist;
 	private int mNextPlaylistItem;
 	private XSPFTrackInfo mCurrentTrack;
+	private XSPFTrackInfo mNextTrack;
 
 	private long mStartPlaybackTime;
 	private String mCurrentTrackRating;
@@ -173,6 +174,13 @@ public class PlayerThread extends Thread {
 
 	public XSPFTrackInfo getCurrentTrack() {
 		return mCurrentTrack;
+	}
+	
+	public int getNextBuffered() {
+		if (mBackMP != null)
+			return mBufferedBack;
+		else
+			return 0;
 	}
 	
 	private LastFMNotificationListener mLastFMNotificationListener = null;
@@ -373,7 +381,7 @@ public class PlayerThread extends Thread {
 		}
 	};
 
-	OnBufferingUpdateListener mOnBufferingUpdateListener = new MediaPlayer.OnBufferingUpdateListener() {
+	OnBufferingUpdateListener mOnFrontBufferingUpdateListener = new MediaPlayer.OnBufferingUpdateListener() {
 
 		public void onBufferingUpdate(MediaPlayer mp, int percent) {
 			
@@ -387,9 +395,27 @@ public class PlayerThread extends Thread {
 			{
 				mFrontMP.start();
 			}
+			
+			if(percent == 100)
+				try {
+					bufferNextTrack();
+				} catch (LastFMError e) {		
+					Log.e(TAG, "buffering next track failed:");
+					e.printStackTrace();
+				}
 
 			if (mLastFMNotificationListener != null)
 				mLastFMNotificationListener.onBuffer(percent);
+		}
+	};
+	
+	OnBufferingUpdateListener mOnBackBufferingUpdateListener = new MediaPlayer.OnBufferingUpdateListener() {
+
+		public void onBufferingUpdate(MediaPlayer mp, int percent) {
+			
+			Log.d(TAG, "back player buffered " + percent);
+			
+			mBufferedBack = percent;
 		}
 	};
 
@@ -440,13 +466,60 @@ public class PlayerThread extends Thread {
 	}
 
 	
+	private void bufferNextTrack() throws LastFMError {
+		
+		mNextTrack = getNextTrack();
+		
+		if (mNextTrack == null)
+			throw new NotEnoughContentError();
+
+		String streamUrl = mNextTrack.getLocation();
+		try {
+			// just to be safe
+			if (mBackMP != null)
+			{
+				mBackMP.release();
+				mBackMP = null;
+			}
+			
+			MediaPlayer mediaPlayer = new MediaPlayer();
+			
+			Log.d(TAG, "pre-buffering from stream " + streamUrl);
+			mediaPlayer.setDataSource(streamUrl);
+			
+			mediaPlayer.setOnBufferingUpdateListener(mOnBackBufferingUpdateListener); // this starts the player once prebuffering is done
+			mediaPlayer.prepare();
+			mBackMP = mediaPlayer;
+			
+		} catch (IllegalArgumentException e) {
+			Log.e(TAG, "in bufferNextTrack", e);
+			mBackMP.release();
+			mBackMP = null;
+			throw new LastFMError(e.toString());
+		} catch (IllegalStateException e) {
+			mBackMP.release();
+			mBackMP = null;
+			Log.e(TAG, "in bufferNextTrack", e);
+			throw new LastFMError(e.toString());
+		} catch (IOException e) {
+			mBackMP.release();
+			mBackMP = null;
+			Log.e(TAG, "in bufferNextTrack", e);
+			throw new LastFMError(e.toString());
+		}
+	}
+
+	
 	private void playNextTrack() throws LastFMError {
-		if (mCurrentTrack != null) //FIXME for resume after dl finished
+		if (mCurrentTrack != null)
 			submitCurrentTrackDelayed();
 		
-//		if(mFullDownloadMode && mDownloadingTrack != null)
-//			mCurrentTrack = mDownloadingTrack;
-//		else
+		if(mNextTrack != null) // there's background pre-buffering going on
+		{
+			mCurrentTrack = mNextTrack;
+			mNextTrack = null;
+		}
+		else
 			mCurrentTrack = getNextTrack();
 		
 		if (mCurrentTrack == null)
@@ -461,62 +534,19 @@ public class PlayerThread extends Thread {
 				mFrontMP = null;
 			}
 
-//			if(mFullDownloadMode)
-//			{
-//				mReadyFile.delete(); // is consumed by now
-//				
-//				if(!mDownloader.isAlive() && !mDownloader.isDone())// no download ever started yet, start one 
-//				{
-//					Log.d(TAG, "No download running, starting new one (" + mCurrentTrack.getTitle() + ")");
-//
-//					mDownloadingTrack = mCurrentTrack;
-//					mDownloader = new DownloaderThread(streamUrl, mDownloadingFile, mCurrentTrack.getTitle(), mHandler);
-//					mDownloader.start();
-//				}
-//
-//				Log.d(TAG, "Waiting for download to finish");
-//				
-//				// downloading now , but not ready
-//				try {
-//					mDownloader.join(100);
-//					if(mDownloader.isAlive()) // still running
-//						return; // get back to main loop to get messages!!
-//				} catch (InterruptedException e) {
-//					e.printStackTrace();
-//				}
-//				
-//				Log.d(TAG, "Download finished, swapping buffers");
-//
-//				mDownloadingFile.renameTo(new File(mContext.getCacheDir(), mReadyFileName));
-//				mDownloadingFile.createNewFile();
-//				
-//				Log.d(TAG, "Starting new download to " + mDownloadingFile.getAbsolutePath());
-//				
-//				mDownloadingTrack = getNextTrack();
-//				mDownloader = new DownloaderThread(mDownloadingTrack.getLocation(),
-//						mDownloadingFile, 
-//						mDownloadingTrack.getTitle(),
-//						mHandler);
-//				mDownloader.start();
-//			}
-			
-			
-			MediaPlayer mediaPlayer = new MediaPlayer();
-//			
-//			if(mFullDownloadMode) // readyFile is ready at this point
-//			{
-//				FileInputStream fis = new FileInputStream(mReadyFile);
-//				mediaPlayer.setDataSource(fis.getFD());
-//				Log.d(TAG, "playing from file " + mReadyFile.getAbsolutePath());
-//			}
-//			else
+			MediaPlayer mediaPlayer;
+			if(mBackMP != null) // there already is a pre-buffering media player
 			{
-				Log.d(TAG, "playing from stream " + streamUrl);
-				mediaPlayer.setDataSource(streamUrl);
+				mediaPlayer = mBackMP;
+				mBackMP = null;
 			}
-				
+			else
+				mediaPlayer = new MediaPlayer();
+			
+			Log.d(TAG, "playing from stream " + streamUrl);
+			mediaPlayer.setDataSource(streamUrl);
 			mediaPlayer.setOnCompletionListener(mOnTrackCompletionListener);
-			mediaPlayer.setOnBufferingUpdateListener(mOnBufferingUpdateListener); // this starts the player once prebuffering is done
+			mediaPlayer.setOnBufferingUpdateListener(mOnFrontBufferingUpdateListener); // this starts the player once prebuffering is done
 			mediaPlayer.prepare();
 			if (mMuted)
 				mediaPlayer.setVolume(0, 0);
