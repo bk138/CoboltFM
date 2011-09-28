@@ -441,6 +441,7 @@ public class PlayerActivity extends Activity {
 
 		refreshTimer = new Timer();
 		refreshTimer.scheduleAtFixedRate(new StatusRefreshTask(), 1000, 1000);
+		
 
 		TextView statusText = (TextView) PlayerActivity.this
 				.findViewById(R.id.status_text);
@@ -646,6 +647,9 @@ public class PlayerActivity extends Activity {
 		}
 		
 		SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
+
+		mPreBuffer = settings.getInt("preBuffer", 5);
+
 		if(settings.getBoolean("firstRun", true)) // is the first run
 		{
 			SharedPreferences.Editor ed = settings.edit();
