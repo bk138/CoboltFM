@@ -210,25 +210,30 @@ public class PlayerThread extends Thread {
 				try {
 					switch (msg.what) {
 					case PlayerThread.MESSAGE_LOGIN:
+						Log.d(TAG, "got LOGIN message");
 						if (!login(mUsername, mPassword))
 							getLooper().quit();
 						break;
 					case PlayerThread.MESSAGE_STOP:
+						Log.d(TAG, "got STOP message");
 						stopPlaying();
 						getLooper().quit();
 						break;
 					case PlayerThread.MESSAGE_SUBMIT_TRACK:
+						Log.d(TAG, "got SUBMIT message");
 						TrackSubmissionParams params = (TrackSubmissionParams) msg.obj;
 						mScrobbler.submit(params.mTrack,
 								params.mPlaybackStartTime, params.mRating);
 						break;
 					case PlayerThread.MESSAGE_SCROBBLE_NOW_PLAYING:
+						Log.d(TAG, "got NOW_PLAYING message");
 						XSPFTrackInfo currTrack = getCurrentTrack();
 						mScrobbler.nowPlaying(currTrack.getCreator(), currTrack
 								.getTitle(), currTrack.getAlbum(), currTrack
 								.getDuration());
 						break;
 					case PlayerThread.MESSAGE_SHARE:
+						Log.d(TAG, "got SHARE message");
 						try {
 							TrackShareParams msgParams = (TrackShareParams) msg.obj;
 							scrobblerRpcCall("recommendItem", new String[] {
@@ -247,6 +252,7 @@ public class PlayerThread extends Thread {
 
 						break;
 					case PlayerThread.MESSAGE_LOVE:
+						Log.d(TAG, "got LOVE message");
 						try {
 							setCurrentTrackRating("L");
 							XSPFTrackInfo currentTrack = getCurrentTrack();
@@ -262,6 +268,7 @@ public class PlayerThread extends Thread {
 						}
 						break;
 					case PlayerThread.MESSAGE_BAN:
+						Log.d(TAG, "got BAN message");
 						try {
 							setCurrentTrackRating("B");
 							XSPFTrackInfo currentTrack2 = getCurrentTrack();
@@ -279,16 +286,20 @@ public class PlayerThread extends Thread {
 						playNextTrack();
 						break;
 					case PlayerThread.MESSAGE_SKIP:
+						Log.d(TAG, "got SKIP message");
 						setCurrentTrackRating("S");
 						playNextTrack();
 						break;
 					case PlayerThread.MESSAGE_CACHE_TRACK_INFO:
+						Log.d(TAG, "got CACHE_TRACK_INFO message");
 						getCurrentTrack().downloadImageBitmap();
 						break;
 					case PlayerThread.MESSAGE_CACHE_FRIENDS_LIST:
+						Log.d(TAG, "got CACHE_FRIENDS_LIST message");
 						mFriendsList = downloadFriendsList(mUsername);
 						break;
 					case PlayerThread.MESSAGE_UPDATE_PLAYLIST:
+						Log.d(TAG, "got UPDATE_PLAYLIST message");
 						mPlaylist = getPlaylist();
 						if (mPlaylist != null) {
 							mNextPlaylistItem = 0;
@@ -296,6 +307,7 @@ public class PlayerThread extends Thread {
 							throw new LastFMError("Playlist fetch failed");
 						break;
 					case PlayerThread.MESSAGE_ADJUST:
+						Log.d(TAG, "got ADJUST message");
 						if (adjust((String) msg.obj)) {
 							mPlaylist = getPlaylist();
 							if (mPlaylist != null) {
@@ -305,10 +317,6 @@ public class PlayerThread extends Thread {
 								throw new LastFMError("Playlist fetch failed");
 						} else
 							throw new LastFMError("Failed to tune to a station. Please try again or choose a different station.");
-						break;
-					case PlayerThread.MESSAGE_DOWNLOAD_FINISHED:
-						Log.d(TAG, "got download finished message");
-						playNextTrack();
 						break;
 					}
 				} catch (LastFMError e) {
@@ -617,6 +625,8 @@ public class PlayerThread extends Thread {
 
 	private ArrayList<XSPFTrackInfo> getPlaylist() {
 		try {
+			Log.d(TAG, "Getting playlist started");
+
 			URL url;
 			url = new URL("http://" + mBaseURL + "/xspf.php?sk=" + mSession
 					+ "&discovery=0&desktop=1.4.1.57486&api_key=9d1bbaef3b443eb97973d44181d04e4b");
@@ -652,8 +662,9 @@ public class PlayerThread extends Thread {
 					Log.e(TAG, "in getPlaylist", e);
 					return null;
 				}
-
-			return result;
+				
+				Log.d(TAG, "Getting playlist successful");
+				return result;
 		} catch (Exception e) {
 			Log.e(TAG, "in getPlaylist", e);
 			return null;
