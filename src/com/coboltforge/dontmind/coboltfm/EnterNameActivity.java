@@ -104,6 +104,7 @@ public class EnterNameActivity extends Activity {
 		nameText.setAdapter(adapter);
 		nameText.setThreshold(1);
 		nameText.setText(defaultName);
+		nameText.setSelectAllOnFocus(true);
 		
 		nameText.setOnFocusChangeListener(new OnFocusChangeListener() {
 
