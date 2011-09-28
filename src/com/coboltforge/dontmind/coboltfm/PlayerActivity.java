@@ -8,10 +8,12 @@ import com.coboltforge.dontmind.coboltfm.R;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.ServiceConnection;
 import android.content.SharedPreferences;
 import android.content.DialogInterface.OnClickListener;
@@ -687,6 +689,17 @@ public class PlayerActivity extends Activity {
 			}
 		}
 
+		// listen for headphone plugs/unplugs
+		registerReceiver(new BroadcastReceiver() {
+			//@Override
+			public void onReceive(Context context, Intent intent)
+			{
+				int state = intent.getIntExtra("state", 0);
+				String name = intent.getStringExtra("name");
+				Log.d(TAG, "Detected headphone '" + name  + (state == 0 ? "' unplug" : "' plug"));
+			}
+		}, new IntentFilter(Intent.ACTION_HEADSET_PLUG));
+		
 	}
 
 	protected void shareTrack(XSPFTrackInfo track) {
