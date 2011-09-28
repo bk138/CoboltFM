@@ -412,12 +412,11 @@ public class PlayerThread extends Thread {
 			
 			mBufferedFront = percent;
 			
-			if(percent >= mPreBuffer && 
-					mFrontMP != null &&
-					!mFrontMP.isPlaying())
-			{
+			if(percent >= mPreBuffer && mFrontMP != null && !mFrontMP.isPlaying())
 				mFrontMP.start();
-			}
+			
+			if(percent < mPreBuffer && mFrontMP != null && mFrontMP.isPlaying())
+				mFrontMP.pause();
 			
 			if(percent == 100)
 				try {

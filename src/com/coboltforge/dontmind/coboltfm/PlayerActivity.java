@@ -122,6 +122,7 @@ public class PlayerActivity extends Activity {
 	}
 
 	private PlayerService mBoundService;
+	private int mPreBuffer;
 
 	public class LastFMServiceConnection implements ServiceConnection {
 		public void onServiceConnected(ComponentName className, IBinder service) {
@@ -356,7 +357,7 @@ public class PlayerActivity extends Activity {
 									else // current track still downloading
 									{
 										bufferText.setText("(buffered "+ buffered + " %)");
-										if(pos == 0) // pre-buffering
+										if(buffered < mPreBuffer) // pre-buffering
 											bufferText.setTextColor(Color.RED);
 										else 
 											bufferText.setTextColor(Color.GREEN);
@@ -803,7 +804,8 @@ public class PlayerActivity extends Activity {
 			if (mBoundService != null)  
 			{
 				SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
-				mBoundService.setPreBuffer(settings.getInt("preBuffer", 5));
+				mPreBuffer = settings.getInt("preBuffer", 5);
+				mBoundService.setPreBuffer(mPreBuffer);
 			}
 		}
 		
