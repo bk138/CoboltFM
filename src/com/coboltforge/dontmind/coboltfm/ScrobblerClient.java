@@ -37,6 +37,7 @@ public class ScrobblerClient {
 				"c=" + CLIENT_ID + "&v=" + URLEncoder.encode(mClientVersion, "UTF-8") + "&u=" + URLEncoder.encode(username, "UTF-8") + 
 				"&t=" + timestamp + "&a=" + auth;
 			URL url = new URL(req);
+			Log.d(TAG, "Shakin' hands: " + url.toString());
 			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
 			conn.connect();
 			InputStream is = conn.getInputStream();
@@ -49,6 +50,7 @@ public class ScrobblerClient {
 				mNowPlayingUrl = stringReader.readLine();
 				mSubmissionUrl = stringReader.readLine();
 				stringReader.close();
+				Log.d(TAG, "Handshake complete");
 				return true;
 			}
 			stringReader.close();

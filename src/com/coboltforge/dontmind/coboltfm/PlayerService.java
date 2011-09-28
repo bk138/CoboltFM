@@ -272,14 +272,7 @@ public class PlayerService extends Service {
 			return true;
 		Message.obtain(mPlayerThread.mHandler, PlayerThread.MESSAGE_STOP)
 				.sendToTarget();
-		try {
-			mPlayerThread.join(10000);
-			if (mPlayerThread.isAlive())
-				mPlayerThread.stop();
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-			return false;
-		}
+		mPlayerThread.interrupt();
 		mPlayerThread = null;
 		mCurrentStatus = new StoppedStatus();
 		updateNotification("Stopped");

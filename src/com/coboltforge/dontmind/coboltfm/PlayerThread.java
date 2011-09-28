@@ -207,6 +207,15 @@ public class PlayerThread extends Thread {
 		mHandler = new Handler() {
 
 			public void handleMessage(Message msg) {
+				// if interrupted, bail out at once
+				if(isInterrupted())
+				{
+					Log.d(TAG, "INTERRUPTED, bailing out!");
+					stopPlaying();
+					getLooper().quit();
+					return;
+				}
+				// otherwise, process our message queue
 				try {
 					switch (msg.what) {
 					case PlayerThread.MESSAGE_LOGIN:
@@ -309,7 +318,11 @@ public class PlayerThread extends Thread {
 					case PlayerThread.MESSAGE_ADJUST:
 						Log.d(TAG, "got ADJUST message");
 						if (adjust((String) msg.obj)) {
+							if(isInterrupted())
+								return;
 							mPlaylist = getPlaylist();
+							if(isInterrupted())
+								return;
 							if (mPlaylist != null) {
 								mNextPlaylistItem = 0;
 								startPlaying();
@@ -498,7 +511,7 @@ public class PlayerThread extends Thread {
 			mediaPlayer.setDataSource(streamUrl);
 			
 			mediaPlayer.setOnBufferingUpdateListener(mOnBackBufferingUpdateListener); // this starts the player once prebuffering is done
-			mediaPlayer.prepare();
+			mediaPlayer.prepareAsync();
 			mBackMP = mediaPlayer;
 			
 		} catch (IllegalArgumentException e) {
@@ -560,7 +573,8 @@ public class PlayerThread extends Thread {
 			mediaPlayer.setDataSource(streamUrl);
 			mediaPlayer.setOnCompletionListener(mOnTrackCompletionListener);
 			mediaPlayer.setOnBufferingUpdateListener(mOnFrontBufferingUpdateListener); // this starts the player once prebuffering is done
-			mediaPlayer.prepare();
+			mediaPlayer.prepareAsync();
+
 			if (mMuted)
 				mediaPlayer.setVolume(0, 0);
 			mFrontMP = mediaPlayer;
@@ -766,6 +780,12 @@ public class PlayerThread extends Thread {
 			mSession = session;
 			mBaseURL = baseHost + basePath;
 			
+			if(isInterrupted())
+			{
+				Log.d(TAG, "Login interupted");
+				return false;
+			}
+			
 			mScrobbler = new ScrobblerClient();
 			mScrobbler.setClientVersionString(mVersionString);
 			mScrobbler.handshake(username, password);			
@@ -798,6 +818,7 @@ public class PlayerThread extends Thread {
 		if (!options.parse())
 			options = null;
 		stringReader.close();
+		Log.d(TAG, "Handshake complete");
 		return options;
 	}
 
