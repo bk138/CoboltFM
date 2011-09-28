@@ -57,7 +57,8 @@ public class XSPFTrackInfo {
 	public Bitmap downloadImageBitmap() { 
 		if (mBitmap == null && !mBitmapLoadFailed) {
 	        try { 
-	            URL aURL = new URL(mImage); 
+	            URL aURL = new URL(mImage);
+	            Log.d(TAG, "trying to download bitmap from " + aURL.toString());
 	            URLConnection conn = aURL.openConnection(); 
 	            conn.connect(); 
 	            InputStream is = conn.getInputStream(); 
