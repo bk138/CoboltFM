@@ -28,7 +28,7 @@
 <string name="track_shared">Lied empfohlen</string>
 <string name="message">Nachricht</string>
 <string name="with">mit</string>
-<string name="tune">Radio hören</string>
+<string name="tune">Radio</string>
 <string name="enter_artist_name_title">Künstler</string>
 <string name="enter_tag_title">Tag</string>
 <string name="choose_friend_title">Freunde</string>
@@ -39,4 +39,11 @@
 <string name="settings_title">Einstellungen</string>
 <string name="madeby">CoboltFM wurde hergestellt von der Cobolt Forge, basierend auf alastfm © 2008 Oleg Avdeev (http://lastfm.ajaxie.com)</string>
 <string name="reset_question">Sicher dass alle Einstellungen zurückgesetzt werden sollen, inklusive Benutzernamen und Passwort?</string>
+<string name="artist">Künstler</string>
+<string name="myrecommendations">Meine Empfehlungen</string>
+<string name="myradiostation">Meine Radiostation</string>
+<string name="myneighbourradio">Mein Nachbarradio</string>
+<string name="myfriends">Meine Freunde</string>
+
+
 </resources>

@@ -26,7 +26,7 @@
 		
 		 <Button android:id="@+id/tune_button" android:layout_width="100dip" android:textSize="18sp"
 		 android:drawableLeft="@drawable/tune_icon" 
-		 android:text="Tune" android:layout_height="65dip" android:textStyle="bold"/>
+		 android:text="@string/tune" android:layout_height="65dip" android:textStyle="bold"/>
 		</LinearLayout>
 		 
 	</LinearLayout>

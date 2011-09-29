@@ -28,8 +28,8 @@
 <string name="track_shared">Track shared</string>
 <string name="message">Message</string>
 <string name="with">with</string>
-<string name="tune">Tune to a station</string>
-<string name="enter_artist_name_title">Enter station name</string>
+<string name="tune">Tune</string>
+<string name="enter_artist_name_title">Enter artist name</string>
 <string name="enter_tag_title">Enter tag</string>
 <string name="choose_friend_title">Choose friend</string>
 <string name="prebuffer">Set percent of song to prebuffer:</string>
@@ -39,4 +39,11 @@
 <string name="settings_title">Settings</string>
 <string name="madeby">Produced by Cobolt Forge, based on alastfm © 2008 Oleg Avdeev (http://lastfm.ajaxie.com)</string>
 <string name="reset_question">Are you really sure you want to reset all settings, including your saved last.fm username and password?</string>
+<string name="artist">Artist</string>
+<string name="myrecommendations">My Recommendations</string>
+<string name="myradiostation">My Radio Station</string>
+<string name="myneighbourradio">My Neighbour Radio</string>
+<string name="myfriends">My Friends\' Radio</string>
+
+
 </resources>

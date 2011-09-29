@@ -26,6 +26,14 @@ public class TuneActivity extends ListActivity {
         	SharedPreferences settings = getSharedPreferences(PlayerActivity.PREFS_NAME, 0);
 	        mUsername = settings.getString("username", "empty");
 
+	        
+	        final String[] STATION_TYPES = new String[] {
+	        		getString(R.string.artist), "Tag", 
+	        		getString(R.string.myrecommendations),
+	        		getString(R.string.myradiostation),
+	        		getString(R.string.myneighbourradio),
+	        		getString(R.string.myfriends)} ;
+	        
 	        setListAdapter(new ArrayAdapter<String>(this,
 	                android.R.layout.simple_list_item_1, STATION_TYPES));
 
@@ -168,11 +176,6 @@ public class TuneActivity extends ListActivity {
 					}
 					
 		}	   
-	   
-	   private final static String[] STATION_TYPES = new String[] {
-		   		"Artist", "Tag", "My Recommendations",
-		        "My Radio Station",		        
-		        "My Neighbour Radio", "Friends Radio"} ;
 	   
 	   private final int STATION_TYPE_ARTIST = 0;
 	   private final int STATION_TYPE_TAG = 1;
