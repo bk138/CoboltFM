@@ -408,7 +408,7 @@ public class PlayerThread extends Thread {
 
 		public void onBufferingUpdate(MediaPlayer mp, int percent) {
 			
-			if(percent < 100)
+			if(percent < 100 && mCurrentTrack != null)
 				Log.d(TAG, "front player buffered " + percent + " %, (" + mPreBuffer + " needed) of " + mCurrentTrack.getTitle());
 			
 			mBufferedFront = percent;
@@ -436,7 +436,7 @@ public class PlayerThread extends Thread {
 
 		public void onBufferingUpdate(MediaPlayer mp, int percent) {
 			
-			if(percent < 100)
+			if(percent < 100 && mNextTrack != null)
 				Log.d(TAG, "back player buffered " + percent + "% of " + mNextTrack.getTitle());
 			
 			mBufferedBack = percent;
