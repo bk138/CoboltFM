@@ -32,8 +32,7 @@ public class SettingsActivity extends Activity {
 			public void onClick(View v) {
 				new AlertDialog.Builder(SettingsActivity.this)
 						.setIcon(R.drawable.alert_dialog_icon)
-						.setTitle(
-								"Are you really want to reset all settings, including your saved last.fm username and password?")
+						.setMessage(getString(R.string.reset_question))
 						.setPositiveButton(R.string.alert_dialog_ok,
 								new DialogInterface.OnClickListener() {
 									public void onClick(DialogInterface dialog,

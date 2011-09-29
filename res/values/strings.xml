@@ -37,4 +37,6 @@
 <string name="userinfo_button">Change user name &amp; password</string>
 <string name="reset_button">Reset all settings</string>
 <string name="settings_title">Settings</string>
+<string name="madeby">Produced by Cobolt Forge, based on alastfm © 2008 Oleg Avdeev (http://lastfm.ajaxie.com)</string>
+<string name="reset_question">Are you really sure you want to reset all settings, including your saved last.fm username and password?</string>
 </resources>
