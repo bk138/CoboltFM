@@ -505,15 +505,13 @@ public class PlayerThread extends Thread {
 				mBackMP.release();
 				mBackMP = null;
 			}
-			
-			MediaPlayer mediaPlayer = new MediaPlayer();
-			
 			Log.d(TAG, "pre-buffering from stream " + streamUrl);
-			mediaPlayer.setDataSource(streamUrl);
-			
-			mediaPlayer.setOnBufferingUpdateListener(mOnBackBufferingUpdateListener); // this starts the player once prebuffering is done
-			mediaPlayer.prepareAsync();
-			mBackMP = mediaPlayer;
+
+			mBackMP = new MediaPlayer();
+			mBufferedBack = 0;
+			mBackMP.setDataSource(streamUrl);
+			mBackMP.setOnBufferingUpdateListener(mOnBackBufferingUpdateListener); // this starts the player once prebuffering is done
+			mBackMP.prepareAsync();
 			
 		} catch (IllegalArgumentException e) {
 			Log.e(TAG, "in bufferNextTrack", e);
@@ -561,29 +559,27 @@ public class PlayerThread extends Thread {
 				mFrontMP = null;
 			}
 
-			MediaPlayer mediaPlayer;
 			if(mBackMP != null) // there already is a pre-buffering media player
 			{
 				Log.d(TAG, "using pre-buffered stream " + streamUrl);
-				mediaPlayer = mBackMP;
-				mediaPlayer.setOnCompletionListener(mOnTrackCompletionListener);
-				mediaPlayer.setOnBufferingUpdateListener(mOnFrontBufferingUpdateListener); // this starts the player once prebuffering is done
+				mFrontMP = mBackMP;
+				mFrontMP.setOnCompletionListener(mOnTrackCompletionListener);
+				mFrontMP.setOnBufferingUpdateListener(mOnFrontBufferingUpdateListener); // this starts the player once prebuffering is done
 				mBackMP = null;
 			}
 			else
 			{
 				Log.d(TAG, "playing from stream " + streamUrl);
-				mediaPlayer = new MediaPlayer();
-				mediaPlayer.setDataSource(streamUrl);
-				mediaPlayer.setOnCompletionListener(mOnTrackCompletionListener);
-				mediaPlayer.setOnBufferingUpdateListener(mOnFrontBufferingUpdateListener); // this starts the player once prebuffering is done
-				mediaPlayer.prepareAsync();
+				mFrontMP = new MediaPlayer();
+				mBufferedFront = 0;
+				mFrontMP.setDataSource(streamUrl);
+				mFrontMP.setOnCompletionListener(mOnTrackCompletionListener);
+				mFrontMP.setOnBufferingUpdateListener(mOnFrontBufferingUpdateListener); // this starts the player once prebuffering is done
+				mFrontMP.prepareAsync();
 			}
-			
 
 			if (mMuted)
-				mediaPlayer.setVolume(0, 0);
-			mFrontMP = mediaPlayer;
+				mFrontMP.setVolume(0, 0);
 			
 			syncMuteState(); // in case if mute flag changed concurrently after previous if
 			
