@@ -19,6 +19,7 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
+import android.content.Context;
 import android.net.Uri;
 import android.util.Log;
 
@@ -177,7 +178,7 @@ public class Utils {
 		return l.toUpperCase() + text.substring(1).toLowerCase(); 
 	}
 	
-	public static String getUriDescription(Uri uri) {
+	public static String getUriDescription(Context c, Uri uri) {
 		if (!uri.getScheme().equals("lastfm"))
 			return "<invalid uri>";
 		
@@ -189,7 +190,7 @@ public class Utils {
 			String username = path.get(0);
 			
 			if (path.get(1).equals("neighbours"))
-				return username + "'s Neighbourhood";
+				return username + c.getString(R.string.uri_neighbours);
 			if (path.get(1).equals("personal"))
 				return username + "'s Library";
 			if (path.get(1).equals("playlist"))

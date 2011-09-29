@@ -39,11 +39,15 @@
 <string name="settings_title">Settings</string>
 <string name="madeby">Produced by Cobolt Forge, based on alastfm © 2008 Oleg Avdeev (http://lastfm.ajaxie.com)</string>
 <string name="reset_question">Are you really sure you want to reset all settings, including your saved last.fm username and password?</string>
+
 <string name="artist">Artist</string>
 <string name="myrecommendations">My Recommendations</string>
 <string name="myradiostation">My Radio Station</string>
 <string name="myneighbourradio">My Neighbour Radio</string>
 <string name="myfriends">My Friends\' Radio</string>
 
+<string name="pleasewait">Please wait while loading...</string>
+
+<string name="uri_neighbours">\'s Neighbourhood</string>
 
 </resources>

@@ -9,7 +9,7 @@
         android:layout_width="fill_parent" android:layout_height="wrap_content"
         android:layout_weight="0"
         android:paddingBottom="4dip"
-        android:text="Enter tag name"/>
+        android:text="@string/enter_tag_title"/>
 
     <AutoCompleteTextView android:id="@+id/station_name"
         android:layout_width="fill_parent"

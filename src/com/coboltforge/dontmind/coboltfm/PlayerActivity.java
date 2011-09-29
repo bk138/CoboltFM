@@ -282,7 +282,7 @@ public class PlayerActivity extends Activity {
 								if (stationUri == null && username != null)
 									stationUri = genDefaultUri(username);
 								if (stationUri != null)
-									radioName.setText(Utils.getUriDescription(stationUri));
+									radioName.setText(Utils.getUriDescription(getApplicationContext(), stationUri));
 								showLoadingBanner("Connecting..");
 							}
 							else
@@ -509,7 +509,7 @@ public class PlayerActivity extends Activity {
 
 					TextView radioName = (TextView) PlayerActivity.this
 						.findViewById(R.id.radio_name);
-					radioName.setText(Utils.getUriDescription(stationUri));
+					radioName.setText(Utils.getUriDescription(getApplicationContext(), stationUri));
 
 					showLoadingBanner("Connecting..");
 					Intent serviceIntent = new Intent();
@@ -760,7 +760,7 @@ public class PlayerActivity extends Activity {
 
 				TextView radioName = (TextView) PlayerActivity.this
 						.findViewById(R.id.radio_name);
-				radioName.setText(Utils.getUriDescription(stationUri));
+				radioName.setText(Utils.getUriDescription(getApplicationContext(), stationUri));
 				showLoadingBanner("Connecting..");
 
 				Intent serviceIntent = new Intent(Intent.ACTION_VIEW,
@@ -791,7 +791,7 @@ public class PlayerActivity extends Activity {
 
 				TextView radioName = (TextView) PlayerActivity.this
 						.findViewById(R.id.radio_name);
-				radioName.setText(Utils.getUriDescription(data.getData()));
+				radioName.setText(Utils.getUriDescription(getApplicationContext(), data.getData()));
 
 				Intent serviceIntent = new Intent(Intent.ACTION_VIEW, data
 						.getData(), PlayerActivity.this, PlayerService.class);

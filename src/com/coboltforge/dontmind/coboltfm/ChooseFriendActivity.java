@@ -96,8 +96,7 @@ public class ChooseFriendActivity extends ListActivity {
         switch (id) {
             case DIALOG_KEY: {
                 dialog = new ProgressDialog(this);
-                dialog.setTitle("Downloading friends list");
-                dialog.setMessage("Please wait while loading...");
+                dialog.setMessage(getString(R.string.pleasewait));
                 dialog.setIndeterminate(true);
                 dialog.setCancelable(true);
                 dialog.setOnCancelListener(listener);
