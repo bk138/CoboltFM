@@ -563,6 +563,7 @@ public class PlayerThread extends Thread {
 			{
 				Log.d(TAG, "using pre-buffered stream " + streamUrl);
 				mFrontMP = mBackMP;
+				mBufferedFront = mBufferedBack;
 				mFrontMP.setOnCompletionListener(mOnTrackCompletionListener);
 				mFrontMP.setOnBufferingUpdateListener(mOnFrontBufferingUpdateListener); // this starts the player once prebuffering is done
 				mBackMP = null;
