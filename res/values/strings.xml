@@ -13,7 +13,6 @@
 <string name="user_info_title">User Info</string>
 <string name="ok_button">OK</string>
 <string name="cancel_button">Cancel</string>
-<string name="settings_button">Settings</string>
 <string name="menu_settings">Settings</string>
 <string name="share_track_title">Share Track</string>
 <string name="menu_about">About</string>
@@ -21,7 +20,6 @@
 <string name="menu_profile">Show Profile Page</string>
 <string name="about_title">About</string>
 <string name="albumcover_title">Album Cover</string>
-<string name="station_spinner_prompt">Select station type</string>
 <string name="username">Username</string>
 <string name="password">Password</string>
 <string name="signup">Don\'t have a last.fm username? Register at http://last.fm/join</string>
@@ -31,7 +29,6 @@
 <string name="message">Message</string>
 <string name="with">with</string>
 <string name="tune">Tune to a station</string>
-<string name="enter_station_title">Enter station name</string>
 <string name="enter_artist_name_title">Enter station name</string>
 <string name="enter_tag_title">Enter tag</string>
 <string name="choose_friend_title">Choose friend</string>
