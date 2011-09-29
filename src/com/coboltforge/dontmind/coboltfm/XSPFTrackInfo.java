@@ -5,9 +5,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.net.URLConnection;
-
 import org.w3c.dom.Element;
-
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.util.Log;
@@ -22,6 +20,7 @@ public class XSPFTrackInfo {
 	private String mImage;
 	private String mTitle;
 	private String mStationName;
+	
 	
 	
 	public String getStationName() {
@@ -57,8 +56,8 @@ public class XSPFTrackInfo {
 	public Bitmap downloadImageBitmap() { 
 		if (mBitmap == null && !mBitmapLoadFailed) {
 	        try { 
+	            Log.d(TAG, "trying to download bitmap from '" + mImage + "'");
 	            URL aURL = new URL(mImage);
-	            Log.d(TAG, "trying to download bitmap from " + aURL.toString());
 	            URLConnection conn = aURL.openConnection(); 
 	            conn.connect(); 
 	            InputStream is = conn.getInputStream(); 

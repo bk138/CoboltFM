@@ -19,6 +19,7 @@ import android.content.SharedPreferences;
 import android.content.DialogInterface.OnClickListener;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
@@ -233,7 +234,7 @@ public class PlayerActivity extends Activity {
 
 	class StatusRefreshTask extends TimerTask {
 
-		Bitmap prevBitmap;
+		Bitmap prevBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.ban);
 
 		PlayerService.Status prevStatus;
 		
@@ -366,9 +367,16 @@ public class PlayerActivity extends Activity {
 									creatorText.setText(track.getCreator());
 									albumText.setText(track.getAlbum());
 									if (prevBitmap != track.getBitmap()) {
-										albumView
-												.setImageDrawable(new BitmapDrawable(
-														track.getBitmap()));
+										if(track.getBitmap() != null)
+										{
+											albumView.setClickable(true);
+											albumView.setImageDrawable(new BitmapDrawable(track.getBitmap()));
+										}
+										else
+										{
+											albumView.setClickable(false);
+											albumView.setImageDrawable(new BitmapDrawable(BitmapFactory.decodeResource(getResources(), R.drawable.ban)));
+										}
 										prevBitmap = track.getBitmap();
 									}
 									trackText.setText(track.getTitle());
