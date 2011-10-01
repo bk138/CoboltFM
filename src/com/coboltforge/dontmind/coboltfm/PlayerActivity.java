@@ -22,10 +22,12 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
+import android.media.AudioManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -61,6 +63,8 @@ public class PlayerActivity extends Activity {
 
 	protected static final String TAG = "PlayerActivity";
 
+	private AudioManager audio;
+	
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		boolean result = super.onCreateOptionsMenu(menu);
@@ -450,6 +454,7 @@ public class PlayerActivity extends Activity {
 		refreshTimer = new Timer();
 		refreshTimer.scheduleAtFixedRate(new StatusRefreshTask(), 1000, 1000);
 		
+		audio = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
 
 		TextView statusText = (TextView) PlayerActivity.this
 				.findViewById(R.id.status_text);
@@ -836,4 +841,23 @@ public class PlayerActivity extends Activity {
 		outState.putBoolean("shareButton_enabled", shareButton.isEnabled());
 	}
 
+	// allow volume adjsut even when no sample is playing
+	@Override
+	public boolean onKeyDown(int keyCode, KeyEvent event) {
+		switch (keyCode) {
+		case KeyEvent.KEYCODE_VOLUME_UP:
+			audio.adjustStreamVolume(AudioManager.STREAM_MUSIC,
+					AudioManager.ADJUST_RAISE, AudioManager.FLAG_SHOW_UI);
+			return true;
+		case KeyEvent.KEYCODE_VOLUME_DOWN:
+			audio.adjustStreamVolume(AudioManager.STREAM_MUSIC,
+					AudioManager.ADJUST_LOWER, AudioManager.FLAG_SHOW_UI);
+			return true;
+		default:
+			return super.onKeyDown(keyCode, event);
+
+		}
+	}
+
+	
 }
