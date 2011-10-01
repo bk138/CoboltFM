@@ -293,7 +293,7 @@ public class PlayerActivity extends Activity {
 									stationUri = genDefaultUri(username);
 								if (stationUri != null)
 									radioName.setText(Utils.getUriDescription(getApplicationContext(), stationUri));
-								showLoadingBanner("Connecting..");
+								showLoadingBanner(getString(R.string.connecting));
 							}
 							else
 								showTimeDisplay();
@@ -522,7 +522,7 @@ public class PlayerActivity extends Activity {
 						.findViewById(R.id.radio_name);
 					radioName.setText(Utils.getUriDescription(getApplicationContext(), stationUri));
 
-					showLoadingBanner("Connecting..");
+					showLoadingBanner(getString(R.string.connecting));
 					Intent serviceIntent = new Intent();
 					serviceIntent.setAction(Intent.ACTION_VIEW);
 					serviceIntent.setClass(PlayerActivity.this,
@@ -569,7 +569,7 @@ public class PlayerActivity extends Activity {
 					showTimeDisplay();
 					TextView statusText = (TextView) PlayerActivity.this
 							.findViewById(R.id.status_text);
-					statusText.setText("Disconnected");
+					statusText.setText(getString(R.string.disconnected));
 				}
 			}
 		});
@@ -773,7 +773,7 @@ public class PlayerActivity extends Activity {
 				TextView radioName = (TextView) PlayerActivity.this
 						.findViewById(R.id.radio_name);
 				radioName.setText(Utils.getUriDescription(getApplicationContext(), stationUri));
-				showLoadingBanner("Connecting..");
+				showLoadingBanner(getString(R.string.connecting));
 
 				Intent serviceIntent = new Intent(Intent.ACTION_VIEW,
 						stationUri, PlayerActivity.this, PlayerService.class);
@@ -808,7 +808,7 @@ public class PlayerActivity extends Activity {
 				Intent serviceIntent = new Intent(Intent.ACTION_VIEW, data
 						.getData(), PlayerActivity.this, PlayerService.class);
 
-				showLoadingBanner("Connecting..");
+				showLoadingBanner(getString(R.string.connecting));
 
 				if (mBoundService == null) {
 					if (!PlayerActivity.this.bindService(serviceIntent,

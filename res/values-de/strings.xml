@@ -50,5 +50,8 @@
 
 <string name="uri_neighbours">s Nachbarschaft</string>
 
+<string name="disconnected">Nicht verbunden</string>
+<string name="connecting">Verbinden...</string>
+
 
 </resources>
