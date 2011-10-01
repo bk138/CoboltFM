@@ -26,6 +26,7 @@ import android.media.AudioManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.IBinder;
+import android.os.Vibrator;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
@@ -158,6 +159,11 @@ public class PlayerActivity extends Activity {
 				public void run() {
 					final ImageButton skipButton = (ImageButton) findViewById(R.id.skip_button);
 					skipButton.setEnabled(true);
+					
+					Vibrator vib = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
+					long[] pattern = {0, 666, 111, 111, 111, 111};
+					vib.vibrate(pattern, -1);
+					
 				}
 			});
 		}
@@ -632,6 +638,7 @@ public class PlayerActivity extends Activity {
 		albumView.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View v) {
 				Log.d(TAG, "Album cover clicked");
+				
 				if (mBoundService != null) 	
 				{
 					final PlayerService.Status status = mBoundService.getCurrentStatus();
