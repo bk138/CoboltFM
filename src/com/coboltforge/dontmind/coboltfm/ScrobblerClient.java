@@ -17,7 +17,7 @@ import android.util.Log;
 
 public class ScrobblerClient {
 
-	static final String CLIENT_ID = "ass";
+	static final String CLIENT_ID = "ala";
 	private static final String TAG = "ScrobblerClient";
 	private String mSessionId;
 	private String mNowPlayingUrl;
