@@ -192,11 +192,11 @@ public class Utils {
 			if (path.get(1).equals("neighbours"))
 				return username + c.getString(R.string.uri_neighbours);
 			if (path.get(1).equals("personal"))
-				return username + "'s Library";
+				return username +  c.getString(R.string.uri_library);
 			if (path.get(1).equals("playlist"))
-				return username + "'s Library";
+				return username +  c.getString(R.string.uri_library);
 			if (path.get(1).equals("recommended"))
-				return username + "'s Recommendations";
+				return username +  c.getString(R.string.uri_recommendations);
 			return "<invalid uri>";			
 		} else
 			if (uri.getAuthority().equals("artist")) {
@@ -213,34 +213,5 @@ public class Utils {
 					return "<invalid uri>";
 	}
 
-	/**
-	 *  Move the file in oldLocation to newLocation.
-	 */
-	public static void copyFile(File	oldLocation, File	newLocation) throws IOException {
 
-		if ( oldLocation.exists( )) {
-			BufferedInputStream  reader = new BufferedInputStream( new FileInputStream(oldLocation) );
-			BufferedOutputStream  writer = new BufferedOutputStream( new FileOutputStream(newLocation, false));
-			try {
-				byte[]  buff = new byte[8192];
-				int numChars;
-				while ( (numChars = reader.read(  buff, 0, buff.length ) ) != -1) {
-					writer.write( buff, 0, numChars );
-				}
-			} catch( IOException ex ) {
-				throw new IOException("IOException when transferring " + oldLocation.getPath() + " to " + newLocation.getPath());
-			} finally {
-				try {
-					if ( reader != null ){                    	
-						writer.close();
-						reader.close();
-					}
-				} catch( IOException ex ){
-					Log.e("Utils.moveFile","Error closing files when transferring " + oldLocation.getPath() + " to " + newLocation.getPath() ); 
-				}
-			}
-		} else {
-			throw new IOException("Old location does not exist when transferring " + oldLocation.getPath() + " to " + newLocation.getPath() );
-		}
-	}
 }

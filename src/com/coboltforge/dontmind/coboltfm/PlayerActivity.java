@@ -256,7 +256,13 @@ public class PlayerActivity extends Activity {
 						.getCurrentStatus();
 
 				if (status != null) {
-					final String statusString = status.toString();
+					String statusString = status.toString();
+					if(statusString.equals("playing"))
+						statusString = getString(R.string.playing);
+					if(statusString.equals("connecting.."))
+						statusString = getString(R.string.connecting);
+					final String finalStatusString = statusString;
+					
 					PlayerActivity.this.runOnUiThread(new Runnable() {
 
 						public void run() {
@@ -326,7 +332,7 @@ public class PlayerActivity extends Activity {
 										Log.w(TAG, Boolean.toString(res));
 									}
 								} else 
-									showErrorMsg(statusString);
+									showErrorMsg(finalStatusString);
 							}
 							
 							else {
@@ -340,7 +346,7 @@ public class PlayerActivity extends Activity {
 										.isCurrentTrackBanned());
 								shareButton.setEnabled(true);
 
-								statusText.setText(statusString);
+								statusText.setText(finalStatusString);
 							}
 
 							if (status instanceof PlayerService.PlayingStatus) {
