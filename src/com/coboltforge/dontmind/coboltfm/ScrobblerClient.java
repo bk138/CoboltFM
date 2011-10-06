@@ -79,6 +79,7 @@ public class ScrobblerClient {
 			"&t=" + URLEncoder.encode(track, "UTF-8") + "&b=" + URLEncoder.encode(album, "UTF-8") +
 			"&l=" + Integer.toString(len) + "&n=&m=";
 			url = new URL(mNowPlayingUrl);
+			Log.d(TAG, "nowPlaying() '" + req + "' to " + url.toString());
 		} catch (UnsupportedEncodingException e1) {
 			Log.e(TAG, "while scrobbling 'now playing'", e1);
 			return false;
@@ -142,6 +143,7 @@ public class ScrobblerClient {
 			"&b[0]=" + URLEncoder.encode(album, "UTF-8") +
 			"&n[0]=&m[0]=";
 			url = new URL(mSubmissionUrl);
+			Log.d(TAG, "submit() '" + req + "' to " + url.toString());
 		} catch (UnsupportedEncodingException e1) {
 			Log.e(TAG, "while scrobbling", e1);
 			return false;
@@ -160,14 +162,17 @@ public class ScrobblerClient {
 	        wr.write(req);
 	        wr.flush();
 		
-        String res;
+	        String res;
         	rd = new BufferedReader(new InputStreamReader(conn.getInputStream()));
 			res = rd.readLine();
 			if (res != null && res.equals("OK"))
+			{
+				Log.d(TAG, "Submit returned " + res);
 				return true;
+			}
 			else
 			{
-				Log.e(TAG, "Now playing returned " + res);
+				Log.e(TAG, "Submit returned " + res);
 				return false;
 			}
 		} catch (IOException e) {

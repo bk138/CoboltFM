@@ -473,9 +473,11 @@ public class PlayerThread extends Thread {
 
 	private void submitCurrentTrackDelayed() {
 		XSPFTrackInfo curTrack = getCurrentTrack();
+		Log.d(TAG, "in submitCurrentTrackDelayed()");
 		if (curTrack.getDuration() > 30 && mFrontMP != null)
-			if (mFrontMP != null && mFrontMP.getCurrentPosition() > 240
-					|| mFrontMP.getCurrentPosition() > curTrack.getDuration()					
+		{
+			if (mFrontMP.getCurrentPosition() > 240
+					|| mFrontMP.getCurrentPosition() >= curTrack.getDuration()					
 					|| (mCurrentTrackRating != null && mCurrentTrackRating.equals("L"))
 					|| (mCurrentTrackRating != null && mCurrentTrackRating.equals("B"))) {
 				TrackSubmissionParams params = new TrackSubmissionParams(
@@ -483,6 +485,7 @@ public class PlayerThread extends Thread {
 				Message.obtain(mHandler, PlayerThread.MESSAGE_SUBMIT_TRACK,
 						params).sendToTarget();
 			}
+		}
 	}
 
 	private void startPlaying() throws LastFMError {
