@@ -688,7 +688,7 @@ public class PlayerActivity extends Activity {
 			{
 				AlertDialog.Builder dialog = new AlertDialog.Builder(this);
 				dialog.setTitle(getString(R.string.support_dialog_title));
-				dialog.setIcon(getResources().getDrawable(R.drawable.lastfm_icon));
+				dialog.setIcon(getResources().getDrawable(R.drawable.app_icon));
 				dialog.setMessage(R.string.support_dialog_text);
 
 				dialog.setPositiveButton(getString(R.string.support_dialog_yes), new OnClickListener() {

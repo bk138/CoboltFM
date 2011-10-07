@@ -7,7 +7,7 @@
 
   <ImageView android:id="@+id/albumcoverview"
 			android:layout_width="fill_parent" android:layout_height="fill_parent"
-			android:scaleType="fitCenter" android:src="@drawable/lastfm_icon">
+			android:scaleType="fitCenter">
 		</ImageView>
  
 </LinearLayout>
