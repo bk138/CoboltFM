@@ -397,6 +397,7 @@ public class PlayerThread extends Thread {
 
 		public void onCompletion(MediaPlayer mp) {
 			try {
+				mp.seekTo(mp.getDuration()); // the mp gets set the 0 pos when done, this interfers with the track submit logic 
 				playNextTrack();
 			} catch (LastFMError e) {
 				setErrorState(e);
@@ -473,11 +474,15 @@ public class PlayerThread extends Thread {
 
 	private void submitCurrentTrackDelayed() {
 		XSPFTrackInfo curTrack = getCurrentTrack();
-		Log.d(TAG, "in submitCurrentTrackDelayed()");
 		if (curTrack.getDuration() > 30 && mFrontMP != null)
 		{
-			if (mFrontMP.getCurrentPosition() > 240
-					|| mFrontMP.getCurrentPosition() >= curTrack.getDuration()/2					
+			Log.d(TAG, "submitCurrentTrackDelayed(), player pos at " 
+					+ mFrontMP.getCurrentPosition()
+					+ ", is currently " + (mFrontMP.isPlaying() ? "playing" : "not playing")
+					+ ", track lasts " + curTrack.getDuration()
+					+ ", it's rated " + mCurrentTrackRating);
+
+			if ((mFrontMP.getCurrentPosition() > 240000 || mFrontMP.getCurrentPosition() >= curTrack.getDuration()/2)					
 					|| (mCurrentTrackRating != null && mCurrentTrackRating.equals("L"))
 					|| (mCurrentTrackRating != null && mCurrentTrackRating.equals("B"))) {
 				TrackSubmissionParams params = new TrackSubmissionParams(
