@@ -477,7 +477,7 @@ public class PlayerThread extends Thread {
 		if (curTrack.getDuration() > 30 && mFrontMP != null)
 		{
 			if (mFrontMP.getCurrentPosition() > 240
-					|| mFrontMP.getCurrentPosition() >= curTrack.getDuration()					
+					|| mFrontMP.getCurrentPosition() >= curTrack.getDuration()/2					
 					|| (mCurrentTrackRating != null && mCurrentTrackRating.equals("L"))
 					|| (mCurrentTrackRating != null && mCurrentTrackRating.equals("B"))) {
 				TrackSubmissionParams params = new TrackSubmissionParams(

@@ -141,7 +141,8 @@ public class ScrobblerClient {
 			"&r[0]=" + rating +
 			"&l[0]=" + Integer.toString(len) + 
 			"&b[0]=" + URLEncoder.encode(album, "UTF-8") +
-			"&n[0]=&m[0]=";
+			"&n[0]=" +
+			"&m[0]=";
 			url = new URL(mSubmissionUrl);
 			Log.d(TAG, "submit() '" + req + "' to " + url.toString());
 		} catch (UnsupportedEncodingException e1) {
