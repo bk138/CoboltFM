@@ -3,6 +3,7 @@ package com.coboltforge.dontmind.coboltfm;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import com.coboltforge.customviews.FixedViewFlipper;
 import com.coboltforge.dontmind.coboltfm.R;
 
 import android.app.Activity;
@@ -39,7 +40,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ImageButton;
-import android.widget.ViewFlipper;
 import android.widget.ViewSwitcher;
 import android.widget.Gallery.LayoutParams;
 
@@ -425,7 +425,7 @@ public class PlayerActivity extends Activity {
 
 	void showLoadingBanner(String text) {
 		final TextView textView = (TextView) findViewById(R.id.loading_text);
-		ViewFlipper switcher = (ViewFlipper) findViewById(R.id.switcher);
+		FixedViewFlipper switcher = (FixedViewFlipper) findViewById(R.id.switcher);
 		
 		if (!text.equals(textView.getText().toString()))
 		{
@@ -437,14 +437,14 @@ public class PlayerActivity extends Activity {
 	}
 
 	void showTimeDisplay() {
-		ViewFlipper switcher = (ViewFlipper) findViewById(R.id.switcher);
+		FixedViewFlipper switcher = (FixedViewFlipper) findViewById(R.id.switcher);
 		if (switcher.getCurrentView().getId() != R.id.display_container)
 			switcher.setDisplayedChild(0); // is the first child in layout!
 	}
 	
 	void showErrorMsg(String text) {
 		final TextView textView = (TextView) findViewById(R.id.error_text);
-		ViewFlipper switcher = (ViewFlipper) findViewById(R.id.switcher);
+		FixedViewFlipper switcher = (FixedViewFlipper) findViewById(R.id.switcher);
 		
 		if (!text.equals(textView.getText().toString()))
 		{

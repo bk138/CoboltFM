@@ -32,7 +32,7 @@
 		 
 	</LinearLayout>
 	
-	<ViewFlipper android:id="@+id/switcher" android:layout_width="fill_parent" 
+	<com.coboltforge.customviews.FixedViewFlipper android:id="@+id/switcher" android:layout_width="fill_parent" 
 	android:baselineAligned="false" android:layout_gravity="center_horizontal"
 	 android:layout_height="fill_parent"  android:layout_weight="1">
 	
@@ -113,7 +113,7 @@
 		</LinearLayout>
 		
 	
-	</ViewFlipper>
+	</com.coboltforge.customviews.FixedViewFlipper>
 
 	<LinearLayout android:orientation="horizontal"
 		android:layout_width="wrap_content" android:layout_height="wrap_content"
