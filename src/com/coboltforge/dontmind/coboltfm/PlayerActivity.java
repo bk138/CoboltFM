@@ -65,6 +65,7 @@ public class PlayerActivity extends Activity {
 	protected static final String TAG = "PlayerActivity";
 
 	private AudioManager audio;
+	BroadcastReceiver headsetPlugReceiver;
 	
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
@@ -721,7 +722,7 @@ public class PlayerActivity extends Activity {
 		}
 
 		// listen for headphone plugs/unplugs
-		registerReceiver(new BroadcastReceiver() {
+		headsetPlugReceiver = new BroadcastReceiver() {
 			//@Override
 			public void onReceive(Context context, Intent intent)
 			{
@@ -729,9 +730,18 @@ public class PlayerActivity extends Activity {
 				String name = intent.getStringExtra("name");
 				Log.d(TAG, "Detected headphone '" + name  + (state == 0 ? "' unplug" : "' plug"));
 			}
-		}, new IntentFilter(Intent.ACTION_HEADSET_PLUG));
+		};
+		registerReceiver(headsetPlugReceiver, new IntentFilter(Intent.ACTION_HEADSET_PLUG));
 		
 	}
+	
+	@Override
+	public void onDestroy() {
+		super.onDestroy();
+		
+		unregisterReceiver(headsetPlugReceiver);
+	}
+	
 
 	protected void shareTrack(XSPFTrackInfo track) {
 		startActivityForResult(new Intent(PlayerActivity.this,
