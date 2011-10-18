@@ -129,7 +129,6 @@ public class PlayerActivity extends Activity {
 	}
 
 	private PlayerService mBoundService;
-	private ServiceConnection mServiceConnection = new LastFMServiceConnection();
 	private int mPreBuffer;
 	private boolean mHeadphonePlugged;
 
@@ -142,7 +141,6 @@ public class PlayerActivity extends Activity {
 			// cast its IBinder to a concrete class and directly access it.
 			mBoundService = ((PlayerService.LocalBinder) service).getService();
 			onServiceStarted();
-			Log.d(TAG, "Connected to service!");
 		}
 
 		public void onServiceDisconnected(ComponentName className) {
@@ -151,7 +149,6 @@ public class PlayerActivity extends Activity {
 			// Because it is running in our same process, we should never
 			// see this happen.
 			mBoundService = null;
-			Log.d(TAG, "Disconnected from service!");
 		}
 	};
 
@@ -466,6 +463,13 @@ public class PlayerActivity extends Activity {
 		}
 	}
 
+	void bindToPlayerService() {
+		if (!PlayerActivity.this.bindService(new Intent(PlayerActivity.this,
+				PlayerService.class), new LastFMServiceConnection(),
+				Context.BIND_AUTO_CREATE))
+			PlayerActivity.this.showDialog(DIALOG_ERROR);
+	}
+
 	Timer refreshTimer;
 
 	void showLoadingBanner(String text) {
@@ -523,12 +527,7 @@ public class PlayerActivity extends Activity {
 			statusText.setText("Invalid version -- please check for update");
 		}
 
-		// (re)-bind to player service
-		// this reconnects to the already runnging service 
-		if (!PlayerActivity.this.bindService(new Intent(PlayerActivity.this,
-				PlayerService.class), mServiceConnection,
-				Context.BIND_AUTO_CREATE))
-			PlayerActivity.this.showDialog(DIALOG_ERROR);
+		bindToPlayerService();
 
 		final Button tuneButton = (Button) findViewById(R.id.tune_button);
 
@@ -607,11 +606,11 @@ public class PlayerActivity extends Activity {
 					 * PlayerActivity.this.startService(serviceIntent);
 					 */
 					if (mBoundService == null) {
-						PlayerActivity.this.startService(serviceIntent);
 						if (!PlayerActivity.this.bindService(serviceIntent,
-								mServiceConnection,
+								new LastFMServiceConnection(),
 								Context.BIND_AUTO_CREATE))
 							PlayerActivity.this.showDialog(DIALOG_ERROR);
+						PlayerActivity.this.startService(serviceIntent);
 					} else {
 						PlayerActivity.this.startService(serviceIntent);
 						// mBoundService.startPlaying(stationUri.toString());
@@ -834,9 +833,6 @@ public class PlayerActivity extends Activity {
 		super.onDestroy();
 		
 		unregisterReceiver(headsetPlugReceiver);
-		
-		// unbind from player service. will keep running cause we used startservice()!
-		unbindService(mServiceConnection);
 	}
 	
 
@@ -924,11 +920,11 @@ public class PlayerActivity extends Activity {
 				showLoadingBanner(getString(R.string.connecting));
 
 				if (mBoundService == null) {
-					PlayerActivity.this.startService(serviceIntent);
 					if (!PlayerActivity.this.bindService(serviceIntent,
-							mServiceConnection,
+							new LastFMServiceConnection(),
 							Context.BIND_AUTO_CREATE))
 						PlayerActivity.this.showDialog(DIALOG_ERROR);
+					PlayerActivity.this.startService(serviceIntent);
 				} else {
 					PlayerActivity.this.startService(serviceIntent);
 				}
