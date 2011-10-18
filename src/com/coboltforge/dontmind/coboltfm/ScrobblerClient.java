@@ -115,7 +115,8 @@ public class ScrobblerClient {
 			Log.e(TAG, "while scrobbling 'now playing'", e);
 		} finally {
 	        try {
-				wr.close();			
+	        	if (wr != null)
+	        		wr.close();			
 				if (rd != null)
 					rd.close();
 	        } catch (IOException e) {
@@ -180,7 +181,8 @@ public class ScrobblerClient {
 			Log.e(TAG, "while scrobbling", e);
 		} finally {
 	        try {
-				wr.close();			
+	        	if (wr != null)
+	        		wr.close();			
 				if (rd != null)
 					rd.close();
 	        } catch (IOException e) {
