@@ -366,6 +366,11 @@ public class PlayerActivity extends Activity {
 									showErrorMsg(finalStatusString);
 								
 								resetButtons();
+								
+								mBoundService = null;
+								Intent serviceIntent = new Intent(PlayerActivity.this,
+										PlayerService.class);
+								PlayerActivity.this.stopService(serviceIntent);
 							}
 							
 							else {
