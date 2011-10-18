@@ -305,6 +305,8 @@ public class PlayerActivity extends Activity {
 								if (stationUri != null)
 									radioName.setText(Utils.getUriDescription(getApplicationContext(), stationUri));
 								showLoadingBanner(getString(R.string.connecting));
+								final ImageButton playButton = (ImageButton) findViewById(R.id.play_button);
+								playButton.setImageResource(R.drawable.pause);
 							}
 							else
 								showTimeDisplay();
@@ -338,18 +340,23 @@ public class PlayerActivity extends Activity {
 									}
 								} else 
 									showErrorMsg(finalStatusString);
+								
+								final ImageButton playButton = (ImageButton) findViewById(R.id.play_button);
+								playButton.setImageResource(R.drawable.play);
 							}
 							
 							else {
 								final ImageButton loveButton = (ImageButton) findViewById(R.id.love_button);
 								final ImageButton banButton = (ImageButton) findViewById(R.id.ban_button);
 								final ImageButton shareButton = (ImageButton) findViewById(R.id.share_button);
-
+								final ImageButton playButton = (ImageButton) findViewById(R.id.play_button);
+								
 								loveButton.setEnabled(!mBoundService
 										.isCurrentTrackLoved());
 								banButton.setEnabled(!mBoundService
 										.isCurrentTrackBanned());
 								shareButton.setEnabled(true);
+								playButton.setImageResource(R.drawable.pause);
 
 								statusText.setText(finalStatusString);
 							}
@@ -710,6 +717,8 @@ public class PlayerActivity extends Activity {
 			shareButton.setEnabled(savedInstanceState.getBoolean(
 					"shareButton_enabled", true));
 			mHeadphonePlugged = savedInstanceState.getBoolean("headphone_plugged", false);
+			if(savedInstanceState.getBoolean("paused", false) == false)
+				playButton.setImageResource(R.drawable.pause);
 		}
 		
 		SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
@@ -917,12 +926,19 @@ public class PlayerActivity extends Activity {
 		final ImageButton loveButton = (ImageButton) findViewById(R.id.love_button);
 		final ImageButton banButton = (ImageButton) findViewById(R.id.ban_button);
 		final ImageButton shareButton = (ImageButton) findViewById(R.id.share_button);
+
+		boolean paused = false;
+		if (mBoundService != null
+			&&	mBoundService.getCurrentStatus() instanceof PlayerService.PlayingStatus
+			&& ((PlayerService.PlayingStatus) mBoundService.getCurrentStatus()).getIsActuallyPaused())
+				paused = true;
 		
 		outState.putBoolean("loveButton_enabled", loveButton.isEnabled());
 		outState.putBoolean("banButton_enabled", banButton.isEnabled());
 		outState.putBoolean("shareButton_enabled", shareButton.isEnabled());
 		
 		outState.putBoolean("headphone_plugged", mHeadphonePlugged);
+		outState.putBoolean("paused", paused);
 	}
 
 	// allow volume adjsut even when no sample is playing
