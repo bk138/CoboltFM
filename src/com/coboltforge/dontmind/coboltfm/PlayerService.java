@@ -279,6 +279,18 @@ public class PlayerService extends Service {
 		return true;
 	}
 	
+	public boolean pausePlaying(boolean pause) {
+		if (mPlayerThread == null)
+			return false;
+		if(pause)
+			Message.obtain(mPlayerThread.mHandler, PlayerThread.MESSAGE_PAUSE).sendToTarget();
+		else
+			Message.obtain(mPlayerThread.mHandler, PlayerThread.MESSAGE_UNPAUSE).sendToTarget();
+		//mCurrentStatus = new PausedStatus(); // TODO
+		//updateNotification("Paused"); //TODO
+		return true;
+	}
+	
 	public boolean setPreBuffer(int percent)
 	{
 		if (mPlayerThread != null)

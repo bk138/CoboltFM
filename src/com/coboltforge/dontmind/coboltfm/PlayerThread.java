@@ -51,7 +51,8 @@ public class PlayerThread extends Thread {
 	public static final int MESSAGE_SHARE = 9;
 	public static final int MESSAGE_CACHE_FRIENDS_LIST = 10;
 	public static final int MESSAGE_LOGIN = 11;
-	public static final int MESSAGE_DOWNLOAD_FINISHED = 12;
+	public static final int MESSAGE_PAUSE = 12;
+	public static final int MESSAGE_UNPAUSE = 13;
 
 
 	private static final String TAG = "PlayerThread";
@@ -75,6 +76,7 @@ public class PlayerThread extends Thread {
 	}
 	
 	MediaPlayer mFrontMP = null;
+	boolean mFrontPaused = false;
 	int mBufferedFront;
 	MediaPlayer mBackMP = null;
 	int mBufferedBack;
@@ -228,6 +230,14 @@ public class PlayerThread extends Thread {
 						stopPlaying();
 						getLooper().quit();
 						break;
+					case PlayerThread.MESSAGE_PAUSE:
+						Log.d(TAG, "got PAUSE message");
+						pausePlaying(true);
+						break;
+					case PlayerThread.MESSAGE_UNPAUSE:
+						Log.d(TAG, "got UNPAUSE message");
+						pausePlaying(false);
+						break;
 					case PlayerThread.MESSAGE_SUBMIT_TRACK:
 						Log.d(TAG, "got SUBMIT message");
 						TrackSubmissionParams params = (TrackSubmissionParams) msg.obj;
@@ -360,6 +370,7 @@ public class PlayerThread extends Thread {
 		{
 			mFrontMP.stop();
 			mFrontMP.release();
+			mFrontPaused = false;
 			mFrontMP = null;
 		}
 		
@@ -373,6 +384,44 @@ public class PlayerThread extends Thread {
 		
 		return true;
 	}
+	
+	private boolean pausePlaying(boolean pause)
+	{
+		if(mFrontMP == null)
+			return false;
+		
+		if(pause)
+		{
+			int pos;
+			try {
+				pos = mFrontMP.getCurrentPosition();
+			}
+			catch (IllegalStateException e) {
+				pos = 0;
+			}
+
+			if(pos > 0 && mFrontMP.isPlaying())
+			{
+				// Calling pause() has no effect on a MediaPlayer object that is already in the Paused state.
+				mFrontMP.pause();
+				mFrontPaused = true;
+				Log.d(TAG, "Paused front player");
+			}
+		}
+		else
+		{
+			if(mFrontPaused) // paused or stopped state? we only act for paused!
+			{
+				mFrontMP.start();
+				mFrontPaused = false;
+				Log.d(TAG, "Unpaused front player");
+			}
+		}
+		
+		return true;
+	}
+	 
+	
 
 	public final ArrayList<FriendInfo> getFriendsList() {
 		return mFriendsList;
@@ -414,7 +463,7 @@ public class PlayerThread extends Thread {
 			
 			mBufferedFront = percent;
 			
-			if(percent >= mPreBuffer && mFrontMP != null && !mFrontMP.isPlaying())
+			if(percent >= mPreBuffer && mFrontMP != null && !mFrontMP.isPlaying() && !mFrontPaused)
 				mFrontMP.start();
 			
 			if(percent < mPreBuffer && mFrontMP != null && mFrontMP.isPlaying())
@@ -544,6 +593,9 @@ public class PlayerThread extends Thread {
 
 	
 	private void playNextTrack() throws LastFMError {
+		
+		Log.d(TAG, "playNextTrack()");
+		
 		if (mCurrentTrack != null)
 			submitCurrentTrackDelayed();
 		
@@ -564,6 +616,7 @@ public class PlayerThread extends Thread {
 			{
 				mFrontMP.stop();
 				mFrontMP.release();
+				mFrontPaused = false;
 				mFrontMP = null;
 			}
 

@@ -730,6 +730,14 @@ public class PlayerActivity extends Activity {
 				int state = intent.getIntExtra("state", 0);
 				String name = intent.getStringExtra("name");
 				Log.d(TAG, "Detected headphone '" + name  + (state == 0 ? "' unplug" : "' plug"));
+				
+				if(mBoundService != null)
+				{
+					if(state == 0) //unplug
+						mBoundService.pausePlaying(true);
+					else
+						mBoundService.pausePlaying(false);
+				}
 			}
 		};
 		registerReceiver(headsetPlugReceiver, new IntentFilter(Intent.ACTION_HEADSET_PLUG));
