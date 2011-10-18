@@ -131,6 +131,7 @@ public class PlayerActivity extends Activity {
 	private PlayerService mBoundService;
 	private ServiceConnection mServiceConnection = new LastFMServiceConnection();
 	private int mPreBuffer;
+	private boolean mHeadphonePlugged;
 
 	public class LastFMServiceConnection implements ServiceConnection {
 		public void onServiceConnected(ComponentName className, IBinder service) {
@@ -708,6 +709,7 @@ public class PlayerActivity extends Activity {
 					"banButton_enabled", true));
 			shareButton.setEnabled(savedInstanceState.getBoolean(
 					"shareButton_enabled", true));
+			mHeadphonePlugged = savedInstanceState.getBoolean("headphone_plugged", false);
 		}
 		
 		SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
@@ -765,14 +767,23 @@ public class PlayerActivity extends Activity {
 			{
 				int state = intent.getIntExtra("state", 0);
 				String name = intent.getStringExtra("name");
-				Log.d(TAG, "Detected headphone '" + name  + (state == 0 ? "' unplug" : "' plug"));
+				Log.d(TAG, "Detected headphone '" + name  + (state == 0 ? "' unplug" : "' plug")
+							+ ", state says " + mHeadphonePlugged);
 				
 				if(mBoundService != null)
 				{
-					if(state == 0) //unplug
-						mBoundService.pausePlaying(true);
-					else
-						mBoundService.pausePlaying(false);
+					if(state == 0) //unplug, there can be several, on rotation for instance
+					{
+						if(mHeadphonePlugged == true) // only pause when plugged before
+							mBoundService.pausePlaying(true);
+						mHeadphonePlugged = false;
+					}
+					else // plug. also sent anew on rotation
+					{
+						if(mHeadphonePlugged == false) // only resume when unplugged before
+							mBoundService.pausePlaying(false);
+						mHeadphonePlugged = true;
+					}
 				}
 			}
 		};
@@ -907,10 +918,11 @@ public class PlayerActivity extends Activity {
 		final ImageButton banButton = (ImageButton) findViewById(R.id.ban_button);
 		final ImageButton shareButton = (ImageButton) findViewById(R.id.share_button);
 		
-					
 		outState.putBoolean("loveButton_enabled", loveButton.isEnabled());
 		outState.putBoolean("banButton_enabled", banButton.isEnabled());
 		outState.putBoolean("shareButton_enabled", shareButton.isEnabled());
+		
+		outState.putBoolean("headphone_plugged", mHeadphonePlugged);
 	}
 
 	// allow volume adjsut even when no sample is playing
