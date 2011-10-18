@@ -163,7 +163,10 @@ public class PlayerActivity extends Activity {
 			PlayerActivity.this.runOnUiThread(new Runnable() {
 				public void run() {
 					final ImageButton skipButton = (ImageButton) findViewById(R.id.skip_button);
+					final ImageButton stopButton = (ImageButton) findViewById(R.id.stop_button);
+
 					skipButton.setEnabled(true);
+					stopButton.setEnabled(true);
 					
 					Vibrator vib = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
 					long[] pattern = {0, 666, 111, 111, 111, 111};
@@ -309,6 +312,13 @@ public class PlayerActivity extends Activity {
 
 							TextView radioName = (TextView) PlayerActivity.this
 									.findViewById(R.id.radio_name);
+							
+							final ImageButton skipButton = (ImageButton) findViewById(R.id.skip_button);
+							final ImageButton playButton = (ImageButton) findViewById(R.id.play_button);
+							final ImageButton stopButton = (ImageButton) findViewById(R.id.stop_button);
+							final ImageButton loveButton = (ImageButton) findViewById(R.id.love_button);
+							final ImageButton banButton = (ImageButton) findViewById(R.id.ban_button);
+							final ImageButton shareButton = (ImageButton) findViewById(R.id.share_button);
 
 							if (status instanceof PlayerService.ConnectingStatus
 									|| status instanceof PlayerService.LoggingInStatus)
@@ -323,7 +333,6 @@ public class PlayerActivity extends Activity {
 								if (stationUri != null)
 									radioName.setText(Utils.getUriDescription(getApplicationContext(), stationUri));
 								showLoadingBanner(getString(R.string.connecting));
-								final ImageButton playButton = (ImageButton) findViewById(R.id.play_button);
 								playButton.setImageResource(R.drawable.pause);
 							}
 							else
@@ -363,11 +372,6 @@ public class PlayerActivity extends Activity {
 							}
 							
 							else {
-								final ImageButton loveButton = (ImageButton) findViewById(R.id.love_button);
-								final ImageButton banButton = (ImageButton) findViewById(R.id.ban_button);
-								final ImageButton shareButton = (ImageButton) findViewById(R.id.share_button);
-								final ImageButton playButton = (ImageButton) findViewById(R.id.play_button);
-								
 								loveButton.setEnabled(!mBoundService
 										.isCurrentTrackLoved());
 								banButton.setEnabled(!mBoundService
@@ -430,10 +434,9 @@ public class PlayerActivity extends Activity {
 									radioName.setText(track.getStationName());
 									
 									// gets stuck sometimes when rotating
-									final ImageButton skipButton = (ImageButton) findViewById(R.id.skip_button);
 									skipButton.setEnabled(true);
+									stopButton.setEnabled(true);
 									
-									final ImageButton playButton = (ImageButton) findViewById(R.id.play_button);
 									if(isActuallyPaused)
 									{
 										playButton.setImageResource(R.drawable.play);
@@ -725,9 +728,17 @@ public class PlayerActivity extends Activity {
 		albumView.setOutAnimation(AnimationUtils.loadAnimation(this,
 				android.R.anim.fade_out));
 
+		// reset all to initial state
+		resetButtons();
 		
-		// a restart or fresh start?
+		// a restart ? if so, set some buttons and stuff
 		if (savedInstanceState != null) {
+			playButton.setEnabled(savedInstanceState.getBoolean(
+					"playButton_enabled", true));
+			stopButton.setEnabled(savedInstanceState.getBoolean(
+					"stopButton_enabled", true));
+			skipButton.setEnabled(savedInstanceState.getBoolean(
+					"skipButton_enabled", true));
 			loveButton.setEnabled(savedInstanceState.getBoolean(
 					"loveButton_enabled", true));
 			banButton.setEnabled(savedInstanceState.getBoolean(
@@ -738,8 +749,6 @@ public class PlayerActivity extends Activity {
 			if(savedInstanceState.getBoolean("paused", false) == false)
 				playButton.setImageResource(R.drawable.pause);
 		}
-		else
-			resetButtons();
 		
 		SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
 
@@ -943,16 +952,22 @@ public class PlayerActivity extends Activity {
 	protected void onSaveInstanceState(Bundle outState) {
 		super.onSaveInstanceState(outState);
 
+		final ImageButton playButton = (ImageButton) findViewById(R.id.play_button);
+		final ImageButton stopButton = (ImageButton) findViewById(R.id.stop_button);
+		final ImageButton skipButton = (ImageButton) findViewById(R.id.skip_button);
 		final ImageButton loveButton = (ImageButton) findViewById(R.id.love_button);
 		final ImageButton banButton = (ImageButton) findViewById(R.id.ban_button);
 		final ImageButton shareButton = (ImageButton) findViewById(R.id.share_button);
 
-		boolean paused = false;
+		boolean paused = true;
 		if (mBoundService != null
 			&&	mBoundService.getCurrentStatus() instanceof PlayerService.PlayingStatus
-			&& ((PlayerService.PlayingStatus) mBoundService.getCurrentStatus()).getIsActuallyPaused())
-				paused = true;
+			&& !((PlayerService.PlayingStatus) mBoundService.getCurrentStatus()).getIsActuallyPaused())
+				paused = false;
 		
+		outState.putBoolean("playButton_enabled", playButton.isEnabled());
+		outState.putBoolean("stopButton_enabled", stopButton.isEnabled());
+		outState.putBoolean("skipButton_enabled", skipButton.isEnabled());
 		outState.putBoolean("loveButton_enabled", loveButton.isEnabled());
 		outState.putBoolean("banButton_enabled", banButton.isEnabled());
 		outState.putBoolean("shareButton_enabled", shareButton.isEnabled());
