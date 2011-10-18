@@ -360,6 +360,8 @@ public class PlayerActivity extends Activity {
 										.getCurrentBuffered();
 								int next_buffered = ((PlayerService.PlayingStatus) status)
 								        .getNextBuffered();
+								boolean isActuallyPaused = ((PlayerService.PlayingStatus) status)
+								        .getIsActuallyPaused();
 								final XSPFTrackInfo track = ((PlayerService.PlayingStatus) status)
 										.getCurrentTrack();
 								if (track != null) {
@@ -405,10 +407,29 @@ public class PlayerActivity extends Activity {
 									// gets stuck sometimes when rotating
 									final ImageButton skipButton = (ImageButton) findViewById(R.id.skip_button);
 									skipButton.setEnabled(true);
+									
+									final ImageButton playButton = (ImageButton) findViewById(R.id.play_button);
+									if(isActuallyPaused)
+									{
+										playButton.setImageResource(R.drawable.play);
+										// blink time
+										if(timeText.getVisibility() == View.VISIBLE)
+											timeText.setVisibility(View.INVISIBLE);
+										else
+											timeText.setVisibility(View.VISIBLE);
+									}
+									else // playing
+									{
+										playButton.setImageResource(R.drawable.pause);
+										timeText.setVisibility(View.VISIBLE);
+									}
+
 								}
 							} else {
 								resetSongInfoDisplay();
 								resetAlbumImage();
+								final ImageButton playButton = (ImageButton) findViewById(R.id.play_button);
+								playButton.setImageResource(R.drawable.play);
 							}
 							prevStatus = status;
 						}
@@ -461,7 +482,7 @@ public class PlayerActivity extends Activity {
 		setContentView(R.layout.main);
 
 		refreshTimer = new Timer();
-		refreshTimer.scheduleAtFixedRate(new StatusRefreshTask(), 1000, 1000);
+		refreshTimer.scheduleAtFixedRate(new StatusRefreshTask(), 666, 666);
 		
 		audio = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
 
@@ -507,8 +528,25 @@ public class PlayerActivity extends Activity {
 						&& (mBoundService.getCurrentStatus() != null)
 						&& !(mBoundService.getCurrentStatus() instanceof PlayerService.StoppedStatus)
 						&& !(mBoundService.getCurrentStatus() instanceof PlayerService.ErrorStatus))
+				{
+					final PlayerService.Status status = mBoundService.getCurrentStatus();
+					if (status instanceof PlayerService.PlayingStatus)
+					{
+						if(((PlayerService.PlayingStatus) status).getIsActuallyPaused())
+						{
+							mBoundService.pausePlaying(false);
+							playButton.setImageResource(R.drawable.play);
+						}
+						else
+						{
+							mBoundService.pausePlaying(true);
+							playButton.setImageResource(R.drawable.pause);
+						}
+					}
 					return;
+				}
 
+				
 				SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
 				String username = settings.getString("username", null);
 				String password = settings.getString("password", null);
@@ -552,10 +590,7 @@ public class PlayerActivity extends Activity {
 						// mBoundService.startPlaying(stationUri.toString());
 					}
 
-					/*
-					 * if (mBoundService != null)
-					 * mBoundService.startPlaying(stationUrl);
-					 */
+					playButton.setImageResource(R.drawable.pause);
 				}
 			}
 		};
@@ -578,6 +613,7 @@ public class PlayerActivity extends Activity {
 					TextView statusText = (TextView) PlayerActivity.this
 							.findViewById(R.id.status_text);
 					statusText.setText(getString(R.string.disconnected));
+					playButton.setImageResource(R.drawable.play);
 				}
 			}
 		});
@@ -870,7 +906,8 @@ public class PlayerActivity extends Activity {
 		final ImageButton loveButton = (ImageButton) findViewById(R.id.love_button);
 		final ImageButton banButton = (ImageButton) findViewById(R.id.ban_button);
 		final ImageButton shareButton = (ImageButton) findViewById(R.id.share_button);
-
+		
+					
 		outState.putBoolean("loveButton_enabled", loveButton.isEnabled());
 		outState.putBoolean("banButton_enabled", banButton.isEnabled());
 		outState.putBoolean("shareButton_enabled", shareButton.isEnabled());

@@ -185,6 +185,11 @@ public class PlayerThread extends Thread {
 			return 0;
 	}
 	
+	public boolean getIsPaused()
+	{
+		return mFrontPaused;
+	}
+	
 	private LastFMNotificationListener mLastFMNotificationListener = null;
 
 	public void setLastFMNotificationListener(

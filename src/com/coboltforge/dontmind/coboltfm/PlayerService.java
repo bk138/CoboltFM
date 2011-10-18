@@ -160,6 +160,7 @@ public class PlayerService extends Service {
 		int buffered;
 		int next_buffered;
 		int position;
+		boolean is_paused;
 		XSPFTrackInfo trackInfo;
 
 		public PlayingStatus(int currentPosition, XSPFTrackInfo currentTrack) {
@@ -183,6 +184,10 @@ public class PlayerService extends Service {
 			return next_buffered;
 		}
 
+		public boolean getIsActuallyPaused() {
+			return is_paused;
+		}
+		
 		public XSPFTrackInfo getCurrentTrack() {
 			return trackInfo;
 		}
@@ -197,6 +202,9 @@ public class PlayerService extends Service {
 		
 		public void setNextBuffered(int nextBuffered) {
 			next_buffered = nextBuffered;
+		}
+		public void setPause(boolean pause) {
+			is_paused = pause;
 		}
 	}
 
@@ -262,6 +270,9 @@ public class PlayerService extends Service {
 					((PlayingStatus) curStatus)
 					        .setNextBuffered(mPlayerThread
 					        		.getNextBuffered());
+					((PlayingStatus) curStatus)
+					        .setPause(mPlayerThread
+			        		        .getIsPaused());
 				}
 			}
 		return mCurrentStatus;
@@ -286,8 +297,6 @@ public class PlayerService extends Service {
 			Message.obtain(mPlayerThread.mHandler, PlayerThread.MESSAGE_PAUSE).sendToTarget();
 		else
 			Message.obtain(mPlayerThread.mHandler, PlayerThread.MESSAGE_UNPAUSE).sendToTarget();
-		//mCurrentStatus = new PausedStatus(); // TODO
-		//updateNotification("Paused"); //TODO
 		return true;
 	}
 	
