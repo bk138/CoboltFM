@@ -1,4 +1,5 @@
 
+* playerthread can become null during getcurrentstatus(), called by the refresh timer task
 * okay, service unbind *is* important
 * nicer gui
 
