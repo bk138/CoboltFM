@@ -629,10 +629,10 @@ public class PlayerActivity extends Activity {
 				if (mBoundService != null) {
 					showLoadingBanner("Stopping..");
 					mBoundService.stopPlaying();
+					// PlayerActivity.this.unbindService(mConnection);
 					mBoundService = null;
 					Intent serviceIntent = new Intent(PlayerActivity.this,
 							PlayerService.class);
-					PlayerActivity.this.unbindService(mServiceConnection);
 					PlayerActivity.this.stopService(serviceIntent);
 					resetSongInfoDisplay();
 					resetAlbumImage();
