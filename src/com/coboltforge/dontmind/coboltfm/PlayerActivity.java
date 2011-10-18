@@ -749,7 +749,7 @@ public class PlayerActivity extends Activity {
 				playButton.setImageResource(R.drawable.pause);
 		}
 		
-		SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
+		final SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
 
 		mPreBuffer = settings.getInt("preBuffer", 5);
 
@@ -809,15 +809,16 @@ public class PlayerActivity extends Activity {
 				
 				if(mBoundService != null)
 				{
+					boolean actOnHeadphone = settings.getBoolean("headphonePlugPause", true);
 					if(state == 0) //unplug, there can be several, on rotation for instance
 					{
-						if(mHeadphonePlugged == true) // only pause when plugged before
+						if(mHeadphonePlugged == true && actOnHeadphone) // only pause when plugged before
 							mBoundService.pausePlaying(true);
 						mHeadphonePlugged = false;
 					}
 					else // plug. also sent anew on rotation
 					{
-						if(mHeadphonePlugged == false) // only resume when unplugged before
+						if(mHeadphonePlugged == false && actOnHeadphone) // only resume when unplugged before
 							mBoundService.pausePlaying(false);
 						mHeadphonePlugged = true;
 					}

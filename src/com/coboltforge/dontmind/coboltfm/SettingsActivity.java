@@ -100,6 +100,9 @@ public class SettingsActivity extends Activity {
 		
 		CheckBox showSupportCheckBox = (CheckBox) findViewById(R.id.support_dialog_checkbox);
 		showSupportCheckBox.setChecked(settings.getBoolean("showSupportDialog", true));
+		
+		CheckBox headphonePlugCheckBox = (CheckBox) findViewById(R.id.headphone_plug_checkbox);
+		headphonePlugCheckBox.setChecked(settings.getBoolean("headphonePlugPause", true));
 	}
 	
 	
@@ -109,12 +112,15 @@ public class SettingsActivity extends Activity {
 		
 		SeekBar preBufferSlider = (SeekBar) findViewById(R.id.prebuffer_slider);
 		CheckBox showSupportCheckBox = (CheckBox) findViewById(R.id.support_dialog_checkbox);
-
+		CheckBox headphonePlugCheckBox = (CheckBox) findViewById(R.id.headphone_plug_checkbox);
+		
 		SharedPreferences settings = getSharedPreferences(
 				PlayerActivity.PREFS_NAME, 0);
 		Editor ed = settings.edit();
 		ed.putInt("preBuffer", preBufferSlider.getProgress());
 		ed.putBoolean("showSupportDialog", showSupportCheckBox.isChecked());
+		ed.putBoolean("headphonePlugPause", headphonePlugCheckBox.isChecked());
+
 		ed.commit();
 	}
 
