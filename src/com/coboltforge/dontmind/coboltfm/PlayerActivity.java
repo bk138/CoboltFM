@@ -240,6 +240,24 @@ public class PlayerActivity extends Activity {
 		albumText.setText("");
 		trackText.setText("");
 	}
+	
+	void resetButtons() {
+		final ImageButton playButton = (ImageButton) findViewById(R.id.play_button);
+		final ImageButton stopButton = (ImageButton) findViewById(R.id.stop_button);
+		final ImageButton skipButton = (ImageButton) findViewById(R.id.skip_button);
+		final ImageButton loveButton = (ImageButton) findViewById(R.id.love_button);
+		final ImageButton banButton = (ImageButton) findViewById(R.id.ban_button);
+		final ImageButton shareButton = (ImageButton) findViewById(R.id.share_button);
+		
+		playButton.setEnabled(true);
+		playButton.setImageResource(R.drawable.play);
+		stopButton.setEnabled(false);
+		skipButton.setEnabled(false);
+		loveButton.setEnabled(false);
+		banButton.setEnabled(false);
+		shareButton.setEnabled(false);
+	}
+	
 
 	void resetAlbumImage() {
 		ImageSwitcher albumView = (ImageSwitcher) PlayerActivity.this
@@ -341,8 +359,7 @@ public class PlayerActivity extends Activity {
 								} else 
 									showErrorMsg(finalStatusString);
 								
-								final ImageButton playButton = (ImageButton) findViewById(R.id.play_button);
-								playButton.setImageResource(R.drawable.play);
+								resetButtons();
 							}
 							
 							else {
@@ -409,7 +426,7 @@ public class PlayerActivity extends Activity {
 										}
 										prevBitmap = track.getBitmap();
 									}
-									trackText.setText(track.getTitle());
+									trackText.setText(track.getTitle() + " "); // italic cuts off part of last char
 									radioName.setText(track.getStationName());
 									
 									// gets stuck sometimes when rotating
@@ -436,8 +453,7 @@ public class PlayerActivity extends Activity {
 							} else {
 								resetSongInfoDisplay();
 								resetAlbumImage();
-								final ImageButton playButton = (ImageButton) findViewById(R.id.play_button);
-								playButton.setImageResource(R.drawable.play);
+								resetButtons();
 							}
 							prevStatus = status;
 						}
@@ -618,10 +634,10 @@ public class PlayerActivity extends Activity {
 					resetSongInfoDisplay();
 					resetAlbumImage();
 					showTimeDisplay();
+					resetButtons();
 					TextView statusText = (TextView) PlayerActivity.this
 							.findViewById(R.id.status_text);
 					statusText.setText(getString(R.string.disconnected));
-					playButton.setImageResource(R.drawable.play);
 				}
 			}
 		});
@@ -709,6 +725,8 @@ public class PlayerActivity extends Activity {
 		albumView.setOutAnimation(AnimationUtils.loadAnimation(this,
 				android.R.anim.fade_out));
 
+		
+		// a restart or fresh start?
 		if (savedInstanceState != null) {
 			loveButton.setEnabled(savedInstanceState.getBoolean(
 					"loveButton_enabled", true));
@@ -720,6 +738,8 @@ public class PlayerActivity extends Activity {
 			if(savedInstanceState.getBoolean("paused", false) == false)
 				playButton.setImageResource(R.drawable.pause);
 		}
+		else
+			resetButtons();
 		
 		SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
 
