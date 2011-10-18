@@ -836,7 +836,8 @@ public class PlayerActivity extends Activity {
 		unregisterReceiver(headsetPlugReceiver);
 		
 		// unbind from player service. will keep running cause we used startservice()!
-		unbindService(mServiceConnection);
+		if (mBoundService != null)
+			unbindService(mServiceConnection);
 	}
 	
 
