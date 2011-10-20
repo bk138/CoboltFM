@@ -255,26 +255,32 @@ public class PlayerService extends Service {
 
 	public Status getCurrentStatus() {
 		if (mPlayerThread != null)
-			if (mPlayerThread.getError() != null)
-				mCurrentStatus = new ErrorStatus(mPlayerThread.getError());
-			else {
-				Status curStatus = mCurrentStatus;
-				if (curStatus instanceof PlayingStatus)
-				{
-					((PlayingStatus) curStatus)
-							.setCurrentPosition(mPlayerThread
-									.getCurrentPosition());
-					((PlayingStatus) curStatus)
-							.setCurrentBuffered(mPlayerThread
-									.getCurrentBuffered());
-					((PlayingStatus) curStatus)
-					        .setNextBuffered(mPlayerThread
-					        		.getNextBuffered());
-					((PlayingStatus) curStatus)
-					        .setPause(mPlayerThread
-			        		        .getIsPaused());
+			try {
+				if (mPlayerThread.getError() != null)
+					mCurrentStatus = new ErrorStatus(mPlayerThread.getError());
+				else {
+					Status curStatus = mCurrentStatus;
+					if (curStatus instanceof PlayingStatus)
+					{
+						((PlayingStatus) curStatus)
+						.setCurrentPosition(mPlayerThread
+								.getCurrentPosition());
+						((PlayingStatus) curStatus)
+						.setCurrentBuffered(mPlayerThread
+								.getCurrentBuffered());
+						((PlayingStatus) curStatus)
+						.setNextBuffered(mPlayerThread
+								.getNextBuffered());
+						((PlayingStatus) curStatus)
+						.setPause(mPlayerThread
+								.getIsPaused());
+					}
 				}
 			}
+		catch(NullPointerException e) {
+			Log.e(TAG, "Oops, thread died during getCurrentStatus()...");
+		}
+
 		return mCurrentStatus;
 	}
 
