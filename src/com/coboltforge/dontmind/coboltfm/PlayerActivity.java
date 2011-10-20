@@ -129,6 +129,7 @@ public class PlayerActivity extends Activity {
 	}
 
 	private PlayerService mBoundService;
+	private ServiceConnection mServiceConnection;
 	private int mPreBuffer;
 	private boolean mHeadphonePlugged;
 
@@ -468,11 +469,19 @@ public class PlayerActivity extends Activity {
 		}
 	}
 
-	void bindToPlayerService() {
-		if (!PlayerActivity.this.bindService(new Intent(PlayerActivity.this,
-				PlayerService.class), new LastFMServiceConnection(),
-				Context.BIND_AUTO_CREATE))
+	void bindToPlayerService(Intent serviceIntent) {
+		mServiceConnection = new LastFMServiceConnection();
+		if (!PlayerActivity.this.bindService(serviceIntent, mServiceConnection, Context.BIND_AUTO_CREATE))
 			PlayerActivity.this.showDialog(DIALOG_ERROR);
+	}
+	
+	void unbindFromPlayerService() 
+	{
+		if(mServiceConnection != null)
+		{
+			PlayerActivity.this.unbindService(mServiceConnection);
+			mServiceConnection = null;
+		}
 	}
 
 	Timer refreshTimer;
@@ -532,7 +541,8 @@ public class PlayerActivity extends Activity {
 			statusText.setText("Invalid version -- please check for update");
 		}
 
-		bindToPlayerService();
+		// re-bind to service
+		bindToPlayerService(new Intent(PlayerActivity.this, PlayerService.class));
 
 		final Button tuneButton = (Button) findViewById(R.id.tune_button);
 
@@ -611,10 +621,7 @@ public class PlayerActivity extends Activity {
 					 * PlayerActivity.this.startService(serviceIntent);
 					 */
 					if (mBoundService == null) {
-						if (!PlayerActivity.this.bindService(serviceIntent,
-								new LastFMServiceConnection(),
-								Context.BIND_AUTO_CREATE))
-							PlayerActivity.this.showDialog(DIALOG_ERROR);
+						bindToPlayerService(serviceIntent);
 						PlayerActivity.this.startService(serviceIntent);
 					} else {
 						PlayerActivity.this.startService(serviceIntent);
@@ -892,6 +899,9 @@ public class PlayerActivity extends Activity {
 
 				Intent serviceIntent = new Intent(Intent.ACTION_VIEW,
 						stationUri, PlayerActivity.this, PlayerService.class);
+				if (mBoundService == null) {
+					bindToPlayerService(serviceIntent);
+				}
 				PlayerActivity.this.startService(serviceIntent);
 			}
 		}
@@ -926,10 +936,7 @@ public class PlayerActivity extends Activity {
 				showLoadingBanner(getString(R.string.connecting));
 
 				if (mBoundService == null) {
-					if (!PlayerActivity.this.bindService(serviceIntent,
-							new LastFMServiceConnection(),
-							Context.BIND_AUTO_CREATE))
-						PlayerActivity.this.showDialog(DIALOG_ERROR);
+					bindToPlayerService(serviceIntent);
 					PlayerActivity.this.startService(serviceIntent);
 				} else {
 					PlayerActivity.this.startService(serviceIntent);
