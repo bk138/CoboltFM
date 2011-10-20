@@ -254,67 +254,70 @@ public class PlayerService extends Service {
 	}
 
 	public Status getCurrentStatus() {
-		if (mPlayerThread != null)
-			try {
-				if (mPlayerThread.getError() != null)
-					mCurrentStatus = new ErrorStatus(mPlayerThread.getError());
-				else {
-					Status curStatus = mCurrentStatus;
-					if (curStatus instanceof PlayingStatus)
-					{
-						((PlayingStatus) curStatus)
-						.setCurrentPosition(mPlayerThread
-								.getCurrentPosition());
-						((PlayingStatus) curStatus)
-						.setCurrentBuffered(mPlayerThread
-								.getCurrentBuffered());
-						((PlayingStatus) curStatus)
-						.setNextBuffered(mPlayerThread
-								.getNextBuffered());
-						((PlayingStatus) curStatus)
-						.setPause(mPlayerThread
-								.getIsPaused());
-					}
+		try {
+			if (mPlayerThread.getError() != null)
+				mCurrentStatus = new ErrorStatus(mPlayerThread.getError());
+			else {
+				Status curStatus = mCurrentStatus;
+				if (curStatus instanceof PlayingStatus)
+				{
+					((PlayingStatus) curStatus)
+					.setCurrentPosition(mPlayerThread
+							.getCurrentPosition());
+					((PlayingStatus) curStatus)
+					.setCurrentBuffered(mPlayerThread
+							.getCurrentBuffered());
+					((PlayingStatus) curStatus)
+					.setNextBuffered(mPlayerThread
+							.getNextBuffered());
+					((PlayingStatus) curStatus)
+					.setPause(mPlayerThread
+							.getIsPaused());
 				}
 			}
+		}
 		catch(NullPointerException e) {
-			Log.e(TAG, "Oops, thread died during getCurrentStatus()...");
 		}
 
 		return mCurrentStatus;
 	}
 
 	public boolean stopPlaying() {
-		if (mPlayerThread == null)
+		try {
+			Message.obtain(mPlayerThread.mHandler, PlayerThread.MESSAGE_STOP).sendToTarget();
+			mPlayerThread.interrupt();
+			mPlayerThread = null;
+			mCurrentStatus = new StoppedStatus();
+			updateNotification("Stopped");
 			return true;
-		Message.obtain(mPlayerThread.mHandler, PlayerThread.MESSAGE_STOP)
-				.sendToTarget();
-		mPlayerThread.interrupt();
-		mPlayerThread = null;
-		mCurrentStatus = new StoppedStatus();
-		updateNotification("Stopped");
-		return true;
+		}
+		catch(NullPointerException e) {
+			return true;
+		}
 	}
-	
+
 	public boolean pausePlaying(boolean pause) {
-		if (mPlayerThread == null)
+		try {
+			if(pause)
+				Message.obtain(mPlayerThread.mHandler, PlayerThread.MESSAGE_PAUSE).sendToTarget();
+			else
+				Message.obtain(mPlayerThread.mHandler, PlayerThread.MESSAGE_UNPAUSE).sendToTarget();
+			return true;
+		}
+		catch(NullPointerException e) {
 			return false;
-		if(pause)
-			Message.obtain(mPlayerThread.mHandler, PlayerThread.MESSAGE_PAUSE).sendToTarget();
-		else
-			Message.obtain(mPlayerThread.mHandler, PlayerThread.MESSAGE_UNPAUSE).sendToTarget();
-		return true;
+		}
 	}
 	
 	public boolean setPreBuffer(int percent)
 	{
-		if (mPlayerThread != null)
-		{
+		try	{
 			mPlayerThread.setPreBuffer(percent);
 			return true;
 		}
-		else
+		catch(NullPointerException e) {
 			return false;
+		}
 	}
 
 	@Override
@@ -333,18 +336,27 @@ public class PlayerService extends Service {
 	}
 
 	PhoneStateListener mPhoneStateListener = new PhoneStateListener()
+	{
+		public void onCallStateChanged(int state, String incomingNumber) {					
+			if (state == TelephonyManager.CALL_STATE_IDLE)
 			{
-				public void onCallStateChanged(int state, String incomingNumber) {					
-					if (state == TelephonyManager.CALL_STATE_IDLE)
-					{
-						if (mPlayerThread != null)
-							mPlayerThread.unmute();						
-					} else
-						if (mPlayerThread != null)
-							mPlayerThread.mute();						
+				try {
+					mPlayerThread.unmute();
+				}
+				catch(NullPointerException e) {
+				}
+			} 
+			else
+			{
+				try {
+					mPlayerThread.mute();						
+				}
+				catch(NullPointerException e) {
 				}
 			}
-			;
+		}
+	}
+	;
 	public boolean startPlaying(String url) {
 			if (mPlayerThread != null)
 				stopPlaying();
@@ -382,51 +394,58 @@ public class PlayerService extends Service {
 	}
 
 	public boolean skipCurrentTrack() {
-		if (mPlayerThread != null) {
-			Message.obtain(mPlayerThread.mHandler, PlayerThread.MESSAGE_SKIP)
-					.sendToTarget();
+		try {
+			Message.obtain(mPlayerThread.mHandler, PlayerThread.MESSAGE_SKIP).sendToTarget();
 			return true;
-		} else
+		} 
+		catch(NullPointerException e) {
 			return false;
+		}
 	}
 
 	public boolean loveCurrentTrack() {
-		if (mPlayerThread != null) {
+		try {
 			mCurrentTrackLoved = true;
-			Message.obtain(mPlayerThread.mHandler, PlayerThread.MESSAGE_LOVE)
-					.sendToTarget();
+			Message.obtain(mPlayerThread.mHandler, PlayerThread.MESSAGE_LOVE).sendToTarget();
 			return true;
-		} else
+		} 
+		catch(NullPointerException e) {
 			return false;
+		}
 	}
 
 	public final ArrayList<FriendInfo> getFriendsList() {
-		if (mPlayerThread != null)
+		try {
 			return mPlayerThread.getFriendsList();
-		else
+		}
+		catch(NullPointerException e) {
 			return null;
+		}
 	}
 
-	public boolean shareTrack(XSPFTrackInfo track, String recipient,
-			String message) {
-		if (mPlayerThread != null) {
+	public boolean shareTrack(XSPFTrackInfo track, String recipient, String message) {
+		try {
 			PlayerThread.TrackShareParams msgParams = new PlayerThread.TrackShareParams(
 					track, recipient, message, "en");
 			Message.obtain(mPlayerThread.mHandler, PlayerThread.MESSAGE_SHARE,
 					msgParams).sendToTarget();
 			return true;
-		} else
+		}
+		catch(NullPointerException e) {
 			return false;
+		}
 	}
 
 	public boolean banCurrentTrack() {
-		if (mPlayerThread != null) {
+		try {
 			mCurrentTrackBanned = true;
 			Message.obtain(mPlayerThread.mHandler, PlayerThread.MESSAGE_BAN)
-					.sendToTarget();
+			.sendToTarget();
 			return true;
-		} else
+		}
+		catch(NullPointerException e) {
 			return false;
+		}
 	}
 
 }
