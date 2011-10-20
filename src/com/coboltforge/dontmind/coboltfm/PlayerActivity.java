@@ -481,6 +481,7 @@ public class PlayerActivity extends Activity {
 		{
 			PlayerActivity.this.unbindService(mServiceConnection);
 			mServiceConnection = null;
+			mBoundService = null;
 		}
 	}
 
@@ -846,6 +847,7 @@ public class PlayerActivity extends Activity {
 		super.onDestroy();
 		
 		unregisterReceiver(headsetPlugReceiver);
+		unbindFromPlayerService();
 	}
 	
 
