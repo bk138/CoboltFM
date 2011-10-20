@@ -470,6 +470,7 @@ public class PlayerActivity extends Activity {
 	}
 
 	void bindToPlayerService(Intent serviceIntent) {
+		unbindFromPlayerService();
 		mServiceConnection = new LastFMServiceConnection();
 		if (!PlayerActivity.this.bindService(serviceIntent, mServiceConnection, Context.BIND_AUTO_CREATE))
 			PlayerActivity.this.showDialog(DIALOG_ERROR);
@@ -622,8 +623,8 @@ public class PlayerActivity extends Activity {
 					 * PlayerActivity.this.startService(serviceIntent);
 					 */
 					if (mBoundService == null) {
-						bindToPlayerService(serviceIntent);
 						PlayerActivity.this.startService(serviceIntent);
+						bindToPlayerService(serviceIntent);
 					} else {
 						PlayerActivity.this.startService(serviceIntent);
 						// mBoundService.startPlaying(stationUri.toString());
@@ -902,9 +903,11 @@ public class PlayerActivity extends Activity {
 				Intent serviceIntent = new Intent(Intent.ACTION_VIEW,
 						stationUri, PlayerActivity.this, PlayerService.class);
 				if (mBoundService == null) {
+					PlayerActivity.this.startService(serviceIntent);
 					bindToPlayerService(serviceIntent);
 				}
-				PlayerActivity.this.startService(serviceIntent);
+				else
+					PlayerActivity.this.startService(serviceIntent);
 			}
 		}
 		if (requestCode == SET_USER_INFO_AND_TUNE && resultCode == RESULT_OK) {
@@ -938,8 +941,8 @@ public class PlayerActivity extends Activity {
 				showLoadingBanner(getString(R.string.connecting));
 
 				if (mBoundService == null) {
-					bindToPlayerService(serviceIntent);
 					PlayerActivity.this.startService(serviceIntent);
+					bindToPlayerService(serviceIntent);
 				} else {
 					PlayerActivity.this.startService(serviceIntent);
 				}
