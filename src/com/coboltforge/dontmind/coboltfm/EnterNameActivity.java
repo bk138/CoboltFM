@@ -77,10 +77,13 @@ public class EnterNameActivity extends Activity {
 	String hint;
 	String defaultName = "";
 	
-	public EnterNameActivity(int layout, String listId, String hint) {
+	public EnterNameActivity(int layout, String listId) {
 		layoutId = layout;
-		this.hint = hint;
 		this.listId = listId;
+	}
+	
+	public void setHint(String hint) {
+		this.hint = hint;
 	}
 	
 	public void setDefaultName(String name) {

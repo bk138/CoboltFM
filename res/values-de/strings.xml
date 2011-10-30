@@ -58,5 +58,8 @@
 <string name="connecting">Verbinden...</string>
 <string name="playing">Spielt</string>
 
+<string name="artistmissing">Bitte einen Künstlernamen eingeben!</string>
+<string name="tagmissing">Bitte einen Tag eingeben!</string>
+
 
 </resources>

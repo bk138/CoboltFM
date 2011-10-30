@@ -12,7 +12,7 @@ import android.os.Bundle;
 public class EnterArtistNameActivity extends EnterNameActivity {
 	
 	public EnterArtistNameActivity() {
-		super(R.layout.enter_station, "station", "Please enter some artist name");				
+		super(R.layout.enter_station, "station");
 	}
 	
 	@Override
@@ -30,6 +30,8 @@ public class EnterArtistNameActivity extends EnterNameActivity {
         }
 		
 		super.onCreate(savedInstanceState);
+		
+		setHint(getApplicationContext().getString(R.string.artistmissing));
 	}
 
 }

@@ -57,5 +57,8 @@
 <string name="connecting">Connecting...</string>
 <string name="playing">Playing</string>
 
+<string name="artistmissing">Please enter some artist name!</string>
+<string name="tagmissing">Please enter some tag name!</string>
+
 
 </resources>

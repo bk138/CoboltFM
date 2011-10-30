@@ -12,8 +12,7 @@ import android.os.Bundle;
 public class EnterTagActivity extends EnterNameActivity {
 
 	public EnterTagActivity() {
-		super(R.layout.enter_tag, "tag", "Please enter some tag name");
-		
+		super(R.layout.enter_tag, "tag");
 	}
 	
 	@Override
@@ -31,6 +30,8 @@ public class EnterTagActivity extends EnterNameActivity {
         }
 		
 		super.onCreate(savedInstanceState);
+		
+		setHint(getString(R.string.tagmissing));
 	}
 
 }
