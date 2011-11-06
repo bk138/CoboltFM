@@ -847,6 +847,7 @@ public class PlayerActivity extends Activity {
 	public void onDestroy() {
 		super.onDestroy();
 		
+		refreshTimer.cancel();
 		unregisterReceiver(headsetPlugReceiver);
 		unbindFromPlayerService();
 	}
