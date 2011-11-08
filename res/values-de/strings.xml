@@ -38,7 +38,7 @@
 <string name="userinfo_button">Benutzernamen &amp; Passwort ändern</string>
 <string name="reset_button">Alle Einstellungen zurücksetzen</string>
 <string name="settings_title">Einstellungen</string>
-<string name="madeby">CoboltFM wurde hergestellt von der Cobolt Forge (www.coboltforge.com). CoboltFM ist eine Weiterentwicklung von alastfm von Oleg Avdeev (lastfm.ajaxie.com)</string>
+<string name="madeby">CoboltFM wurde hergestellt von der CoboltForge (www.coboltforge.com). CoboltFM ist eine Weiterentwicklung von alastfm von Oleg Avdeev (lastfm.ajaxie.com)</string>
 <string name="reset_question">Sicher dass alle Einstellungen zurückgesetzt werden sollen, inklusive Benutzernamen und Passwort?</string>
 
 <string name="artist">Künstler</string>

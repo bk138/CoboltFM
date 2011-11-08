@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+<string name="app_name">CoboltFM</string>
+<string name="alert_dialog_single_choice">Error</string>
+<string name="alert_dialog_ok">OK</string>
+<string name="alert_dialog_cancel">Cancelar</string>
+<string name="support_dialog_title">Por favor ayuda à CoboltFM</string>
+<string name="support_dialog_text">¿Si CoboltFM te gusta, porque no consideras ayudar a su desarollo? De momento, puedes hacerlo usando flattr o paypal. ¡Muchissimas gracias!</string>
+<string name="support_dialog_yes">¡Si, buena idea!</string>
+<string name="support_dialog_no">Ahorita no.</string>
+<string name="support_dialog_neveragain">¡No me preguntas otra vez!</string>
+<string name="support_dialog_settings_show">Mostra Diálogo de Ayuda al Inicio</string>
+<string name="headphone_plug_settings">Desconectar/conectar de Auriculares pausa/reanuda Canción</string>
+<string name="user_info_title">Información del Usuario</string>
+<string name="ok_button">OK</string>
+<string name="cancel_button">Cancelar</string>
+<string name="menu_settings">Ajustes</string>
+<string name="share_track_title">Comparte Canción</string>
+<string name="menu_about">Sobre CoboltFM</string>
+<string name="menu_status">Comproba Estado del Servidor</string>
+<string name="menu_profile">Mostra Página de Perfil</string>
+<string name="about_title">Sobre CoboltFM</string>
+<string name="albumcover_title">Portada del Album</string>
+<string name="username">Nombre e Usario</string>
+<string name="password">Contraseña</string>
+<string name="signup">¿No tienes una cuenta last.fm? Crea una à http://last.fm/join</string>
+<string name="track_loved">Canción amada</string>
+<string name="track_banned">Canción prohibida</string>
+<string name="track_shared">Canción compartida</string>
+<string name="message">Mensaje</string>
+<string name="with">con</string>
+<string name="tune">Radio</string>
+<string name="enter_artist_name_title">Introduce nombre del artista</string>
+<string name="enter_tag_title">Introduce etiqueta</string>
+<string name="choose_friend_title">Elige amigo</string>
+<string name="prebuffer">Descarga esta parte de la canción antes que reproduce la canción:</string>
+<string name="prebuffer_expl">Asegura que hay menos saltos en una cancion, pero pueden ser pausas más largas entre canciones diferentes. Pruebe ponerlo a valores más altos cuando tienes mala conexión à Internet.</string>
+<string name="userinfo_button">Cambia nombre de usario &amp; contraseña</string>
+<string name="reset_button">Restablecer todos los ajustes</string>
+<string name="settings_title">Ajustes</string>
+<string name="madeby">Producido por CoboltForge (www.coboltforge.com), sobre la base de alastfm por Oleg Avdeev (lastfm.ajaxie.com)</string>
+<string name="reset_question">¿Estás realmente seguro de que deseas restablecer todos los ajustes, incluyendo tu nombre de usuario de last.fm y tu contraseña?</string>
+
+<string name="artist">Artista</string>
+<string name="myrecommendations">Mis Recomendaciones</string>
+<string name="myradiostation">Mi Estación de Radio</string>
+<string name="myneighbourradio">Mi Radio Vecino</string>
+<string name="myfriends">Mi Radio de mis Amigos</string>
+
+<string name="pleasewait">Por favor espere...</string>
+
+<string name="uri_neighbours">\'s Vecinos</string>
+<string name="uri_library">\'s Biblioteca</string>
+<string name="uri_recommendations">\'s Recomendaciones</string>
+
+<string name="disconnected">Desconectado</string>
+<string name="connecting">Conectando...</string>
+<string name="playing">Tocando</string>
+
+<string name="artistmissing">¡Por favor introduce un nombre del artista!</string>
+<string name="tagmissing">¡Por favor introduce una etiquta!</string>
+
+
+</resources>
