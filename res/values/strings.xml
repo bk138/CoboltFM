@@ -11,6 +11,7 @@
 <string name="support_dialog_neveragain">Never ask again!</string>
 <string name="support_dialog_settings_show">Show Support Dialog on Startup</string>
 <string name="headphone_plug_settings">Headphone Unplug/Plug pauses/resumes</string>
+<string name="vibrate_settings">Vibrate on Track Change</string>
 <string name="user_info_title">User Info</string>
 <string name="ok_button">OK</string>
 <string name="cancel_button">Cancel</string>

@@ -103,6 +103,9 @@ public class SettingsActivity extends Activity {
 		
 		CheckBox headphonePlugCheckBox = (CheckBox) findViewById(R.id.headphone_plug_checkbox);
 		headphonePlugCheckBox.setChecked(settings.getBoolean("headphonePlugPause", true));
+		
+		CheckBox vibrateCheckBox = (CheckBox) findViewById(R.id.vibrate_checkbox);
+		vibrateCheckBox.setChecked(settings.getBoolean("vibrateOnChange", false));
 	}
 	
 	
@@ -113,6 +116,7 @@ public class SettingsActivity extends Activity {
 		SeekBar preBufferSlider = (SeekBar) findViewById(R.id.prebuffer_slider);
 		CheckBox showSupportCheckBox = (CheckBox) findViewById(R.id.support_dialog_checkbox);
 		CheckBox headphonePlugCheckBox = (CheckBox) findViewById(R.id.headphone_plug_checkbox);
+		CheckBox vibrateCheckBox = (CheckBox) findViewById(R.id.vibrate_checkbox);
 		
 		SharedPreferences settings = getSharedPreferences(
 				PlayerActivity.PREFS_NAME, 0);
@@ -120,6 +124,7 @@ public class SettingsActivity extends Activity {
 		ed.putInt("preBuffer", preBufferSlider.getProgress());
 		ed.putBoolean("showSupportDialog", showSupportCheckBox.isChecked());
 		ed.putBoolean("headphonePlugPause", headphonePlugCheckBox.isChecked());
+		ed.putBoolean("vibrateOnChange", vibrateCheckBox.isChecked());
 
 		ed.commit();
 	}

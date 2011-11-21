@@ -70,6 +70,13 @@
            android:layout_margin="5dip" ></CheckBox> 
             
          <CheckBox
+            android:id="@+id/vibrate_checkbox" 
+            android:text="@string/vibrate_settings" 
+            android:layout_width="wrap_content" 
+            android:layout_height="wrap_content"
+           android:layout_margin="5dip" ></CheckBox> 
+            
+         <CheckBox
             android:id="@+id/support_dialog_checkbox" 
             android:text="@string/support_dialog_settings_show" 
             android:layout_width="wrap_content" 

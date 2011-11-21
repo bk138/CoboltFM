@@ -165,10 +165,14 @@ public class PlayerActivity extends Activity {
 
 					skipButton.setEnabled(true);
 					stopButton.setEnabled(true);
-					
-					Vibrator vib = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
-					long[] pattern = {0, 666, 111, 111, 111, 111};
-					vib.vibrate(pattern, -1);
+
+					final SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
+					if(settings.getBoolean("vibrateOnChange", false))
+					{
+						Vibrator vib = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
+						long[] pattern = {0, 666, 111, 111, 111, 111};
+						vib.vibrate(pattern, -1);
+					}
 					
 				}
 			});
