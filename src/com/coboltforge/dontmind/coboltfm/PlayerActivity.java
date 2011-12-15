@@ -294,6 +294,9 @@ public class PlayerActivity extends Activity {
 					PlayerActivity.this.runOnUiThread(new Runnable() {
 
 						public void run() {
+							
+							try {
+							
 							if (mBoundService == null)
 								return;
 						
@@ -466,7 +469,14 @@ public class PlayerActivity extends Activity {
 								resetButtons();
 							}
 							prevStatus = status;
+							
 						}
+						catch(Exception e) { // most probably a NullPonter one
+							Log.e(TAG, "Caught exception while refreshing status");
+							e.printStackTrace();
+						}
+							
+						} // run method end
 					});
 				}
 			}
