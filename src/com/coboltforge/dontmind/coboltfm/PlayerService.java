@@ -8,8 +8,10 @@ import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.os.Binder;
@@ -56,6 +58,8 @@ public class PlayerService extends Service {
 	private final IBinder mBinder = new LocalBinder();
 
 	private NotificationManager mNM;
+	
+	private BroadcastReceiver headsetPlugReceiver;
 
 	private LastFMNotificationListener mLastFMNotificationListener = null;
 	
@@ -75,12 +79,36 @@ public class PlayerService extends Service {
 	@Override
 	public void onCreate() {
 		mNM = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+	
+
+		// listen for headphone plugs/unplugs
+		headsetPlugReceiver = new BroadcastReceiver() {
+			//@Override
+			public void onReceive(Context context, Intent intent)
+			{
+				int state = intent.getIntExtra("state", 0);
+				String name = intent.getStringExtra("name");
+				Log.d(TAG, "Detected headphone '" + name  + (state == 0 ? "' unplug" : "' plug"));
+
+				final SharedPreferences settings = getSharedPreferences(PlayerActivity.PREFS_NAME, 0);
+
+				if(settings.getBoolean("headphonePlugPause", true)) {
+					if(state == 0) //unplug
+						pausePlaying(true);
+					else // plug. also sent anew on rotation
+						pausePlaying(false);
+				}
+			}
+		};
+		registerReceiver(headsetPlugReceiver, new IntentFilter(Intent.ACTION_HEADSET_PLUG));
 	}
 
 	@Override
 	public void onDestroy() {
 		stopPlaying();
 		mNM.cancel(PLAYER_NOTIFICATIONS);
+		
+		unregisterReceiver(headsetPlugReceiver);
 	}
 
 	private void updateNotification(String text) {

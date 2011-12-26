@@ -9,12 +9,10 @@ import com.coboltforge.dontmind.coboltfm.R;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
-import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.content.ServiceConnection;
 import android.content.SharedPreferences;
 import android.content.DialogInterface.OnClickListener;
@@ -65,7 +63,6 @@ public class PlayerActivity extends Activity {
 	protected static final String TAG = "PlayerActivity";
 
 	private AudioManager audio;
-	BroadcastReceiver headsetPlugReceiver;
 	
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
@@ -131,7 +128,6 @@ public class PlayerActivity extends Activity {
 	private PlayerService mBoundService;
 	private ServiceConnection mServiceConnection;
 	private int mPreBuffer;
-	private boolean mHeadphonePlugged;
 
 	public class LastFMServiceConnection implements ServiceConnection {
 		public void onServiceConnected(ComponentName className, IBinder service) {
@@ -762,7 +758,6 @@ public class PlayerActivity extends Activity {
 					"banButton_enabled", true));
 			shareButton.setEnabled(savedInstanceState.getBoolean(
 					"shareButton_enabled", true));
-			mHeadphonePlugged = savedInstanceState.getBoolean("headphone_plugged", false);
 			if(savedInstanceState.getBoolean("paused", false) == false)
 				playButton.setImageResource(R.drawable.pause);
 		}
@@ -815,35 +810,7 @@ public class PlayerActivity extends Activity {
 			}
 		}
 
-		// listen for headphone plugs/unplugs
-		headsetPlugReceiver = new BroadcastReceiver() {
-			//@Override
-			public void onReceive(Context context, Intent intent)
-			{
-				int state = intent.getIntExtra("state", 0);
-				String name = intent.getStringExtra("name");
-				Log.d(TAG, "Detected headphone '" + name  + (state == 0 ? "' unplug" : "' plug")
-							+ ", state says " + mHeadphonePlugged);
-				
-				if(mBoundService != null)
-				{
-					boolean actOnHeadphone = settings.getBoolean("headphonePlugPause", true);
-					if(state == 0) //unplug, there can be several, on rotation for instance
-					{
-						if(mHeadphonePlugged == true && actOnHeadphone) // only pause when plugged before
-							mBoundService.pausePlaying(true);
-						mHeadphonePlugged = false;
-					}
-					else // plug. also sent anew on rotation
-					{
-						if(mHeadphonePlugged == false && actOnHeadphone) // only resume when unplugged before
-							mBoundService.pausePlaying(false);
-						mHeadphonePlugged = true;
-					}
-				}
-			}
-		};
-		registerReceiver(headsetPlugReceiver, new IntentFilter(Intent.ACTION_HEADSET_PLUG));
+
 		
 	}
 	
@@ -852,7 +819,6 @@ public class PlayerActivity extends Activity {
 		super.onDestroy();
 		
 		refreshTimer.cancel();
-		unregisterReceiver(headsetPlugReceiver);
 		unbindFromPlayerService();
 	}
 	
@@ -991,7 +957,6 @@ public class PlayerActivity extends Activity {
 		outState.putBoolean("banButton_enabled", banButton.isEnabled());
 		outState.putBoolean("shareButton_enabled", shareButton.isEnabled());
 		
-		outState.putBoolean("headphone_plugged", mHeadphonePlugged);
 		outState.putBoolean("paused", paused);
 	}
 
