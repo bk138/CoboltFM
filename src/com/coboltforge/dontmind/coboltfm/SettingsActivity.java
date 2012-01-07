@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.os.Bundle;
+import android.text.AlteredCharSequence;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -106,6 +107,9 @@ public class SettingsActivity extends Activity {
 		
 		CheckBox vibrateCheckBox = (CheckBox) findViewById(R.id.vibrate_checkbox);
 		vibrateCheckBox.setChecked(settings.getBoolean("vibrateOnChange", false));
+		
+		CheckBox alternateConnCheckBox = (CheckBox) findViewById(R.id.alternate_conn_checkbox);
+		alternateConnCheckBox.setChecked(settings.getBoolean("alternateConnMethod", false));
 	}
 	
 	
@@ -117,6 +121,7 @@ public class SettingsActivity extends Activity {
 		CheckBox showSupportCheckBox = (CheckBox) findViewById(R.id.support_dialog_checkbox);
 		CheckBox headphonePlugCheckBox = (CheckBox) findViewById(R.id.headphone_plug_checkbox);
 		CheckBox vibrateCheckBox = (CheckBox) findViewById(R.id.vibrate_checkbox);
+		CheckBox alternateConnCheckBox = (CheckBox) findViewById(R.id.alternate_conn_checkbox);
 		
 		SharedPreferences settings = getSharedPreferences(
 				PlayerActivity.PREFS_NAME, 0);
@@ -125,6 +130,7 @@ public class SettingsActivity extends Activity {
 		ed.putBoolean("showSupportDialog", showSupportCheckBox.isChecked());
 		ed.putBoolean("headphonePlugPause", headphonePlugCheckBox.isChecked());
 		ed.putBoolean("vibrateOnChange", vibrateCheckBox.isChecked());
+		ed.putBoolean("alternateConnMethod", alternateConnCheckBox.isChecked());
 
 		ed.commit();
 	}

@@ -83,6 +83,8 @@ public class PlayerThread extends Thread {
 	
 	private int mPreBuffer;
 	
+	private boolean mAlternateConn = false;
+	
 	private ArrayList<XSPFTrackInfo> mPlaylist;
 	private int mNextPlaylistItem;
 	private XSPFTrackInfo mCurrentTrack;
@@ -202,11 +204,12 @@ public class PlayerThread extends Thread {
 	protected ArrayList<FriendInfo> mFriendsList;
 	
 
-	public PlayerThread(Context c, String username, String password, int preBuffer) {
+	public PlayerThread(Context c, String username, String password, int preBuffer, boolean alternateConn) {
 		super();
 		mUsername = username;
 		mPassword = password;
 		mPreBuffer = preBuffer;
+		mAlternateConn = alternateConn;
 	}
 
 	public void run() {
@@ -710,9 +713,14 @@ public class PlayerThread extends Thread {
 		try {
 			Log.d(TAG, "Getting playlist started");
 
-			URL url;
-			url = new URL("http://" + mBaseURL + "/xspf.php?sk=" + mSession
-					+ "&discovery=0&desktop=1.4.1.57486&api_key=9d1bbaef3b443eb97973d44181d04e4b");
+			String urlString = "http://" + mBaseURL + "/xspf.php?sk=" + mSession + "&discovery=0&desktop=1.4.1.57486"; 
+			
+			if(mAlternateConn) {
+				urlString += "&api_key=9d1bbaef3b443eb97973d44181d04e4b";
+				Log.d(TAG, "Using alternate connection method");
+			}
+			
+			URL url = new URL(urlString);
 			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
 			conn.connect();
 			InputStream is = conn.getInputStream();

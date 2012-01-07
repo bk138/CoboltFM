@@ -75,14 +75,29 @@
             android:layout_width="wrap_content" 
             android:layout_height="wrap_content"
            android:layout_margin="5dip" ></CheckBox> 
-            
+
          <CheckBox
-            android:id="@+id/support_dialog_checkbox" 
-            android:text="@string/support_dialog_settings_show" 
+            android:id="@+id/alternate_conn_checkbox" 
+            android:text="@string/alternate_conn_settings" 
             android:layout_width="wrap_content" 
             android:layout_height="wrap_content"
-             android:layout_margin="5dip"></CheckBox>
-     
+             android:layout_margin="5dip">
+         </CheckBox>
+        
+          <TextView
+            android:layout_width="fill_parent"
+            android:text="@string/alternate_conn_expl" android:layout_height="wrap_content"
+             android:layout_marginLeft="10dip"  android:layout_marginRight="10dip"
+            android:layout_marginBottom="20dip"/>
+             
+        
+	       <CheckBox
+	            android:id="@+id/support_dialog_checkbox" 
+	            android:text="@string/support_dialog_settings_show" 
+	            android:layout_width="wrap_content" 
+	            android:layout_height="wrap_content"
+	            android:layout_margin="5dip"></CheckBox>
+	    
      
        </LinearLayout>
      
