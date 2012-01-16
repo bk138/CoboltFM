@@ -457,6 +457,7 @@ public class PlayerThread extends Thread {
 
 	MediaPlayer.OnCompletionListener mOnTrackCompletionListener = new MediaPlayer.OnCompletionListener() {
 
+		@Override
 		public void onCompletion(MediaPlayer mp) {
 			try {
 				mp.seekTo(mp.getDuration()); // the mp gets set the 0 pos when done, this interfers with the track submit logic 
