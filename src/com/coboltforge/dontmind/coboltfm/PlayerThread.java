@@ -459,7 +459,9 @@ public class PlayerThread extends Thread {
 
 		@Override
 		public void onCompletion(MediaPlayer mp) {
+			
 			try {
+				Log.d(TAG, "completed at " + mp.getCurrentPosition() + " of " + mp.getDuration());
 				mp.seekTo(mp.getDuration()); // the mp gets set the 0 pos when done, this interfers with the track submit logic 
 				playNextTrack();
 			} catch (LastFMError e) {
@@ -557,6 +559,7 @@ public class PlayerThread extends Thread {
 	}
 
 	private void startPlaying() throws LastFMError {
+		Log.d(TAG, "startPlaying()");
 		playNextTrack();
 	}
 
