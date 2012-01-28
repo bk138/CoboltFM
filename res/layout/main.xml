@@ -112,6 +112,20 @@
 		
 		</LinearLayout>
 		
+		<LinearLayout android:orientation="horizontal" android:id="@+id/greeter_container"
+                        android:layout_width="wrap_content" android:layout_height="fill_parent"
+                        android:layout_gravity="center"
+                        android:padding="10dip" >
+
+            <ImageView android:id="@+id/greeter"
+            android:src="@drawable/namebanner"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:layout_gravity="center"/>
+
+        </LinearLayout>
+		    
+		
 	
 	</com.coboltforge.customviews.FixedViewFlipper>
 

@@ -337,7 +337,7 @@ public class PlayerActivity extends Activity {
 								playButton.setImageResource(R.drawable.pause);
 							}
 							else
-								showTimeDisplay();
+								showGreeter();
 
 							if (status instanceof PlayerService.ErrorStatus) {
 								PlayerService.ErrorStatus err = (PlayerService.ErrorStatus) status;
@@ -389,6 +389,9 @@ public class PlayerActivity extends Activity {
 							}
 
 							if (status instanceof PlayerService.PlayingStatus) {
+								
+								showTimeDisplay();
+								
 								int pos = ((PlayerService.PlayingStatus) status)
 										.getCurrentPosition();
 								int buffered = ((PlayerService.PlayingStatus) status)
@@ -517,6 +520,12 @@ public class PlayerActivity extends Activity {
 			switcher.setDisplayedChild(0); // is the first child in layout!
 	}
 	
+	void showGreeter() {
+		FixedViewFlipper switcher = (FixedViewFlipper) findViewById(R.id.switcher);
+		if (switcher.getCurrentView().getId() != R.id.greeter_container)
+			switcher.setDisplayedChild(3); // is the 4th child in layout!
+	}
+
 	void showErrorMsg(String text) {
 		final TextView textView = (TextView) findViewById(R.id.error_text);
 		FixedViewFlipper switcher = (FixedViewFlipper) findViewById(R.id.switcher);
@@ -659,7 +668,7 @@ public class PlayerActivity extends Activity {
 					PlayerActivity.this.stopService(serviceIntent);
 					resetSongInfoDisplay();
 					resetAlbumImage();
-					showTimeDisplay();
+					showGreeter();
 					resetButtons();
 					TextView statusText = (TextView) PlayerActivity.this
 							.findViewById(R.id.status_text);
@@ -753,6 +762,7 @@ public class PlayerActivity extends Activity {
 
 		// reset all to initial state
 		resetButtons();
+		showGreeter();
 		
 		// a restart ? if so, set some buttons and stuff
 		if (savedInstanceState != null) {
