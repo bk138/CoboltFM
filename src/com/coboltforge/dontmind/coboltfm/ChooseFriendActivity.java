@@ -119,8 +119,12 @@ public class ChooseFriendActivity extends ListActivity {
     	public void run() {
     		ArrayList<FriendInfo> friends = PlayerThread.downloadFriendsList(mUsername);
     		final ArrayList<String> friendNames = new ArrayList<String>();
-    		for (FriendInfo f : friends) {
-    			friendNames.add(f.getName());
+    		try{ // in case friends == null
+    			for (FriendInfo f : friends) {
+    				friendNames.add(f.getName());
+    			}
+    		}
+    		catch(NullPointerException e) {
     		}
     		ChooseFriendActivity.this.runOnUiThread(new Runnable() {
 				@Override
