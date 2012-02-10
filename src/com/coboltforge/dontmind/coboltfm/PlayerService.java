@@ -355,12 +355,14 @@ public class PlayerService extends Service {
 	}
 
 	void handleIntent(Intent intent) {
-		if (intent.getAction() == null)
-			return;
-		if (intent.getAction().equals(Intent.ACTION_VIEW)) {
-			startPlaying(intent.getDataString());
-		} else
-			Log.e(TAG, "Invalid service intent action: " + intent.getAction());
+		try {
+			if (intent.getAction().equals(Intent.ACTION_VIEW)) {
+				startPlaying(intent.getDataString());
+			} else
+				Log.e(TAG, "Invalid service intent action: " + intent.getAction());
+		}
+		catch(NullPointerException e) {
+		}
 	}
 
 	PhoneStateListener mPhoneStateListener = new PhoneStateListener()
