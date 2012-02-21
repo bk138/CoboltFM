@@ -453,6 +453,9 @@ public class PlayerThread extends Thread {
 		catch(NullPointerException e) {
 			return null;
 		}
+		catch(IndexOutOfBoundsException e) {
+			return null;
+		}
 	}
 
 	MediaPlayer.OnCompletionListener mOnTrackCompletionListener = new MediaPlayer.OnCompletionListener() {
