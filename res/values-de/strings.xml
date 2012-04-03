@@ -5,7 +5,7 @@
 <string name="alert_dialog_ok">OK</string>
 <string name="alert_dialog_cancel">Abbrechen</string>
 <string name="support_dialog_title">Unterstütze CoboltFM</string>
-<string name="support_dialog_text">Wenn Dir CoboltFM gefällt, kannst Du die weitere Entwicklung unterstützen. Das geht momentan via PayPal oder flattr. Vielen Dank!</string>
+<string name="support_dialog_text">Wenn Dir CoboltFM gefällt, kannst Du die weitere Entwicklung unterstützen. Das geht momentan ganz einfach durch Klicken auf das Sponsor-Werbebanner oder via PayPal oder flattr. Vielen Dank!</string>
 <string name="support_dialog_yes">Ja, gute Idee!</string>
 <string name="support_dialog_no">Nein, jetzt nicht.</string>
 <string name="support_dialog_neveragain">Nie mehr fragen!</string>
