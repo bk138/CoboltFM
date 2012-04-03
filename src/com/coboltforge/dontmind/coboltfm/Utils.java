@@ -41,7 +41,7 @@ public class Utils {
 					mMap.put(name, value);
 				}
 				return true;
-			} catch (IOException e) {
+			} catch (Exception e) {
 				e.printStackTrace();
 				return false;
 			}
