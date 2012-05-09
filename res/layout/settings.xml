@@ -21,15 +21,17 @@
 		    android:autoLink="all"
 			android:layout_marginBottom="20dip"
 		    android:text="@string/reset_button"
-		    android:layout_width="fill_parent"
+		    android:layout_width="wrap_content"
+		    android:layout_gravity="center"
 		    android:drawableLeft="@drawable/indicator_input_error"/>                        
-                    
-        <Button android:id="@+id/userinfo_button"
-            android:layout_width="fill_parent"
+                    
+        <Button
+            android:id="@+id/userinfo_button"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-	        android:text="@string/userinfo_button"
-	       	android:layout_marginBottom="20dip"/>
-     
+            android:layout_gravity="center"
+            android:layout_marginBottom="20dip"
+            android:text="@string/userinfo_button" />
        
         <TextView android:text="@string/prebuffer"
          android:layout_height="wrap_content"
