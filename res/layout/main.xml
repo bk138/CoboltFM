@@ -6,13 +6,19 @@
 	
 	<LinearLayout android:orientation="horizontal"
 		android:layout_width="fill_parent" android:layout_height="wrap_content"
-		android:layout_gravity="center_vertical">
+		android:layout_gravity="center_vertical"
+		android:padding="10dp">
 
 		<LinearLayout android:orientation="vertical"
 			android:layout_width="fill_parent" android:layout_height="wrap_content" android:layout_weight="1"
 			android:layout_gravity="right" >
-		<TextView android:id="@+id/status_text" android:layout_height="wrap_content"
-			android:text="playing" android:layout_width="fill_parent"  />		
+
+		<TextView
+		    android:id="@+id/status_text"
+		    android:layout_width="fill_parent"
+		    android:layout_height="wrap_content"
+		    android:text="playing" />
+		
 		<TextView android:id="@+id/radio_name" android:layout_height="fill_parent"
 			android:text="" android:layout_width="fill_parent" 
 			android:textSize="18sp"/>
