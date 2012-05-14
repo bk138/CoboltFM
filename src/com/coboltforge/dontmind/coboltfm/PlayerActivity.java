@@ -54,34 +54,20 @@ public class PlayerActivity extends Activity {
 	protected static final int SET_USER_INFO = 4;
 	protected static final int SETTINGS = 5;	
 
-	public static final int MENU_SETTINGS_ID = Menu.FIRST;
-	public static final int MENU_STATUS_ID = Menu.FIRST + 1;
-	public static final int MENU_ABOUT_ID = Menu.FIRST + 2;
-	public static final int MENU_PROFILE_ID = Menu.FIRST + 3;
-
-
 	protected static final String TAG = "PlayerActivity";
 
 	private AudioManager audio;
 	
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-		boolean result = super.onCreateOptionsMenu(menu);
-		menu.add(0, MENU_PROFILE_ID, 0, R.string.menu_profile).setIcon(
-				android.R.drawable.ic_menu_myplaces);
-		menu.add(0, MENU_STATUS_ID, 0, R.string.menu_status).setIcon(
-				android.R.drawable.ic_menu_info_details);
-		menu.add(0, MENU_SETTINGS_ID, 0, R.string.menu_settings).setIcon(
-				android.R.drawable.ic_menu_preferences);
-		menu.add(0, MENU_ABOUT_ID, 0, R.string.menu_about).setIcon(
-				android.R.drawable.ic_menu_help);
-		return result;
+		getMenuInflater().inflate(R.menu.playeractivitymenu,menu);
+		return true;
 	}
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
-	    case MENU_PROFILE_ID:
+	    case R.id.itemProfile:
 			SharedPreferences settings = getSharedPreferences(
 					PREFS_NAME, 0);
 			String username = settings.getString("username", null);
@@ -91,14 +77,14 @@ public class PlayerActivity extends Activity {
 				startActivity(browserIntent);
 			}
 	    	return true;
-		case MENU_SETTINGS_ID:
+		case R.id.itemSettings:
 			startActivityForResult(
 					new Intent(PlayerActivity.this, SettingsActivity.class), SETTINGS);
 			return true;
-		case MENU_ABOUT_ID:
+		case R.id.itemAbout:
 			startActivity(new Intent(PlayerActivity.this, AboutActivity.class));
 			return true;
-	    case MENU_STATUS_ID:
+	    case R.id.itemStatus:
 	    	Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://status.last.fm"));
 	    	startActivity(browserIntent);
 	    	return true;
