@@ -118,6 +118,7 @@ public class PlayerService extends Service {
 		startIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP|Intent.FLAG_ACTIVITY_SINGLE_TOP);
 		PendingIntent contentIntent = PendingIntent.getActivity(this, 0, startIntent, 0);
 
+		notification.flags |= Notification.FLAG_ONGOING_EVENT;
 		notification.setLatestEventInfo(this, "CoboltFM Player", text,
 				contentIntent);
 
