@@ -46,6 +46,7 @@
 
 <string name="artist">Artist</string>
 <string name="myrecommendations">My Recommendations</string>
+<string name="mymix">My Mix</string>
 <string name="myradiostation">My Radio Station</string>
 <string name="myneighbourradio">My Neighbour Radio</string>
 <string name="myfriends">My Friends\' Radio</string>
@@ -55,7 +56,8 @@
 <string name="uri_neighbours">\'s Neighbourhood</string>
 <string name="uri_library">\'s Library</string>
 <string name="uri_recommendations">\'s Recommendations</string>
-
+<string name="uri_mix">\'s Mix</string>
+    
 <string name="disconnected">Disconnected</string>
 <string name="connecting">Connecting...</string>
 <string name="playing">Playing</string>

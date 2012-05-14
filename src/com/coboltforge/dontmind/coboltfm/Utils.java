@@ -192,6 +192,8 @@ public class Utils {
 				return username +  c.getString(R.string.uri_library);
 			if (path.get(1).equals("recommended"))
 				return username +  c.getString(R.string.uri_recommendations);
+			if (path.get(1).equals("mix"))
+				return username +  c.getString(R.string.uri_mix);
 			return "<invalid uri>";			
 		} else
 			if (uri.getAuthority().equals("artist")) {

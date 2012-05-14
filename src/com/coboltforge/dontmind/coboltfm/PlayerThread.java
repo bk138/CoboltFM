@@ -818,6 +818,9 @@ public class PlayerThread extends Thread {
 			URL url = new URL("http://" + mBaseURL + "/adjust.php?session="
 					+ mSession + "&url="
 					+ URLEncoder.encode(stationUrl, "UTF-8"));
+			
+			Log.d(TAG, "About to tune in to '" + url.toString() + "'");
+			
 			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
 			conn.connect();
 			InputStream is = conn.getInputStream();

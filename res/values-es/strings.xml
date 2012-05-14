@@ -49,7 +49,8 @@
 <string name="myradiostation">Mi Estación de Radio</string>
 <string name="myneighbourradio">Mi Radio Vecino</string>
 <string name="myfriends">Mi Radio de mis Amigos</string>
-
+<string name="mymix">Mi Mix</string>
+    
 <string name="pleasewait">Por favor espere...</string>
 
 <string name="uri_neighbours">\'s Vecinos</string>

@@ -28,11 +28,13 @@ public class TuneActivity extends ListActivity {
 
 	        
 	        final String[] STATION_TYPES = new String[] {
-	        		getString(R.string.artist), "Tag", 
+	        		getString(R.string.artist), 
+	        		"Tag", 
 	        		getString(R.string.myrecommendations),
 	        		getString(R.string.myradiostation),
 	        		getString(R.string.myneighbourradio),
-	        		getString(R.string.myfriends)} ;
+	        		getString(R.string.myfriends),
+	        		getString(R.string.mymix)} ;
 	        
 	        setListAdapter(new ArrayAdapter<String>(this,
 	                android.R.layout.simple_list_item_1, STATION_TYPES));
@@ -40,35 +42,6 @@ public class TuneActivity extends ListActivity {
 		    getListView().setItemsCanFocus(false);
 		    getListView().setChoiceMode(ListView.CHOICE_MODE_SINGLE);
 		    
-	        Uri stationUri = PlayerActivity.getStationUri(settings);
-	        if (stationUri != null)
-	        {
-	        	List<String> path = stationUri.getPathSegments();
-	        	if (stationUri.getScheme().equals("lastfm")) {
-	        		if (stationUri.getAuthority().equals("artist"))
-	        			getListView().setItemChecked(STATION_TYPE_ARTIST, true);
-	        		else
-	        			if (stationUri.getAuthority().equals("globaltags"))
-		        			getListView().setItemChecked(STATION_TYPE_TAG, true);
-	        			else
-	        				if (stationUri.getAuthority().equals("user")) {
-	        					if (path.size() >= 2 && path.get(1).equals("neighbours"))
-	        						getListView().setItemChecked(STATION_TYPE_NEIGHBOR, true);
-	        					if (path.size() >= 2 && path.get(1).equals("recommended"))
-	        						getListView().setItemChecked(STATION_TYPE_RECOMMENDED, true);
-	        					if (path.size() >= 2 && path.get(1).equals("personal"))
-	        					{
-	        						if (path.get(0).equals(mUsername))
-	        							getListView().setItemChecked(STATION_TYPE_PERSONAL, true);
-	        						else
-		        						getListView().setItemChecked(STATION_TYPE_FRIENDS, true);
-	        					}
-	        					if (path.size() >= 2 && path.get(1).equals("playlist"))
-	        						getListView().setItemChecked(STATION_TYPE_PLAYLIST, true);
-	        				}
-	        	}
-	        }
-
 		    getListView().setOnItemClickListener(new OnItemClickListener() {
 
 			@Override
@@ -111,7 +84,15 @@ public class TuneActivity extends ListActivity {
 					setResult(RESULT_OK, new Intent("play", builder.build(),
 							TuneActivity.this, PlayerActivity.class));
 					finish();										
-					break;									
+					break;		
+				case STATION_TYPE_MIX:
+					builder.authority("user");
+					builder.appendPath(mUsername);
+					builder.appendPath("mix");					
+					setResult(RESULT_OK, new Intent("play", builder.build(),
+							TuneActivity.this, PlayerActivity.class));
+					finish();										
+					break;	
 				case STATION_TYPE_ARTIST:
 					startActivityForResult(new Intent(TuneActivity.this,
 							EnterArtistNameActivity.class), ENTER_ARTIST);
@@ -183,7 +164,8 @@ public class TuneActivity extends ListActivity {
 	   private final int STATION_TYPE_PERSONAL = 3;
 	   private final int STATION_TYPE_NEIGHBOR = 4;
 	   private final int STATION_TYPE_FRIENDS = 5;
-	   private final int STATION_TYPE_PLAYLIST = 6;
+	   private final int STATION_TYPE_MIX = 6;
+//	   private final int STATION_TYPE_PLAYLIST = 6;
 //	   private final int STATION_TYPE_GROUP = 6;
 //	   private final int STATION_TYPE_LOVED = 7;
 	   
