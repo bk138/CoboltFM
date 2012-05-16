@@ -76,14 +76,11 @@ public class PlayerThread extends Thread {
 		Log.d(TAG, "prebuffer set to " + mPreBuffer);
 	}
 	
-	MediaPlayer mFrontMP = null;
+	StreamingMediaPlayer mFrontMP = null;
 	boolean mFrontPaused = false;
 	int mBufferedFront;
-	MediaPlayer mBackMP = null;
+	StreamingMediaPlayer mBackMP = null;
 	int mBufferedBack;
-	StreamProxy mFrontProxy = null;
-	StreamProxy mBackProxy = null;
-
 
 	
 	private int mPreBuffer;
@@ -386,10 +383,6 @@ public class PlayerThread extends Thread {
 			mFrontPaused = false;
 			mFrontMP = null;
 		}
-		if(mFrontProxy != null) {
-			mFrontProxy.stop();
-			mFrontProxy = null;
-		}
 		
 		if (mBackMP != null)
 		{
@@ -397,11 +390,6 @@ public class PlayerThread extends Thread {
 			mBackMP.release();
 			mBackMP = null;
 		}
-		if(mBackProxy != null) {
-			mBackProxy.stop();
-			mBackProxy = null;
-		}
-		
 		
 		return true;
 	}
@@ -595,25 +583,13 @@ public class PlayerThread extends Thread {
 				mBackMP.release();
 				mBackMP = null;
 			}
-			if(mBackProxy != null) {
-				mBackProxy.stop();
-				mBackProxy = null;
-			}
 			
-			// start up the proxy before -- we need this as the newer aweseomplayer seems to have problems
-			// streaming from lastfm :-/
-			mBackProxy = new StreamProxy();
-			mBackProxy.init();
-			mBackProxy.start();
-			streamUrl = String.format("http://127.0.0.1:%d/%s", mBackProxy.getPort(), streamUrl);
-			
-			Log.d(TAG, "pre-buffering from stream " + streamUrl);
-
-			mBackMP = new MediaPlayer();
+			mBackMP = new StreamingMediaPlayer();
 			mBufferedBack = 0;
-			mBackMP.setDataSource(streamUrl);
+			mBackMP.setStreamUrl(streamUrl);
 			mBackMP.setOnBufferingUpdateListener(mOnBackBufferingUpdateListener); // this starts the player once prebuffering is done
-			mBackMP.prepare();
+			mBackMP.prepareAsync();
+			Log.d(TAG, "pre-buffering from stream " + mBackMP.getStreamUrl());
 			
 		} catch (IllegalArgumentException e) {
 			Log.e(TAG, "in bufferNextTrack", e);
@@ -665,10 +641,6 @@ public class PlayerThread extends Thread {
 				mFrontPaused = false;
 				mFrontMP = null;
 			}
-			if(mFrontProxy != null) {
-				mFrontProxy.stop();
-				mFrontProxy = null;
-			}
 
 			if(mBackMP != null) // there already is a pre-buffering media player
 			{
@@ -681,21 +653,14 @@ public class PlayerThread extends Thread {
 			}
 			else
 			{
-				// start up the proxy before -- we need this as the newer aweseomplayer seems to have problems
-				// streaming from lastfm :-/
-				mFrontProxy = new StreamProxy();
-				mFrontProxy.init();
-				mFrontProxy.start();
-				streamUrl = String.format("http://127.0.0.1:%d/%s", mFrontProxy.getPort(), streamUrl);
-				
-				Log.d(TAG, "playing from stream " + streamUrl);
-				mFrontMP = new MediaPlayer();
+				mFrontMP = new StreamingMediaPlayer();
 				mBufferedFront = 0;
 				mFrontMP.setAudioStreamType(AudioManager.STREAM_MUSIC);
-				mFrontMP.setDataSource(streamUrl);
+				mFrontMP.setStreamUrl(streamUrl);
 				mFrontMP.setOnCompletionListener(mOnTrackCompletionListener);
 				mFrontMP.setOnBufferingUpdateListener(mOnFrontBufferingUpdateListener); // this starts the player once prebuffering is done
-				mFrontMP.prepare();
+				mFrontMP.prepareAsync();
+				Log.d(TAG, "playing from stream " + mFrontMP.getStreamUrl());
 			}
 
 			if (mMuted)
