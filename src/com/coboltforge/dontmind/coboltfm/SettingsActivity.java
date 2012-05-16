@@ -10,6 +10,7 @@ import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.os.Bundle;
 import android.text.AlteredCharSequence;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -133,6 +134,20 @@ public class SettingsActivity extends Activity {
 		ed.putBoolean("alternateConnMethod", alternateConnCheckBox.isChecked());
 
 		ed.commit();
+	}
+
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		switch (item.getItemId()) {
+		case android.R.id.home:
+			// app icon in action bar clicked; go home
+			Intent intent = new Intent(this, PlayerActivity.class);
+			intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+			startActivity(intent);
+			return true;
+		default:
+			return super.onOptionsItemSelected(item);
+		}
 	}
 
 }
