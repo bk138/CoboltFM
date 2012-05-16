@@ -92,6 +92,9 @@ public class StreamingMediaPlayer extends MediaPlayer {
 	
 	
 	public void setStreamUrl(String path) throws IllegalArgumentException, SecurityException, IllegalStateException, IOException {
+		
+//		detectStreamingBackend();
+		
 		/*
 		 *  start up the proxy before -- we need this as the newer awesomeplayer seems to have problems
 		 *	streaming from lastfm :-/
@@ -420,13 +423,11 @@ public class StreamingMediaPlayer extends MediaPlayer {
 	
 	
 	/*
-	 * backend detectiion stuff
-	 * 
+	 * backend detection stuff
 	 */
-
 	private static final int STREAMING_BACKEND_OPENCORE = 0; 
-	private static final int STREAMING_BACKEND_STAGEFRIGHT = 2; 
-	private static final int STREAMING_BACKEND_UNKNOWN = 2; 
+	private static final int STREAMING_BACKEND_STAGEFRIGHT = 1; 
+	private static final int STREAMING_BACKEND_UNKNOWN = -42; 
 
 	private AtomicInteger streamingBackend = new AtomicInteger(STREAMING_BACKEND_UNKNOWN);
 	private AtomicInteger detectionSocketPort = new AtomicInteger(-1);
@@ -459,7 +460,6 @@ public class StreamingMediaPlayer extends MediaPlayer {
 						streamingBackend.set(STREAMING_BACKEND_STAGEFRIGHT);
 					else if(res.indexOf("OpenCORE") >= 0)
 						streamingBackend.set(STREAMING_BACKEND_OPENCORE);
-
 
 					socket.close();
 					serverSocket.close();
