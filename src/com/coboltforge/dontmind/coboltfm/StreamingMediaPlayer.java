@@ -6,6 +6,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import android.media.MediaPlayer;
+import android.os.Build;
 import android.util.Log;
 
 import org.apache.http.Header;
@@ -93,16 +94,19 @@ public class StreamingMediaPlayer extends MediaPlayer {
 	
 	public void setStreamUrl(String path) throws IllegalArgumentException, SecurityException, IllegalStateException, IOException {
 		
-//		detectStreamingBackend();
-		
 		/*
 		 *  start up the proxy before -- we need this as the newer awesomeplayer seems to have problems
 		 *	streaming from lastfm :-/
 		 */
-		proxy = new StreamProxy();
-		proxy.init();
-		proxy.start();
-		streamUrl = String.format("http://127.0.0.1:%d/%s", proxy.getPort(), path);
+		if(detectStreamingBackend() == STREAMING_BACKEND_STAGEFRIGHT) {
+			proxy = new StreamProxy();
+			proxy.init();
+			proxy.start();
+			streamUrl = String.format("http://127.0.0.1:%d/%s", proxy.getPort(), path);
+		}
+		else {
+			streamUrl = path;
+		}
 		
 		setDataSource(streamUrl);
 	}
@@ -433,6 +437,11 @@ public class StreamingMediaPlayer extends MediaPlayer {
 	private AtomicInteger detectionSocketPort = new AtomicInteger(-1);
 
 	private int detectStreamingBackend() {
+		
+		if (Build.VERSION.SDK_INT < 8) { //2.1 or earlier, opencore only
+			Log.d(TAG, "detect: SDK < 8, MediaPlayer backend is " + STREAMING_BACKEND_OPENCORE);
+			return STREAMING_BACKEND_OPENCORE;
+		}
 
 		final CountDownLatch latch1 = new CountDownLatch(1); 
 		final CountDownLatch latch2 = new CountDownLatch(1);
