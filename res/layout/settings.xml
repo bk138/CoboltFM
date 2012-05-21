@@ -114,11 +114,48 @@
             android:text="@string/streaming_expl" android:layout_height="wrap_content"
             android:layout_marginLeft="10dip"  android:layout_marginRight="10dip"
             android:layout_marginBottom="10dip"/>
-             
-	   
           
-         
+     
+                  
+        <LinearLayout android:orientation="horizontal"
+		android:layout_width="fill_parent" 
+		android:layout_height="wrap_content">
 	    
+             <LinearLayout android:orientation="vertical"
+					android:layout_width="0dip"
+					android:layout_weight="2" 
+					android:layout_height="wrap_content">
+		
+                 <CheckBox
+		            android:id="@+id/sleeptimer_checkbox" 
+		            android:text="@string/sleeptimer_settings" 
+		            android:layout_width="wrap_content" 
+		            android:layout_height="wrap_content"
+		            android:layout_margin="5dip">
+		         </CheckBox>
+              
+                 <TextView
+		            android:layout_width="wrap_content"
+		            android:text="@string/sleeptimer_expl" android:layout_height="wrap_content"
+		            android:layout_marginLeft="10dip"  android:layout_marginRight="10dip"
+		            android:layout_marginBottom="10dip"
+		            android:layout_below="@id/sleeptimer_checkbox"/>
+                 
+             </LinearLayout>
+            
+              
+            <EditText android:id="@+id/sleep_edittext"
+				android:layout_width="0dip"
+				android:layout_weight="1" 
+				android:layout_height="wrap_content" 
+				android:layout_margin="5dip"
+				android:layout_gravity="center"
+				android:inputType="number"
+				android:singleLine="true" />
+            
+            
+        </LinearLayout>
+        
      
        </LinearLayout>
      

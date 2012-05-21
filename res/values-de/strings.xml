@@ -16,6 +16,10 @@
 <string name="alternate_conn_expl">Einen Versuch wert, sollte das Radio nicht starten.</string>
 <string name="streaming_settings">Benutze Streaming Proxy</string>
 <string name="streaming_expl">Ändern, falls Lieder nicht geladen werden. Standardeinstellung automatisch detektiert.</string>
+<string name="sleeptimer_settings">Sleep Timer</string>
+<string name="sleeptimer_expl">Nach soviel Minuten Wiedergabe stoppen.</string>
+       
+    
 <string name="user_info_title">User Info</string>
 <string name="ok_button">OK</string>
 <string name="cancel_button">Abbrechen</string>

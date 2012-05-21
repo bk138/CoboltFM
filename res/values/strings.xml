@@ -16,7 +16,10 @@
 <string name="alternate_conn_expl">Try this when all seems fine, but the radio does not start to play.</string>
 <string name="streaming_settings">Enable Streaming Proxy</string>
 <string name="streaming_expl">Try enabling/ disabling this when buffering does not work. Autodetected on a fresh install.</string>
-    
+
+<string name="sleeptimer_settings">Enable Sleep Timer</string>
+<string name="sleeptimer_expl">Stop playing after this many minutes.</string>
+       
 <string name="user_info_title">User Info</string>
 <string name="ok_button">OK</string>
 <string name="cancel_button">Cancel</string>

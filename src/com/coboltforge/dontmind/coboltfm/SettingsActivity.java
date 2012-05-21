@@ -14,8 +14,11 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
+import android.widget.EditText;
 import android.widget.SeekBar;
 import android.widget.TextView;
+import android.widget.CompoundButton.OnCheckedChangeListener;
 
 public class SettingsActivity extends Activity {
 	protected static final int SET_USER_INFO = 0;
@@ -113,6 +116,26 @@ public class SettingsActivity extends Activity {
 		
 		CheckBox streamingCheckBox = (CheckBox) findViewById(R.id.streaming_checkbox);
 		streamingCheckBox.setChecked(settings.getBoolean("useStreamProxy", ! StreamingMediaPlayer.isStreamingWorkingNatively()));
+
+		CheckBox sleepTimerCheckBox = (CheckBox) findViewById(R.id.sleeptimer_checkbox);
+		sleepTimerCheckBox.setChecked(settings.getBoolean("enableSleepTimer", false));
+		sleepTimerCheckBox.setOnCheckedChangeListener(new OnCheckedChangeListener() {
+			
+			@Override
+			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+				EditText sleepTimeEditText = (EditText) findViewById(R.id.sleep_edittext);
+				sleepTimeEditText.setEnabled(isChecked);
+				sleepTimeEditText.setFocusable(isChecked);
+				sleepTimeEditText.setFocusableInTouchMode(isChecked);
+			}
+		});
+	
+		EditText sleepTimeEditText = (EditText) findViewById(R.id.sleep_edittext);
+		sleepTimeEditText.setEnabled(sleepTimerCheckBox.isChecked());
+		sleepTimeEditText.setFocusable(sleepTimerCheckBox.isChecked());
+		sleepTimeEditText.setFocusableInTouchMode(sleepTimerCheckBox.isChecked());
+		sleepTimeEditText.setText(Integer.toString(settings.getInt("sleepTime", 42)));
+		
 	}
 	
 	
@@ -126,6 +149,9 @@ public class SettingsActivity extends Activity {
 		CheckBox vibrateCheckBox = (CheckBox) findViewById(R.id.vibrate_checkbox);
 		CheckBox alternateConnCheckBox = (CheckBox) findViewById(R.id.alternate_conn_checkbox);
 		CheckBox streamingCheckBox = (CheckBox) findViewById(R.id.streaming_checkbox);
+		CheckBox sleepTimerCheckBox = (CheckBox) findViewById(R.id.sleeptimer_checkbox);
+		EditText sleepTimeEditText = (EditText) findViewById(R.id.sleep_edittext);
+
 
 		SharedPreferences settings = getSharedPreferences(
 				PlayerActivity.PREFS_NAME, 0);
@@ -136,6 +162,12 @@ public class SettingsActivity extends Activity {
 		ed.putBoolean("vibrateOnChange", vibrateCheckBox.isChecked());
 		ed.putBoolean("alternateConnMethod", alternateConnCheckBox.isChecked());
 		ed.putBoolean("useStreamProxy", streamingCheckBox.isChecked());
+		ed.putBoolean("enableSleepTimer", sleepTimerCheckBox.isChecked());
+		try {
+			ed.putInt("sleepTime", Integer.parseInt(sleepTimeEditText.getText().toString()));
+		}
+		catch(Exception e) {
+		}
 
 		ed.commit();
 	}
