@@ -886,6 +886,10 @@ public class PlayerThread extends Thread {
 			mScrobbler.handshake(username, password);			
 			return true;
 		}
+		catch (NullPointerException e) {
+			setErrorState(new LastFMError("Login failed, there was an internal error)"));
+			return false;
+		}
 		catch (UnknownHostException e) {
 			setErrorState(new LastFMError("Login failed, unknown host (please check your internet connection)"));
 			return false;
