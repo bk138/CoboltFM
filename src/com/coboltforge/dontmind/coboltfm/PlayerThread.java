@@ -25,7 +25,6 @@ import org.w3c.dom.NodeList;
 import org.xmlpull.v1.XmlPullParserFactory;
 import org.xmlpull.v1.XmlSerializer;
 
-import android.content.Context;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.media.MediaPlayer.OnBufferingUpdateListener;
@@ -86,6 +85,7 @@ public class PlayerThread extends Thread {
 	private int mPreBuffer;
 	
 	private boolean mAlternateConn = false;
+	private boolean mUseProxy;
 	
 	private ArrayList<XSPFTrackInfo> mPlaylist;
 	private int mNextPlaylistItem;
@@ -206,12 +206,14 @@ public class PlayerThread extends Thread {
 	protected ArrayList<FriendInfo> mFriendsList;
 	
 
-	public PlayerThread(Context c, String username, String password, int preBuffer, boolean alternateConn) {
+	public PlayerThread(String username, String password, int preBuffer, 
+			boolean alternateConn, boolean useProxy) {
 		super();
 		mUsername = username;
 		mPassword = password;
 		mPreBuffer = preBuffer;
 		mAlternateConn = alternateConn;
+		mUseProxy = useProxy;
 	}
 
 	public void run() {
@@ -584,11 +586,11 @@ public class PlayerThread extends Thread {
 				mBackMP = null;
 			}
 			
-			mBackMP = new StreamingMediaPlayer();
+			mBackMP = new StreamingMediaPlayer(mUseProxy);
 			mBufferedBack = 0;
 			mBackMP.setStreamUrl(streamUrl);
 			mBackMP.setOnBufferingUpdateListener(mOnBackBufferingUpdateListener); // this starts the player once prebuffering is done
-			mBackMP.prepareAsync();
+			mBackMP.prepare();
 			Log.d(TAG, "pre-buffering from stream " + mBackMP.getStreamUrl());
 			
 		} catch (IllegalArgumentException e) {
@@ -653,13 +655,13 @@ public class PlayerThread extends Thread {
 			}
 			else
 			{
-				mFrontMP = new StreamingMediaPlayer();
+				mFrontMP = new StreamingMediaPlayer(mUseProxy);
 				mBufferedFront = 0;
 				mFrontMP.setAudioStreamType(AudioManager.STREAM_MUSIC);
 				mFrontMP.setStreamUrl(streamUrl);
 				mFrontMP.setOnCompletionListener(mOnTrackCompletionListener);
 				mFrontMP.setOnBufferingUpdateListener(mOnFrontBufferingUpdateListener); // this starts the player once prebuffering is done
-				mFrontMP.prepareAsync();
+				mFrontMP.prepare();
 				Log.d(TAG, "playing from stream " + mFrontMP.getStreamUrl());
 			}
 

@@ -93,7 +93,7 @@ public class SettingsActivity extends Activity {
 			}
 		});
 		
-		// set do saved or default value
+		// set to saved or default value
 		SharedPreferences settings = getSharedPreferences(
 				PlayerActivity.PREFS_NAME, 0);
 		
@@ -110,6 +110,9 @@ public class SettingsActivity extends Activity {
 		
 		CheckBox alternateConnCheckBox = (CheckBox) findViewById(R.id.alternate_conn_checkbox);
 		alternateConnCheckBox.setChecked(settings.getBoolean("alternateConnMethod", false));
+		
+		CheckBox streamingCheckBox = (CheckBox) findViewById(R.id.streaming_checkbox);
+		streamingCheckBox.setChecked(settings.getBoolean("useStreamProxy", ! StreamingMediaPlayer.isStreamingWorkingNatively()));
 	}
 	
 	
@@ -122,7 +125,8 @@ public class SettingsActivity extends Activity {
 		CheckBox headphonePlugCheckBox = (CheckBox) findViewById(R.id.headphone_plug_checkbox);
 		CheckBox vibrateCheckBox = (CheckBox) findViewById(R.id.vibrate_checkbox);
 		CheckBox alternateConnCheckBox = (CheckBox) findViewById(R.id.alternate_conn_checkbox);
-		
+		CheckBox streamingCheckBox = (CheckBox) findViewById(R.id.streaming_checkbox);
+
 		SharedPreferences settings = getSharedPreferences(
 				PlayerActivity.PREFS_NAME, 0);
 		Editor ed = settings.edit();
@@ -131,6 +135,7 @@ public class SettingsActivity extends Activity {
 		ed.putBoolean("headphonePlugPause", headphonePlugCheckBox.isChecked());
 		ed.putBoolean("vibrateOnChange", vibrateCheckBox.isChecked());
 		ed.putBoolean("alternateConnMethod", alternateConnCheckBox.isChecked());
+		ed.putBoolean("useStreamProxy", streamingCheckBox.isChecked());
 
 		ed.commit();
 	}

@@ -1,10 +1,5 @@
 package com.coboltforge.dontmind.coboltfm;
 
-import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.Executors;
-import java.util.concurrent.TimeUnit;
-import java.util.concurrent.atomic.AtomicInteger;
-
 import android.media.MediaPlayer;
 import android.os.Build;
 import android.util.Log;
@@ -57,6 +52,12 @@ public class StreamingMediaPlayer extends MediaPlayer {
 
 	private StreamProxy proxy = null;
 	private String streamUrl;
+	private boolean useProxy;
+	
+	public StreamingMediaPlayer(boolean useProxy) {
+		this.useProxy = useProxy;
+	}
+	
 	
 	@Override
 	public void stop() {
@@ -94,17 +95,15 @@ public class StreamingMediaPlayer extends MediaPlayer {
 	
 	public void setStreamUrl(String path) throws IllegalArgumentException, SecurityException, IllegalStateException, IOException {
 		
-		/*
-		 *  start up the proxy before -- we need this as the newer awesomeplayer seems to have problems
-		 *	streaming from lastfm :-/
-		 */
-		if(detectStreamingBackend() == STREAMING_BACKEND_STAGEFRIGHT) {
+		if(useProxy) {
+			Log.d(TAG, "Using proxy");
 			proxy = new StreamProxy();
 			proxy.init();
 			proxy.start();
 			streamUrl = String.format("http://127.0.0.1:%d/%s", proxy.getPort(), path);
 		}
 		else {
+			Log.d(TAG, "Using direct");
 			streamUrl = path;
 		}
 		
@@ -429,87 +428,20 @@ public class StreamingMediaPlayer extends MediaPlayer {
 	/*
 	 * backend detection stuff
 	 */
-	private static final int STREAMING_BACKEND_OPENCORE = 0; 
-	private static final int STREAMING_BACKEND_STAGEFRIGHT = 1; 
-	private static final int STREAMING_BACKEND_UNKNOWN = -42; 
 
-	private AtomicInteger streamingBackend = new AtomicInteger(STREAMING_BACKEND_UNKNOWN);
-	private AtomicInteger detectionSocketPort = new AtomicInteger(-1);
-
-	private int detectStreamingBackend() {
+	public static boolean isStreamingWorkingNatively() {
 		
-		if (Build.VERSION.SDK_INT < 8) { //2.1 or earlier, opencore only
-			Log.d(TAG, "detect: SDK < 8, MediaPlayer backend is " + STREAMING_BACKEND_OPENCORE);
-			return STREAMING_BACKEND_OPENCORE;
-		}
+		// 4-9: ok
+		// 10-13: probably most of these need the proxy
+		// 14-.. : probably ok
+		if (Build.VERSION.SDK_INT <= 9)
+			return true;
+		else
+			if(Build.VERSION.SDK_INT <= 13)
+				return false;
+			else
+				return true;
 
-		final CountDownLatch latch1 = new CountDownLatch(1); 
-		final CountDownLatch latch2 = new CountDownLatch(1);
-
-		Executors.newSingleThreadExecutor().submit(new Runnable() {
-			public void run() {
-				try {
-					ServerSocket serverSocket = new ServerSocket(0);
-					detectionSocketPort.set(serverSocket.getLocalPort());
-					latch1.countDown();
-
-					Socket socket = serverSocket.accept();
-					Log.d(TAG, "detect: accepted connection");
-
-					InputStream is = socket.getInputStream();
-
-					byte [] temp = new byte [2048];     
-					int bsize = -1;
-					while(bsize <= 0) {
-						bsize = is.read(temp);
-					}
-					String res = new String(temp, 0, bsize);
-
-					if(res.indexOf("stagefright") >= 0) 
-						streamingBackend.set(STREAMING_BACKEND_STAGEFRIGHT);
-					else if(res.indexOf("OpenCORE") >= 0)
-						streamingBackend.set(STREAMING_BACKEND_OPENCORE);
-
-					socket.close();
-					serverSocket.close();
-				} catch(IOException e) {
-					Log.w(TAG, "detect: " + e.toString());
-				} finally {
-					latch2.countDown();
-				}
-			}
-		});
-
-		Log.d(TAG, "detect: waiting for socket port...");
-		try {
-			latch1.await(500, TimeUnit.MILLISECONDS);
-		} catch (InterruptedException e) {
-		}
-
-		MediaPlayer mp = new MediaPlayer();
-		try {
-			String url = String.format("http://127.0.0.1:%d/", detectionSocketPort.get());
-			Log.d(TAG, "detect: connecting to " + url);
-			mp.setDataSource(url);
-			mp.prepareAsync();
-		} catch (Exception e) {
-			Log.w(TAG, "detect: " +e.toString());
-			mp.release();
-			return STREAMING_BACKEND_UNKNOWN;
-		}
-
-		Log.d(TAG, "detect: waiting for connection to finish...");
-		try {
-			latch2.await(500, TimeUnit.MILLISECONDS);
-		} catch (InterruptedException e) {
-		}
-		Log.d(TAG, "detect: connection finished");
-
-
-		Log.d(TAG, "detect: MediaPlayer backend is " + streamingBackend.get());
-		mp.release();
-
-		return streamingBackend.get();
 	}
 
 }

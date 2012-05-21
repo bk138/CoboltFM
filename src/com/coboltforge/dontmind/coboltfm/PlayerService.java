@@ -402,8 +402,9 @@ public class PlayerService extends Service {
 			String password = settings.getString("password", null);
 			int preBuffer = settings.getInt("preBuffer", 5);
 			boolean altConn = settings.getBoolean("alternateConnMethod", false);
+			boolean useProxy =  settings.getBoolean("useStreamProxy",  ! StreamingMediaPlayer.isStreamingWorkingNatively());
 			
-			mPlayerThread = new PlayerThread(getApplicationContext(), username, password, preBuffer, altConn);
+			mPlayerThread = new PlayerThread(username, password, preBuffer, altConn, useProxy);
 			try {
 				mPlayerThread.setVersionString(getPackageManager().getPackageInfo(this.getPackageName(), 0).versionName);
 			} catch (NameNotFoundException e) {
