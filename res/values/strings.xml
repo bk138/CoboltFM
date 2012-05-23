@@ -19,6 +19,8 @@
 
 <string name="sleeptimer_settings">Enable Sleep Timer</string>
 <string name="sleeptimer_expl">Stop playing after this many minutes.</string>
+<string name="goodnight">Good night!</string>
+
        
 <string name="user_info_title">User Info</string>
 <string name="ok_button">OK</string>

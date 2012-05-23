@@ -15,11 +15,13 @@ import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.os.Binder;
+import android.os.CountDownTimer;
 import android.os.IBinder;
 import android.os.Message;
 import android.telephony.PhoneStateListener;
 import android.telephony.TelephonyManager;
 import android.util.Log;
+import android.widget.Toast;
 
 public class PlayerService extends Service {
 	/**
@@ -60,6 +62,9 @@ public class PlayerService extends Service {
 	private NotificationManager mNM;
 	
 	private BroadcastReceiver headsetPlugReceiver;
+	
+	private CountDownTimer sleepTimer;
+	private long secondsRemainingUntilSleep;
 
 	private LastFMNotificationListener mLastFMNotificationListener = null;
 	
@@ -189,6 +194,7 @@ public class PlayerService extends Service {
 		int buffered;
 		int next_buffered;
 		int position;
+		long remainingTimeUntilSleep; // in minutes
 		boolean is_paused;
 		XSPFTrackInfo trackInfo;
 
@@ -220,6 +226,10 @@ public class PlayerService extends Service {
 		public XSPFTrackInfo getCurrentTrack() {
 			return trackInfo;
 		}
+		
+		public long getRemainingSecondsUntilSleep() {
+			return remainingTimeUntilSleep;
+		}
 
 		public void setCurrentPosition(int currentPosition) {
 			position = currentPosition;
@@ -234,6 +244,9 @@ public class PlayerService extends Service {
 		}
 		public void setPause(boolean pause) {
 			is_paused = pause;
+		}
+		public void setRemainingSecondsUntilSleep(long time) {
+			remainingTimeUntilSleep = time;
 		}
 	}
 
@@ -302,6 +315,8 @@ public class PlayerService extends Service {
 					((PlayingStatus) curStatus)
 					.setPause(mPlayerThread
 							.getIsPaused());
+					((PlayingStatus) curStatus)
+					.setRemainingSecondsUntilSleep(secondsRemainingUntilSleep);
 				}
 			}
 		}
@@ -318,10 +333,17 @@ public class PlayerService extends Service {
 			mPlayerThread = null;
 			mCurrentStatus = new StoppedStatus();
 			updateNotification("Stopped");
+			
+			secondsRemainingUntilSleep = 0;
+			if(sleepTimer != null) {
+				sleepTimer.cancel();
+				sleepTimer = null;
+			}
+			
 			return true;
 		}
 		catch(NullPointerException e) {
-			return true;
+			return false;
 		}
 	}
 
@@ -403,6 +425,9 @@ public class PlayerService extends Service {
 			int preBuffer = settings.getInt("preBuffer", 5);
 			boolean altConn = settings.getBoolean("alternateConnMethod", false);
 			boolean useProxy =  settings.getBoolean("useStreamProxy",  ! StreamingMediaPlayer.isStreamingWorkingNatively());
+			boolean enableSleepTimer = settings.getBoolean("enableSleepTimer", false);
+			final int sleepTime = settings.getInt("sleepTime", 42);
+
 			
 			mPlayerThread = new PlayerThread(username, password, preBuffer, altConn, useProxy);
 			try {
@@ -423,6 +448,27 @@ public class PlayerService extends Service {
 					PlayerThread.MESSAGE_CACHE_FRIENDS_LIST).sendToTarget();
 			updateNotification("Starting playback");
 			mCurrentStatus = new LoggingInStatus();
+			
+			if(enableSleepTimer) {
+				sleepTimer = new CountDownTimer(sleepTime*60*1000, 1000) {
+					
+					@Override
+					public void onTick(long millisUntilFinished) {
+						secondsRemainingUntilSleep = millisUntilFinished/1000;
+					}
+					
+					@Override
+					public void onFinish() {
+						Log.d(TAG, "SleepTimer done after " + sleepTime + " min, stopping playback");
+						Toast.makeText(getApplicationContext(), getString(R.string.goodnight), Toast.LENGTH_LONG).show();
+						stopPlaying();
+					}
+				};
+				Log.d(TAG, "SleepTimer will stop in " + sleepTime + " min");
+				sleepTimer.start();
+			}
+			
+			
 			return true;
 	}
 

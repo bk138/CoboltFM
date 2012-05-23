@@ -288,6 +288,8 @@ public class PlayerActivity extends Activity {
 									.findViewById(R.id.time_counter);
 							TextView bufferText = (TextView) PlayerActivity.this
 							         .findViewById(R.id.buffer_display);
+							TextView sleepText = (TextView) PlayerActivity.this
+							         .findViewById(R.id.sleepTime_display);
 							TextView creatorText = (TextView) PlayerActivity.this
 									.findViewById(R.id.creator_name_text);
 							TextView albumText = (TextView) PlayerActivity.this
@@ -299,6 +301,8 @@ public class PlayerActivity extends Activity {
 
 							TextView radioName = (TextView) PlayerActivity.this
 									.findViewById(R.id.radio_name);
+							
+							ImageView sleepIcon = (ImageView)findViewById(R.id.sleepTime_icon);
 							
 							final ImageButton skipButton = (ImageButton) findViewById(R.id.skip_button);
 							final ImageButton playButton = (ImageButton) findViewById(R.id.play_button);
@@ -384,6 +388,8 @@ public class PlayerActivity extends Activity {
 										.getCurrentBuffered();
 								int next_buffered = ((PlayerService.PlayingStatus) status)
 								        .getNextBuffered();
+								long sleepSecs = ((PlayerService.PlayingStatus) status)
+								        .getRemainingSecondsUntilSleep();
 								boolean isActuallyPaused = ((PlayerService.PlayingStatus) status)
 								        .getIsActuallyPaused();
 								final XSPFTrackInfo track = ((PlayerService.PlayingStatus) status)
@@ -396,6 +402,20 @@ public class PlayerActivity extends Activity {
 									timeText.setText(String.format(
 											"%1$02d:%2$02d", minutes, seconds));
 									
+									if(sleepSecs > 0) {
+										sleepIcon.setVisibility(View.VISIBLE);
+										sleepText.setVisibility(View.VISIBLE);
+										if(sleepSecs > 60) 
+											sleepText.setText(sleepSecs / 60 + " m");
+										else 
+											sleepText.setText(sleepSecs + " s");
+									}
+									else {
+										sleepIcon.setVisibility(View.GONE);
+										sleepText.setVisibility(View.GONE);
+									}
+									
+
 									if(buffered == 100) // complete, pre-buffering should run
 									{	
 										bufferText.setTextColor(Color.YELLOW);
