@@ -234,6 +234,8 @@ public class StreamingMediaPlayer extends MediaPlayer {
 				Log.e(TAG_PROXY, "Error downloading", e);
 			} catch (IOException e) {
 				Log.e(TAG_PROXY, "Error downloading", e);
+			} catch (IllegalStateException e) {
+				Log.e(TAG_PROXY, "Error downloading", e);
 			}
 			return response;
 		}
