@@ -1,5 +1,6 @@
 
 * pref to disable scrobbling
+* move prefs stuff to constants
 * nicer gui
 * skip on headset button press
 

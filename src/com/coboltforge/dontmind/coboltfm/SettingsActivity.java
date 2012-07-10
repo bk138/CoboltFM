@@ -136,6 +136,10 @@ public class SettingsActivity extends Activity {
 		sleepTimeEditText.setFocusableInTouchMode(sleepTimerCheckBox.isChecked());
 		sleepTimeEditText.setText(Integer.toString(settings.getInt("sleepTime", 42)));
 		
+		CheckBox scrobblingCheckBox = (CheckBox) findViewById(R.id.scrobbling_checkbox);
+		scrobblingCheckBox.setChecked(settings.getBoolean("enableScrobbling", true));
+
+		
 	}
 	
 	
@@ -151,7 +155,7 @@ public class SettingsActivity extends Activity {
 		CheckBox streamingCheckBox = (CheckBox) findViewById(R.id.streaming_checkbox);
 		CheckBox sleepTimerCheckBox = (CheckBox) findViewById(R.id.sleeptimer_checkbox);
 		EditText sleepTimeEditText = (EditText) findViewById(R.id.sleep_edittext);
-
+		CheckBox scrobblingCheckBox = (CheckBox) findViewById(R.id.scrobbling_checkbox);
 
 		SharedPreferences settings = getSharedPreferences(
 				PlayerActivity.PREFS_NAME, 0);
@@ -168,6 +172,8 @@ public class SettingsActivity extends Activity {
 		}
 		catch(Exception e) {
 		}
+		ed.putBoolean("enableScroblling", scrobblingCheckBox.isChecked());
+
 
 		ed.commit();
 	}
