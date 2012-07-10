@@ -111,11 +111,16 @@ public class EnterNameActivity extends Activity {
 		nameText.setSelectAllOnFocus(true);
 		
 		nameText.setOnFocusChangeListener(new OnFocusChangeListener() {
-
 			@Override
 			public void onFocusChange(View v, boolean hasFocus) {
 				if (hasFocus && lru.getItemCount() > 0 && nameText.getText().toString().equals(""))
-					nameText.showDropDown();
+				{
+					try{
+						nameText.showDropDown();
+					}
+					catch(Exception e) {
+					}
+				}
 			}			
 		});
 
