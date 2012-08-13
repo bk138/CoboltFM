@@ -1,6 +1,5 @@
 package com.coboltforge.dontmind.coboltfm;
 
-import com.google.ads.*;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager.NameNotFoundException;
@@ -34,10 +33,6 @@ public class AboutActivity extends Activity {
 				}
 			});
 			
-		    // Look up the AdView as a resource and load a request.
-			AdView adView = (AdView)this.findViewById(R.id.ad);
-			adView.loadAd(new AdRequest());
-
 	   }
 	   
 	   @Override
