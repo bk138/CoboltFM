@@ -25,6 +25,7 @@ import org.w3c.dom.NodeList;
 import org.xmlpull.v1.XmlPullParserFactory;
 import org.xmlpull.v1.XmlSerializer;
 
+import android.content.SharedPreferences;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.media.MediaPlayer.OnBufferingUpdateListener;
@@ -86,6 +87,8 @@ public class PlayerThread extends Thread {
 	
 	private boolean mAlternateConn = false;
 	private boolean mUseProxy;
+	private boolean mDoScrobble;
+
 	
 	private ArrayList<XSPFTrackInfo> mPlaylist;
 	private int mNextPlaylistItem;
@@ -207,13 +210,14 @@ public class PlayerThread extends Thread {
 	
 
 	public PlayerThread(String username, String password, int preBuffer, 
-			boolean alternateConn, boolean useProxy) {
+			boolean alternateConn, boolean useProxy, boolean doScrobble) {
 		super();
 		mUsername = username;
 		mPassword = password;
 		mPreBuffer = preBuffer;
 		mAlternateConn = alternateConn;
 		mUseProxy = useProxy;
+		mDoScrobble = doScrobble;
 	}
 
 	public void run() {
@@ -253,8 +257,9 @@ public class PlayerThread extends Thread {
 					case PlayerThread.MESSAGE_SUBMIT_TRACK:
 						Log.d(TAG, "got SUBMIT message");
 						TrackSubmissionParams params = (TrackSubmissionParams) msg.obj;
-						mScrobbler.submit(params.mTrack,
-								params.mPlaybackStartTime, params.mRating);
+						if(mDoScrobble)
+							mScrobbler.submit(params.mTrack,
+									params.mPlaybackStartTime, params.mRating);
 						break;
 					case PlayerThread.MESSAGE_SCROBBLE_NOW_PLAYING:
 						Log.d(TAG, "got NOW_PLAYING message");

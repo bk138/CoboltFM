@@ -45,8 +45,6 @@ public class PlayerActivity extends Activity {
 
 	private static final int DIALOG_ERROR = 1;
 
-	public static final String PREFS_NAME = "LastFMSettings";
-
 	protected static final int SET_USER_INFO_AND_PLAY = 0;
 	protected static final int SHARE_TRACK = 1;
 	protected static final int TUNE = 2;
@@ -69,7 +67,7 @@ public class PlayerActivity extends Activity {
 		switch (item.getItemId()) {
 	    case R.id.itemProfile:
 			SharedPreferences settings = getSharedPreferences(
-					PREFS_NAME, 0);
+					Constants.PREFSNAME, 0);
 			String username = settings.getString("username", null);
 			if(username != null)
 			{
@@ -148,7 +146,7 @@ public class PlayerActivity extends Activity {
 					skipButton.setEnabled(true);
 					stopButton.setEnabled(true);
 
-					final SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
+					final SharedPreferences settings = getSharedPreferences(Constants.PREFSNAME, 0);
 					if(settings.getBoolean("vibrateOnChange", false))
 					{
 						Vibrator vib = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
@@ -315,7 +313,7 @@ public class PlayerActivity extends Activity {
 									|| status instanceof PlayerService.LoggingInStatus)
 							{
 								SharedPreferences settings = getSharedPreferences(
-										PREFS_NAME, 0);
+										Constants.PREFSNAME, 0);
 								String username = settings.getString("username", null);
 
 								Uri stationUri = getStationUri(settings);
@@ -342,7 +340,7 @@ public class PlayerActivity extends Activity {
 										showErrorMsg("Login failed: invalid password");
 
 									SharedPreferences settings = getSharedPreferences(
-											PREFS_NAME, 0);
+											Constants.PREFSNAME, 0);
 									
 									if (status.getClass() != prevStatus.getClass())
 									{
@@ -575,7 +573,7 @@ public class PlayerActivity extends Activity {
 
 		tuneButton.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View v) {
-				SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
+				SharedPreferences settings = getSharedPreferences(Constants.PREFSNAME, 0);
 
 				String username = settings.getString("username", null);
 				String password = settings.getString("password", null);
@@ -615,7 +613,7 @@ public class PlayerActivity extends Activity {
 				}
 
 				
-				SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
+				SharedPreferences settings = getSharedPreferences(Constants.PREFSNAME, 0);
 				String username = settings.getString("username", null);
 				String password = settings.getString("password", null);
 				boolean usernameInvalid = settings.getBoolean(
@@ -788,7 +786,7 @@ public class PlayerActivity extends Activity {
 				playButton.setImageResource(R.drawable.pause);
 		}
 		
-		final SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
+		final SharedPreferences settings = getSharedPreferences(Constants.PREFSNAME, 0);
 
 		mPreBuffer = settings.getInt("preBuffer", 5);
 
@@ -823,7 +821,7 @@ public class PlayerActivity extends Activity {
 				dialog.setNegativeButton(getString(R.string.support_dialog_neveragain), new OnClickListener() {
 					@Override
 					public void onClick(DialogInterface dialog, int which) {
-						SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
+						SharedPreferences settings = getSharedPreferences(Constants.PREFSNAME, 0);
 						SharedPreferences.Editor ed = settings.edit();
 						ed.putBoolean("showSupportDialog", false);
 						ed.commit();
@@ -882,7 +880,7 @@ public class PlayerActivity extends Activity {
 
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		if (requestCode == SET_USER_INFO_AND_PLAY && resultCode == RESULT_OK) {
-			SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
+			SharedPreferences settings = getSharedPreferences(Constants.PREFSNAME, 0);
 			String username = settings.getString("username", null);
 			String password = settings.getString("password", null);
 			if (username != null && password != null && username.length() != 0
@@ -908,7 +906,7 @@ public class PlayerActivity extends Activity {
 			}
 		}
 		if (requestCode == SET_USER_INFO_AND_TUNE && resultCode == RESULT_OK) {
-			SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
+			SharedPreferences settings = getSharedPreferences(Constants.PREFSNAME, 0);
 			String username = settings.getString("username", null);
 			String password = settings.getString("password", null);
 			if (username != null && password != null && username.length() != 0
@@ -917,7 +915,7 @@ public class PlayerActivity extends Activity {
 						new Intent(PlayerActivity.this, TuneActivity.class), TUNE);
 		}
 		if (requestCode == TUNE && resultCode == RESULT_OK) {
-			SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
+			SharedPreferences settings = getSharedPreferences(Constants.PREFSNAME, 0);
 			String username = settings.getString("username", null);
 			String password = settings.getString("password", null);
 
@@ -951,7 +949,7 @@ public class PlayerActivity extends Activity {
 		if (requestCode == SETTINGS) {
 			if (mBoundService != null)  
 			{
-				SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
+				SharedPreferences settings = getSharedPreferences(Constants.PREFSNAME, 0);
 				mPreBuffer = settings.getInt("preBuffer", 5);
 				mBoundService.setPreBuffer(mPreBuffer);
 			}

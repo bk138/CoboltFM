@@ -42,7 +42,7 @@ public class SettingsActivity extends Activity {
 									public void onClick(DialogInterface dialog,
 											int whichButton) {
 										SharedPreferences settings = getSharedPreferences(
-												PlayerActivity.PREFS_NAME, 0);
+												Constants.PREFSNAME, 0);
 										SharedPreferences.Editor ed = settings
 												.edit();
 										ed.clear();
@@ -98,7 +98,7 @@ public class SettingsActivity extends Activity {
 		
 		// set to saved or default value
 		SharedPreferences settings = getSharedPreferences(
-				PlayerActivity.PREFS_NAME, 0);
+				Constants.PREFSNAME, 0);
 		
 		preBufferSlider.setProgress(settings.getInt("preBuffer", 5));
 		
@@ -137,7 +137,7 @@ public class SettingsActivity extends Activity {
 		sleepTimeEditText.setText(Integer.toString(settings.getInt("sleepTime", 42)));
 		
 		CheckBox scrobblingCheckBox = (CheckBox) findViewById(R.id.scrobbling_checkbox);
-		scrobblingCheckBox.setChecked(settings.getBoolean("enableScrobbling", true));
+		scrobblingCheckBox.setChecked(settings.getBoolean(Constants.PREFS_SCROBBLE, true));
 
 		
 	}
@@ -158,7 +158,7 @@ public class SettingsActivity extends Activity {
 		CheckBox scrobblingCheckBox = (CheckBox) findViewById(R.id.scrobbling_checkbox);
 
 		SharedPreferences settings = getSharedPreferences(
-				PlayerActivity.PREFS_NAME, 0);
+				Constants.PREFSNAME, 0);
 		Editor ed = settings.edit();
 		ed.putInt("preBuffer", preBufferSlider.getProgress());
 		ed.putBoolean("showSupportDialog", showSupportCheckBox.isChecked());
@@ -172,7 +172,7 @@ public class SettingsActivity extends Activity {
 		}
 		catch(Exception e) {
 		}
-		ed.putBoolean("enableScroblling", scrobblingCheckBox.isChecked());
+		ed.putBoolean(Constants.PREFS_SCROBBLE, scrobblingCheckBox.isChecked());
 
 
 		ed.commit();

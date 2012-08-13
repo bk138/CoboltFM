@@ -130,7 +130,7 @@ public class ScrobblerClient {
 		return submit(trackInfo.getCreator(), trackInfo.getTitle(), trackInfo.getAlbum(), trackInfo.getDuration(), startTime, trackInfo.getAuth(), rating);
 	}
 	
-	boolean submit(String artist, String track, String album, int len, long startTime, String auth, String rating) {
+	private boolean submit(String artist, String track, String album, int len, long startTime, String auth, String rating) {
 		String req;
 		URL url;
 		try {

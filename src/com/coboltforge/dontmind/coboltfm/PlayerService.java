@@ -95,7 +95,7 @@ public class PlayerService extends Service {
 				String name = intent.getStringExtra("name");
 				Log.d(TAG, "Detected headphone '" + name  + (state == 0 ? "' unplug" : "' plug"));
 
-				final SharedPreferences settings = getSharedPreferences(PlayerActivity.PREFS_NAME, 0);
+				final SharedPreferences settings = getSharedPreferences(Constants.PREFSNAME, 0);
 
 				if(settings.getBoolean("headphonePlugPause", true)) {
 					if(state == 0) //unplug
@@ -415,7 +415,7 @@ public class PlayerService extends Service {
 				stopPlaying();
 
 			SharedPreferences settings = getSharedPreferences(
-					PlayerActivity.PREFS_NAME, 0);
+					Constants.PREFSNAME, 0);
 			
 			TelephonyManager tm = (TelephonyManager)getSystemService(Context.TELEPHONY_SERVICE);
 			tm.listen(mPhoneStateListener, PhoneStateListener.LISTEN_CALL_STATE);
@@ -427,9 +427,9 @@ public class PlayerService extends Service {
 			boolean useProxy =  settings.getBoolean("useStreamProxy",  ! StreamingMediaPlayer.isStreamingWorkingNatively());
 			boolean enableSleepTimer = settings.getBoolean("enableSleepTimer", false);
 			final int sleepTime = settings.getInt("sleepTime", 42);
-
+			boolean scrobble = settings.getBoolean(Constants.PREFS_SCROBBLE, true);
 			
-			mPlayerThread = new PlayerThread(username, password, preBuffer, altConn, useProxy);
+			mPlayerThread = new PlayerThread(username, password, preBuffer, altConn, useProxy, scrobble);
 			try {
 				mPlayerThread.setVersionString(getPackageManager().getPackageInfo(this.getPackageName(), 0).versionName);
 			} catch (NameNotFoundException e) {

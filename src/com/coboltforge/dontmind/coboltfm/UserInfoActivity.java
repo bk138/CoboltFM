@@ -22,7 +22,7 @@ public class UserInfoActivity extends Activity {
 	        final EditText usernameText = (EditText)findViewById(R.id.username);
 	        final EditText passwordText = (EditText)findViewById(R.id.password);
 	        
-        	SharedPreferences settings = getSharedPreferences(PlayerActivity.PREFS_NAME, 0);
+        	SharedPreferences settings = getSharedPreferences(Constants.PREFSNAME, 0);
 	        usernameText.setText(settings.getString("username", ""));
 	        passwordText.setText(settings.getString("password", ""));
 	        
@@ -58,7 +58,7 @@ public class UserInfoActivity extends Activity {
 	                	return;
 	                } 
 	                
-	            	SharedPreferences settings = getSharedPreferences(PlayerActivity.PREFS_NAME, 0);
+	            	SharedPreferences settings = getSharedPreferences(Constants.PREFSNAME, 0);
 	            	SharedPreferences.Editor ed = settings.edit();
 	            	ed.putString("username", usernameText.getText().toString());
 	            	ed.putString("password", passwordText.getText().toString());

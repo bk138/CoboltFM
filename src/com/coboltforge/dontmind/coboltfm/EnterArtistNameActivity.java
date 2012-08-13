@@ -19,7 +19,7 @@ public class EnterArtistNameActivity extends EnterNameActivity {
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
-    	SharedPreferences settings = getSharedPreferences(PlayerActivity.PREFS_NAME, 0);		
+    	SharedPreferences settings = getSharedPreferences(Constants.PREFSNAME, 0);		
         Uri stationUri = PlayerActivity.getStationUri(settings);
         
         if (stationUri != null)

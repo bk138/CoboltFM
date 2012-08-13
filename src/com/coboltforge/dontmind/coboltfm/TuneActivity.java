@@ -22,7 +22,7 @@ public class TuneActivity extends ListActivity {
 	    public void onCreate(Bundle savedInstanceState) {
 	        super.onCreate(savedInstanceState);	        	       
 
-        	SharedPreferences settings = getSharedPreferences(PlayerActivity.PREFS_NAME, 0);
+        	SharedPreferences settings = getSharedPreferences(Constants.PREFSNAME, 0);
 	        mUsername = settings.getString("username", "empty");
 
 	        

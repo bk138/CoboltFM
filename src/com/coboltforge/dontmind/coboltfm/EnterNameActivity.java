@@ -98,7 +98,7 @@ public class EnterNameActivity extends Activity {
 
 		final AutoCompleteTextView nameText = (AutoCompleteTextView) findViewById(R.id.station_name);
 		SharedPreferences settings = getSharedPreferences(
-				PlayerActivity.PREFS_NAME, 0);
+				Constants.PREFSNAME, 0);
 		lru = new LruList(listId);
 		lru.load(settings);
 		
@@ -134,7 +134,7 @@ public class EnterNameActivity extends Activity {
                 	nameText.requestFocus();
                 } else {
 					SharedPreferences settings = getSharedPreferences(
-							PlayerActivity.PREFS_NAME, 0);
+							Constants.PREFSNAME, 0);
 					lru.insertItem(nameText.getText().toString());
 					lru.save(settings);
 					Intent res = new Intent(Intent.ACTION_MAIN);
