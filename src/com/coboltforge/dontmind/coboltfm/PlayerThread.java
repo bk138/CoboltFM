@@ -328,7 +328,11 @@ public class PlayerThread extends Thread {
 						break;
 					case PlayerThread.MESSAGE_CACHE_TRACK_INFO:
 						Log.d(TAG, "got CACHE_TRACK_INFO message");
-						getCurrentTrack().downloadImageBitmap();
+						try{
+							getCurrentTrack().downloadImageBitmap();
+						}
+						catch(NullPointerException e) {
+						}
 						break;
 					case PlayerThread.MESSAGE_CACHE_FRIENDS_LIST:
 						Log.d(TAG, "got CACHE_FRIENDS_LIST message");
