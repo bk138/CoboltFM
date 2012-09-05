@@ -27,7 +27,6 @@ public class ChooseFriendActivity extends ListActivity {
 
 		@Override
 		public void onCancel(DialogInterface dialog) {
-			loader.stop();
 			setResult(RESULT_CANCELED);
 			finish();
 		}		
@@ -127,6 +126,7 @@ public class ChooseFriendActivity extends ListActivity {
     		}
     		catch(NullPointerException e) {
     		}
+    		
     		ChooseFriendActivity.this.runOnUiThread(new Runnable() {
 				@Override
 				public void run() {													
