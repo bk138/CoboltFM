@@ -64,9 +64,9 @@ public class PlayerThread extends Thread {
 	public ConditionVariable mInitLock = new ConditionVariable();
 	private String mSession;
 	private String mBaseURL;
-	
+
 	private String mVersionString = "1.0";
-	
+
 	public void setVersionString(String ver) {
 		mVersionString = ver;
 	}
@@ -75,21 +75,21 @@ public class PlayerThread extends Thread {
 		mPreBuffer = percent;
 		Log.d(TAG, "prebuffer set to " + mPreBuffer);
 	}
-	
+
 	StreamingMediaPlayer mFrontMP = null;
 	boolean mFrontPaused = false;
 	int mBufferedFront;
 	StreamingMediaPlayer mBackMP = null;
 	int mBufferedBack;
 
-	
+
 	private int mPreBuffer;
-	
+
 	private boolean mAlternateConn = false;
 	private boolean mUseProxy;
 	private boolean mDoScrobble;
 
-	
+
 	private ArrayList<XSPFTrackInfo> mPlaylist;
 	private int mNextPlaylistItem;
 	private XSPFTrackInfo mCurrentTrack;
@@ -103,7 +103,7 @@ public class PlayerThread extends Thread {
 	public static class NotEnoughContentError extends LastFMError {
 
 		/**
-		 * 
+		 *
 		 */
 		private static final long serialVersionUID = -6594205637078329839L;
 
@@ -114,7 +114,7 @@ public class PlayerThread extends Thread {
 
 	public static class LastFMXmlRpcError extends LastFMError {
 		/**
-		 * 
+		 *
 		 */
 		private static final long serialVersionUID = 1L;
 		String faultString = "";
@@ -130,7 +130,7 @@ public class PlayerThread extends Thread {
 	}
 
 	public static class BadCredentialsError extends LastFMError {
-		
+
 		private static final long serialVersionUID = -2749238650889906413L;
 		String faultString = "";
 		public static int BAD_USERNAME = 0;
@@ -179,24 +179,24 @@ public class PlayerThread extends Thread {
 		else
 			return 0;
 	}
-	
+
 
 	public XSPFTrackInfo getCurrentTrack() {
 		return mCurrentTrack;
 	}
-	
+
 	public int getNextBuffered() {
 		if (mBackMP != null)
 			return mBufferedBack;
 		else
 			return 0;
 	}
-	
+
 	public boolean getIsPaused()
 	{
 		return mFrontPaused;
 	}
-	
+
 	private LastFMNotificationListener mLastFMNotificationListener = null;
 
 	public void setLastFMNotificationListener(
@@ -207,9 +207,9 @@ public class PlayerThread extends Thread {
 	String mUsername;
 	String mPassword;
 	protected ArrayList<FriendInfo> mFriendsList;
-	
 
-	public PlayerThread(String username, String password, int preBuffer, 
+
+	public PlayerThread(String username, String password, int preBuffer,
 			boolean alternateConn, boolean useProxy, boolean doScrobble) {
 		super();
 		mUsername = username;
@@ -378,7 +378,7 @@ public class PlayerThread extends Thread {
 
 		mInitLock.open();
 		Looper.loop();
-		
+
 		Log.d(TAG, "Saying Goodbye");
 	}
 
@@ -394,22 +394,22 @@ public class PlayerThread extends Thread {
 			mFrontPaused = false;
 			mFrontMP = null;
 		}
-		
+
 		if (mBackMP != null)
 		{
 			mBackMP.stop();
 			mBackMP.release();
 			mBackMP = null;
 		}
-		
+
 		return true;
 	}
-	
+
 	private boolean pausePlaying(boolean pause)
 	{
 		if(mFrontMP == null)
 			return false;
-		
+
 		if(pause)
 		{
 			int pos;
@@ -437,11 +437,11 @@ public class PlayerThread extends Thread {
 				Log.d(TAG, "Unpaused front player");
 			}
 		}
-		
+
 		return true;
 	}
-	 
-	
+
+
 
 	public final ArrayList<FriendInfo> getFriendsList() {
 		return mFriendsList;
@@ -474,10 +474,10 @@ public class PlayerThread extends Thread {
 
 		@Override
 		public void onCompletion(MediaPlayer mp) {
-			
+
 			try {
 				Log.d(TAG, "completed at " + mp.getCurrentPosition() + " of " + mp.getDuration());
-				mp.seekTo(mp.getDuration()); // the mp gets set the 0 pos when done, this interfers with the track submit logic 
+				mp.seekTo(mp.getDuration()); // the mp gets set the 0 pos when done, this interfers with the track submit logic
 				playNextTrack();
 			} catch (LastFMError e) {
 				setErrorState(e);
@@ -488,22 +488,22 @@ public class PlayerThread extends Thread {
 	OnBufferingUpdateListener mOnFrontBufferingUpdateListener = new MediaPlayer.OnBufferingUpdateListener() {
 
 		public void onBufferingUpdate(MediaPlayer mp, int percent) {
-			
+
 			if(percent < 100 && mCurrentTrack != null)
 				Log.d(TAG, "front player buffered " + percent + " %, (" + mPreBuffer + " needed) of " + mCurrentTrack.getTitle());
-			
+
 			mBufferedFront = percent;
-			
+
 			if(percent >= mPreBuffer && mFrontMP != null && !mFrontMP.isPlaying() && !mFrontPaused)
 				mFrontMP.start();
-			
+
 			if(percent < mPreBuffer && mFrontMP != null && mFrontMP.isPlaying())
 				mFrontMP.pause();
-			
+
 			if(percent == 100 && mBackMP == null)
 				try {
 					bufferNextTrack();
-				} catch (LastFMError e) {		
+				} catch (LastFMError e) {
 					Log.e(TAG, "buffering next track failed:");
 					e.printStackTrace();
 				}
@@ -512,14 +512,14 @@ public class PlayerThread extends Thread {
 				mLastFMNotificationListener.onBuffer(percent);
 		}
 	};
-	
+
 	OnBufferingUpdateListener mOnBackBufferingUpdateListener = new MediaPlayer.OnBufferingUpdateListener() {
 
 		public void onBufferingUpdate(MediaPlayer mp, int percent) {
-			
+
 			if(percent < 100 && mNextTrack != null)
 				Log.d(TAG, "back player buffered " + percent + "% of " + mNextTrack.getTitle());
-			
+
 			mBufferedBack = percent;
 		}
 	};
@@ -556,13 +556,13 @@ public class PlayerThread extends Thread {
 		XSPFTrackInfo curTrack = getCurrentTrack();
 		if (curTrack.getDuration() > 30 && mFrontMP != null)
 		{
-			Log.d(TAG, "submitCurrentTrackDelayed(), player pos at " 
+			Log.d(TAG, "submitCurrentTrackDelayed(), player pos at "
 					+ mFrontMP.getCurrentPosition()
 					+ ", is currently " + (mFrontMP.isPlaying() ? "playing" : "not playing")
 					+ ", track lasts " + curTrack.getDuration()
 					+ ", it's rated " + mCurrentTrackRating);
 
-			if ((mFrontMP.getCurrentPosition() > 240000 || mFrontMP.getCurrentPosition() >= curTrack.getDuration()/2)					
+			if ((mFrontMP.getCurrentPosition() > 240000 || mFrontMP.getCurrentPosition() >= curTrack.getDuration()/2)
 					|| (mCurrentTrackRating != null && mCurrentTrackRating.equals("L"))
 					|| (mCurrentTrackRating != null && mCurrentTrackRating.equals("B"))) {
 				TrackSubmissionParams params = new TrackSubmissionParams(
@@ -578,11 +578,11 @@ public class PlayerThread extends Thread {
 		playNextTrack();
 	}
 
-	
+
 	private void bufferNextTrack() throws LastFMError {
-		
+
 		mNextTrack = getNextTrack();
-		
+
 		if (mNextTrack == null)
 			throw new NotEnoughContentError();
 
@@ -594,28 +594,28 @@ public class PlayerThread extends Thread {
 				mBackMP.release();
 				mBackMP = null;
 			}
-			
+
 			mBackMP = new StreamingMediaPlayer(mUseProxy);
 			mBufferedBack = 0;
 			mBackMP.setStreamUrl(streamUrl);
 			mBackMP.setOnBufferingUpdateListener(mOnBackBufferingUpdateListener); // this starts the player once prebuffering is done
 			mBackMP.prepare();
 			Log.d(TAG, "pre-buffering from stream " + mBackMP.getStreamUrl());
-			
+
 		} catch (IllegalArgumentException e) {
 			Log.e(TAG, "in bufferNextTrack", e);
-			if(mBackMP != null) 
+			if(mBackMP != null)
 				mBackMP.release();
 			mBackMP = null;
 			throw new LastFMError(e.toString());
 		} catch (IllegalStateException e) {
-			if(mBackMP != null) 
+			if(mBackMP != null)
 				mBackMP.release();
 			mBackMP = null;
 			Log.e(TAG, "in bufferNextTrack", e);
 			throw new LastFMError(e.toString());
 		} catch (IOException e) {
-			if(mBackMP != null) 
+			if(mBackMP != null)
 				mBackMP.release();
 			mBackMP = null;
 			Log.e(TAG, "in bufferNextTrack", e);
@@ -623,14 +623,14 @@ public class PlayerThread extends Thread {
 		}
 	}
 
-	
+
 	private void playNextTrack() throws LastFMError {
-		
+
 		Log.d(TAG, "playNextTrack()");
-		
+
 		if (mCurrentTrack != null)
 			submitCurrentTrackDelayed();
-		
+
 		if(mNextTrack != null) // there's background pre-buffering going on
 		{
 			mCurrentTrack = mNextTrack;
@@ -638,12 +638,12 @@ public class PlayerThread extends Thread {
 		}
 		else
 			mCurrentTrack = getNextTrack();
-		
+
 		if (mCurrentTrack == null)
 			throw new NotEnoughContentError();
 
 		String streamUrl = mCurrentTrack.getLocation();
-		
+
 		try {
 			if (mFrontMP != null)
 			{
@@ -676,9 +676,9 @@ public class PlayerThread extends Thread {
 
 			if (mMuted)
 				mFrontMP.setVolume(0, 0);
-			
+
 			syncMuteState(); // in case if mute flag changed concurrently after previous if
-			
+
 			mStartPlaybackTime = System.currentTimeMillis() / 1000;
 			mCurrentTrackRating = "";
 			Message.obtain(mHandler, PlayerThread.MESSAGE_CACHE_TRACK_INFO)
@@ -687,7 +687,7 @@ public class PlayerThread extends Thread {
 					.sendToTarget();
 			if (mLastFMNotificationListener != null)
 				mLastFMNotificationListener.onStartTrack(mCurrentTrack);
-			
+
 		} catch (IllegalArgumentException e) {
 			Log.e(TAG, "in playNextTrack", e);
 			throw new LastFMError(e.toString());
@@ -739,13 +739,13 @@ public class PlayerThread extends Thread {
 		try {
 			Log.d(TAG, "Getting playlist started");
 
-			String urlString = "http://" + mBaseURL + "/xspf.php?sk=" + mSession + "&discovery=0&desktop=1.4.1.57486"; 
-			
+			String urlString = "http://" + mBaseURL + "/xspf.php?sk=" + mSession + "&discovery=0&desktop=1.4.1.57486";
+
 			if(mAlternateConn) {
 				urlString += "&api_key=9d1bbaef3b443eb97973d44181d04e4b";
 				Log.d(TAG, "Using alternate connection method");
 			}
-			
+
 			URL url = new URL(urlString);
 			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
 			conn.connect();
@@ -757,7 +757,7 @@ public class PlayerThread extends Thread {
 
 			Element root = doc.getDocumentElement();
 			NodeList titleNs = root.getElementsByTagName("title");
-			String stationName = "<unknown station>"; 
+			String stationName = "<unknown station>";
 			if (titleNs.getLength() > 0)
 			{
 				Element titleElement = (Element)titleNs.item(0);
@@ -766,7 +766,7 @@ public class PlayerThread extends Thread {
 				{
 					Node item = titleElement.getChildNodes().item(i);
 					if (item.getNodeType() == Node.TEXT_NODE)
-						res += item.getNodeValue(); 
+						res += item.getNodeValue();
 				}
 				stationName = URLDecoder.decode(res, "UTF-8");
 			}
@@ -779,7 +779,7 @@ public class PlayerThread extends Thread {
 					Log.e(TAG, "in getPlaylist", e);
 					return null;
 				}
-				
+
 				Log.d(TAG, "Getting playlist successful");
 				return result;
 		} catch (Exception e) {
@@ -788,15 +788,15 @@ public class PlayerThread extends Thread {
 		}
 	}
 
-	
+
 	private boolean adjust(String stationUrl) throws LastFMError {
 		try {
 			URL url = new URL("http://" + mBaseURL + "/adjust.php?session="
 					+ mSession + "&url="
 					+ URLEncoder.encode(stationUrl, "UTF-8"));
-			
+
 			Log.d(TAG, "About to tune in to '" + url.toString() + "'");
-			
+
 			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
 			conn.connect();
 			InputStream is = conn.getInputStream();
@@ -817,6 +817,9 @@ public class PlayerThread extends Thread {
 				return false;
 			}
 		} catch (MalformedURLException e) {
+			Log.e(TAG, "in adjust", e);
+			throw new LastFMError("Adjust failed:" + e.toString());
+		} catch (NullPointerException e) {
 			Log.e(TAG, "in adjust", e);
 			throw new LastFMError("Adjust failed:" + e.toString());
 		} catch (UnsupportedEncodingException e) {
@@ -845,13 +848,13 @@ public class PlayerThread extends Thread {
 
 	private static final String HOST = "http://ws.audioscrobbler.com";
 
-	boolean checkIfUserExists(String username) 
+	boolean checkIfUserExists(String username)
 		throws IOException {
 		try {
 			URL url = new URL(WS_URL + "/user/" + URLEncoder.encode(username, "UTF-8") + "/profile.xml");
 			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
 			conn.connect();
-			
+
 			InputStream is = conn.getInputStream();
 			is.close();
 			return true;
@@ -859,7 +862,7 @@ public class PlayerThread extends Thread {
 			return false;
 		}
 	}
-	
+
 	boolean login(String username, String password) {
 		try {
 			Utils.OptionsParser opts;
@@ -885,16 +888,16 @@ public class PlayerThread extends Thread {
 			}
 			mSession = session;
 			mBaseURL = baseHost + basePath;
-			
+
 			if(isInterrupted())
 			{
 				Log.d(TAG, "Login interupted");
 				return false;
 			}
-			
+
 			mScrobbler = new ScrobblerClient();
 			mScrobbler.setClientVersionString(mVersionString);
-			mScrobbler.handshake(username, password);			
+			mScrobbler.handshake(username, password);
 			return true;
 		}
 		catch (NullPointerException e) {
@@ -993,7 +996,7 @@ public class PlayerThread extends Thread {
 	}
 
 	Boolean mMuted = false;
-	
+
 	public void unmute() {
 		synchronized (mMuted) {
 			if (mFrontMP != null)
@@ -1009,17 +1012,17 @@ public class PlayerThread extends Thread {
 				mFrontMP.setVolume(0, 0);
 		}
 	}
-	
+
 	public void syncMuteState() {
 		synchronized (mMuted) {
-			if (mMuted) 
+			if (mMuted)
 				mFrontMP.setVolume(0, 0);
 			else
 				mFrontMP.setVolume(1, 1);
 		}
 	}
-	
-	
- 
-	
+
+
+
+
 }
