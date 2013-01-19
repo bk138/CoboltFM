@@ -742,7 +742,7 @@ public class PlayerThread extends Thread {
 		try {
 			Log.d(TAG, "Getting playlist started");
 
-			String urlString = "http://" + mBaseURL + "/xspf.php?sk=" + mSession + "&discovery=0&desktop=1.4.1.57486";
+			String urlString = "http://" + mBaseURL + "/xspf.php?sk=" + mSession + "&discovery=0&desktop=1.5.4.27091";
 
 			if(mAlternateConn) {
 				urlString += "&api_key=9d1bbaef3b443eb97973d44181d04e4b";
@@ -925,7 +925,7 @@ public class PlayerThread extends Thread {
 		String passMD5 = Utils.md5String(Pass);
 		URL url = new URL(
 				HOST
-						+ "/radio/handshake.php?version=1.0.0.0&platform=windows&username="
+						+ "/radio/handshake.php?version=1.5.4.27091&platform=linux&platformversion=Unix%2FLinux&username="
 						+ URLEncoder.encode(Username, "UTF_8") + "&passwordmd5=" + passMD5
 						+ "&api_key=9d1bbaef3b443eb97973d44181d04e4b");
 		Log.d(TAG, "Shakin' hands: " + url.toString());
