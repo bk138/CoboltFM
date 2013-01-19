@@ -60,14 +60,14 @@ public class PlayerService extends Service {
 	private final IBinder mBinder = new LocalBinder();
 
 	private NotificationManager mNM;
-	
+
 	private BroadcastReceiver headsetPlugReceiver;
-	
+
 	private CountDownTimer sleepTimer;
 	private long secondsRemainingUntilSleep;
 
 	private LastFMNotificationListener mLastFMNotificationListener = null;
-	
+
 	public void setLastFMNotificationListener(
 			LastFMNotificationListener listener) {
 		this.mLastFMNotificationListener = listener;
@@ -84,7 +84,7 @@ public class PlayerService extends Service {
 	@Override
 	public void onCreate() {
 		mNM = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-	
+
 
 		// listen for headphone plugs/unplugs
 		headsetPlugReceiver = new BroadcastReceiver() {
@@ -112,7 +112,7 @@ public class PlayerService extends Service {
 	public void onDestroy() {
 		stopPlaying();
 		mNM.cancel(PLAYER_NOTIFICATIONS);
-		
+
 		unregisterReceiver(headsetPlugReceiver);
 	}
 
@@ -202,7 +202,7 @@ public class PlayerService extends Service {
 			this.position = currentPosition;
 			this.trackInfo = currentTrack;
 		}
-		
+
 		public String toString() {
 			return "playing";
 		}
@@ -210,11 +210,11 @@ public class PlayerService extends Service {
 		public int getCurrentPosition() {
 			return position;
 		}
-		
+
 		public int getCurrentBuffered() {
 			return buffered;
 		}
-		
+
 		public int getNextBuffered() {
 			return next_buffered;
 		}
@@ -222,11 +222,11 @@ public class PlayerService extends Service {
 		public boolean getIsActuallyPaused() {
 			return is_paused;
 		}
-		
+
 		public XSPFTrackInfo getCurrentTrack() {
 			return trackInfo;
 		}
-		
+
 		public long getRemainingSecondsUntilSleep() {
 			return remainingTimeUntilSleep;
 		}
@@ -234,11 +234,11 @@ public class PlayerService extends Service {
 		public void setCurrentPosition(int currentPosition) {
 			position = currentPosition;
 		}
-		
+
 		public void setCurrentBuffered(int currentBuffered) {
 			buffered = currentBuffered;
 		}
-		
+
 		public void setNextBuffered(int nextBuffered) {
 			next_buffered = nextBuffered;
 		}
@@ -281,7 +281,7 @@ public class PlayerService extends Service {
 			else
 				return mErr.toString();
 		}
-		
+
 		public LastFMError getError() {
 			return mErr;
 		}
@@ -333,13 +333,13 @@ public class PlayerService extends Service {
 			mPlayerThread = null;
 			mCurrentStatus = new StoppedStatus();
 			updateNotification("Stopped");
-			
+
 			secondsRemainingUntilSleep = 0;
 			if(sleepTimer != null) {
 				sleepTimer.cancel();
 				sleepTimer = null;
 			}
-			
+
 			return true;
 		}
 		catch(NullPointerException e) {
@@ -359,7 +359,7 @@ public class PlayerService extends Service {
 			return false;
 		}
 	}
-	
+
 	public boolean setPreBuffer(int percent)
 	{
 		try	{
@@ -390,7 +390,7 @@ public class PlayerService extends Service {
 
 	PhoneStateListener mPhoneStateListener = new PhoneStateListener()
 	{
-		public void onCallStateChanged(int state, String incomingNumber) {					
+		public void onCallStateChanged(int state, String incomingNumber) {
 			if (state == TelephonyManager.CALL_STATE_IDLE)
 			{
 				try {
@@ -398,11 +398,11 @@ public class PlayerService extends Service {
 				}
 				catch(NullPointerException e) {
 				}
-			} 
+			}
 			else
 			{
 				try {
-					mPlayerThread.mute();						
+					mPlayerThread.mute();
 				}
 				catch(NullPointerException e) {
 				}
@@ -416,10 +416,10 @@ public class PlayerService extends Service {
 
 			SharedPreferences settings = getSharedPreferences(
 					Constants.PREFSNAME, 0);
-			
+
 			TelephonyManager tm = (TelephonyManager)getSystemService(Context.TELEPHONY_SERVICE);
 			tm.listen(mPhoneStateListener, PhoneStateListener.LISTEN_CALL_STATE);
-			
+
 			String username = settings.getString("username", null);
 			String password = settings.getString("password", null);
 			int preBuffer = settings.getInt("preBuffer", 5);
@@ -428,13 +428,13 @@ public class PlayerService extends Service {
 			boolean enableSleepTimer = settings.getBoolean("enableSleepTimer", false);
 			final int sleepTime = settings.getInt("sleepTime", 42);
 			boolean scrobble = settings.getBoolean(Constants.PREFS_SCROBBLE, true);
-			
-			mPlayerThread = new PlayerThread(username, password, preBuffer, altConn, useProxy, scrobble);
+
+			mPlayerThread = new PlayerThread(this, username, password, preBuffer, altConn, useProxy, scrobble);
 			try {
 				mPlayerThread.setVersionString(getPackageManager().getPackageInfo(this.getPackageName(), 0).versionName);
 			} catch (NameNotFoundException e) {
 			}
-			
+
 			mPlayerThread
 					.setLastFMNotificationListener(new ServiceNotificationListener(
 							mLastFMNotificationListener));
@@ -448,15 +448,15 @@ public class PlayerService extends Service {
 					PlayerThread.MESSAGE_CACHE_FRIENDS_LIST).sendToTarget();
 			updateNotification("Starting playback");
 			mCurrentStatus = new LoggingInStatus();
-			
+
 			if(enableSleepTimer) {
 				sleepTimer = new CountDownTimer(sleepTime*60*1000, 1000) {
-					
+
 					@Override
 					public void onTick(long millisUntilFinished) {
 						secondsRemainingUntilSleep = millisUntilFinished/1000;
 					}
-					
+
 					@Override
 					public void onFinish() {
 						Log.d(TAG, "SleepTimer done after " + sleepTime + " min, stopping playback");
@@ -467,8 +467,8 @@ public class PlayerService extends Service {
 				Log.d(TAG, "SleepTimer will stop in " + sleepTime + " min");
 				sleepTimer.start();
 			}
-			
-			
+
+
 			return true;
 	}
 
@@ -476,7 +476,7 @@ public class PlayerService extends Service {
 		try {
 			Message.obtain(mPlayerThread.mHandler, PlayerThread.MESSAGE_SKIP).sendToTarget();
 			return true;
-		} 
+		}
 		catch(NullPointerException e) {
 			return false;
 		}
@@ -487,7 +487,7 @@ public class PlayerService extends Service {
 			mCurrentTrackLoved = true;
 			Message.obtain(mPlayerThread.mHandler, PlayerThread.MESSAGE_LOVE).sendToTarget();
 			return true;
-		} 
+		}
 		catch(NullPointerException e) {
 			return false;
 		}

@@ -20,69 +20,79 @@ public class XSPFTrackInfo {
 	private String mImage;
 	private String mTitle;
 	private String mStationName;
-	
-	
-	
+
+
+
+	@Override
+	public String toString() {
+		return "XSPFTrackInfo [mLocation=" + mLocation + ", mAlbum=" + mAlbum
+				+ ", mCreator=" + mCreator + ", mDuration=" + mDuration
+				+ ", mImage=" + mImage + ", mTitle=" + mTitle
+				+ ", mStationName=" + mStationName + ", mBitmap=" + mBitmap
+				+ ", mBitmapLoadFailed=" + mBitmapLoadFailed + ", mAuth="
+				+ mAuth + "]";
+	}
+
 	public String getStationName() {
 		return mStationName;
 	}
-	
+
 	public String getTitle() {
 		return mTitle;
 	}
-	
+
 	public String getLocation() {
 		return mLocation;
 	}
-	
+
 	public String getAlbum() {
 		return mAlbum;
 	}
-	
+
 	public String getCreator() {
 		return mCreator;
 	}
-	
+
 	public int getDuration() {
 		return mDuration;
 	}
-	
+
 	public String getImage() {
 		return mImage;
 	}
-	
+
     Bitmap mBitmap = null;
     boolean mBitmapLoadFailed = false;
-	public Bitmap downloadImageBitmap() { 
+	public Bitmap downloadImageBitmap() {
 		if (mBitmap == null && !mBitmapLoadFailed) {
-	        try { 
+	        try {
 	            Log.d(TAG, "trying to download bitmap from '" + mImage + "'");
 	            URL aURL = new URL(mImage);
-	            URLConnection conn = aURL.openConnection(); 
-	            conn.connect(); 
-	            InputStream is = conn.getInputStream(); 
-	            BufferedInputStream bis = new BufferedInputStream(is); 
-	            mBitmap = BitmapFactory.decodeStream(bis); 
-	            bis.close(); 
-	            is.close(); 
-	       } catch (IOException e) { 
+	            URLConnection conn = aURL.openConnection();
+	            conn.connect();
+	            InputStream is = conn.getInputStream();
+	            BufferedInputStream bis = new BufferedInputStream(is);
+	            mBitmap = BitmapFactory.decodeStream(bis);
+	            bis.close();
+	            is.close();
+	       } catch (IOException e) {
 	           Log.e(TAG, "Error getting bitmap", e);
 	           mBitmapLoadFailed = true;
 	       }
 	   }
-       return mBitmap; 
+       return mBitmap;
     }
-	
+
 	public Bitmap getBitmap() {
 		return mBitmap;
 	}
-	
+
 	private String mAuth;
 
 	public XSPFTrackInfo(String stationName, Element element) throws Utils.ParseException{
 			mStationName = stationName;
-			mLocation = Utils.getChildElement(element, "location");		
-			mAlbum = Utils.getChildElement(element, "album");		
+			mLocation = Utils.getChildElement(element, "location");
+			mAlbum = Utils.getChildElement(element, "album");
 			mCreator = Utils.getChildElement(element, "creator");
 			try {
 				mDuration = Integer.parseInt(Utils.getChildElement(element, "duration"));

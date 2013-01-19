@@ -1,8 +1,11 @@
 package com.coboltforge.dontmind.coboltfm;
 
 import android.media.MediaPlayer;
+import android.net.Uri;
 import android.os.Build;
 import android.util.Log;
+import android.annotation.SuppressLint;
+import android.content.Context;
 
 import org.apache.http.Header;
 import org.apache.http.HttpRequest;
@@ -24,6 +27,7 @@ import org.apache.http.impl.conn.DefaultClientConnection;
 import org.apache.http.impl.conn.DefaultClientConnectionOperator;
 import org.apache.http.impl.conn.DefaultResponseParser;
 import org.apache.http.impl.conn.SingleClientConnManager;
+import org.apache.http.impl.cookie.BasicClientCookie;
 import org.apache.http.io.HttpMessageParser;
 import org.apache.http.io.SessionInputBuffer;
 import org.apache.http.message.BasicHttpRequest;
@@ -43,28 +47,34 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.SocketTimeoutException;
 import java.net.UnknownHostException;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.StringTokenizer;
 
 public class StreamingMediaPlayer extends MediaPlayer {
 
-	private static final String TAG = "StreamingMediaPlayer"; 
+	private static final String TAG = "StreamingMediaPlayer";
 	private static final String TAG_PROXY = StreamProxy.class.getName();
 
 	private StreamProxy proxy = null;
 	private String streamUrl;
 	private boolean useProxy;
-	
-	public StreamingMediaPlayer(boolean useProxy) {
+	private Context mContext;
+	private String mSessionId;
+
+	public StreamingMediaPlayer(Context c, String sessionId, boolean useProxy) {
 		this.useProxy = useProxy;
+		mSessionId = sessionId;
+		mContext = c;
 	}
-	
-	
+
+
 	@Override
 	public void stop() {
-	
+
 		// stop the mediaplayer
 		super.stop();
-		
+
 		// and the proxy, if it exists
 		try{
 			proxy.stop();
@@ -72,16 +82,16 @@ public class StreamingMediaPlayer extends MediaPlayer {
 		}
 		catch(NullPointerException e)  {
 		}
-		
+
 	}
-	
-	
+
+
 	@Override
 	public void release() {
-		
+
 		// release the mediaplayer
 		super.release();
-		
+
 		// and stop the proxy, if it exists
 		try{
 			proxy.stop();
@@ -89,12 +99,13 @@ public class StreamingMediaPlayer extends MediaPlayer {
 		}
 		catch(NullPointerException e)  {
 		}
-		
+
 	}
-	
-	
+
+
+	@SuppressLint("NewApi")
 	public void setStreamUrl(String path) throws IllegalArgumentException, SecurityException, IllegalStateException, IOException {
-		
+
 		if(useProxy) {
 			Log.d(TAG, "Using proxy");
 			proxy = new StreamProxy();
@@ -106,17 +117,24 @@ public class StreamingMediaPlayer extends MediaPlayer {
 			Log.d(TAG, "Using direct");
 			streamUrl = path;
 		}
-		
-		setDataSource(streamUrl);
+
+		if(Build.VERSION.SDK_INT >= 14) {
+			Log.d(TAG, "Adding headers");
+			Map<String, String> httpHeader = new HashMap<String, String>();
+			httpHeader.put("Cookie", "Session=" + mSessionId);
+			setDataSource(mContext, Uri.parse(streamUrl), httpHeader);
+		}
+		else
+			setDataSource(streamUrl);
 	}
-	
-	
+
+
 	public final String getStreamUrl() {
 		return streamUrl;
 	}
-	
-	
-	
+
+
+
 	private class StreamProxy implements Runnable {
 
 		private int port = 0;
@@ -224,10 +242,11 @@ public class StreamingMediaPlayer extends MediaPlayer {
 			SingleClientConnManager mgr = new MyClientConnManager(seed.getParams(),
 					registry);
 			DefaultHttpClient http = new DefaultHttpClient(mgr, seed.getParams());
+			http.getCookieStore().addCookie(new BasicClientCookie("Session", mSessionId));
 			HttpGet method = new HttpGet(url);
 			HttpResponse response = null;
 			try {
-				Log.d(TAG_PROXY, "starting download");
+				Log.d(TAG_PROXY, "starting download, session: " + mSessionId);
 				response = http.execute(method);
 				Log.d(TAG_PROXY, "downloaded");
 			} catch (ClientProtocolException e) {
@@ -421,18 +440,18 @@ public class StreamingMediaPlayer extends MediaPlayer {
 
 	}
 
-	
-	
 
-	
-	
-	
+
+
+
+
+
 	/*
 	 * backend detection stuff
 	 */
 
 	public static boolean isStreamingWorkingNatively() {
-		
+
 		// 4-9: ok
 		// 10-13: probably most of these need the proxy
 		// 14-.. : probably ok

@@ -25,6 +25,7 @@ import org.w3c.dom.NodeList;
 import org.xmlpull.v1.XmlPullParserFactory;
 import org.xmlpull.v1.XmlSerializer;
 
+import android.content.Context;
 import android.content.SharedPreferences;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
@@ -207,11 +208,13 @@ public class PlayerThread extends Thread {
 	String mUsername;
 	String mPassword;
 	protected ArrayList<FriendInfo> mFriendsList;
+	private Context mContext;
 
 
-	public PlayerThread(String username, String password, int preBuffer,
+	public PlayerThread(Context c, String username, String password, int preBuffer,
 			boolean alternateConn, boolean useProxy, boolean doScrobble) {
 		super();
+		mContext = c;
 		mUsername = username;
 		mPassword = password;
 		mPreBuffer = preBuffer;
@@ -595,7 +598,7 @@ public class PlayerThread extends Thread {
 				mBackMP = null;
 			}
 
-			mBackMP = new StreamingMediaPlayer(mUseProxy);
+			mBackMP = new StreamingMediaPlayer(mContext, mSession, mUseProxy);
 			mBufferedBack = 0;
 			mBackMP.setStreamUrl(streamUrl);
 			mBackMP.setOnBufferingUpdateListener(mOnBackBufferingUpdateListener); // this starts the player once prebuffering is done
@@ -664,7 +667,7 @@ public class PlayerThread extends Thread {
 			}
 			else
 			{
-				mFrontMP = new StreamingMediaPlayer(mUseProxy);
+				mFrontMP = new StreamingMediaPlayer(mContext, mSession, mUseProxy);
 				mBufferedFront = 0;
 				mFrontMP.setAudioStreamType(AudioManager.STREAM_MUSIC);
 				mFrontMP.setStreamUrl(streamUrl);
@@ -781,6 +784,8 @@ public class PlayerThread extends Thread {
 				}
 
 				Log.d(TAG, "Getting playlist successful");
+				for(XSPFTrackInfo ti : result)
+					Log.d(TAG, ti.toString());
 				return result;
 		} catch (Exception e) {
 			Log.e(TAG, "in getPlaylist", e);
@@ -793,7 +798,8 @@ public class PlayerThread extends Thread {
 		try {
 			URL url = new URL("http://" + mBaseURL + "/adjust.php?session="
 					+ mSession + "&url="
-					+ URLEncoder.encode(stationUrl, "UTF-8"));
+					+ URLEncoder.encode(stationUrl, "UTF-8")
+					+ "&api_key=9d1bbaef3b443eb97973d44181d04e4b");
 
 			Log.d(TAG, "About to tune in to '" + url.toString() + "'");
 
