@@ -920,7 +920,8 @@ public class PlayerThread extends Thread {
 		URL url = new URL(
 				HOST
 						+ "/radio/handshake.php?version=1.0.0.0&platform=windows&username="
-						+ URLEncoder.encode(Username, "UTF_8") + "&passwordmd5=" + passMD5);
+						+ URLEncoder.encode(Username, "UTF_8") + "&passwordmd5=" + passMD5
+						+ "&api_key=9d1bbaef3b443eb97973d44181d04e4b");
 		Log.d(TAG, "Shakin' hands: " + url.toString());
 		HttpURLConnection conn = (HttpURLConnection) url.openConnection();
 		conn.connect();
